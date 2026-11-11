@@ -2,6 +2,13 @@ import {TROOPS,WORLD} from './data.js';
 
 const WORKER=TROOPS.worker;
 const BASE_VISION=7.8;
+const WORKER_NAMES=[
+ 'Борис','Глеб','Илья','Иван','Еремей','Ефим','Данила','Мирон',
+ 'Матвей','Тимофей','Савва','Фёдор','Василий','Яков','Григорий','Михайло',
+ 'Пётр','Степан','Семён','Андрей','Игнат','Прохор','Лукьян','Тихон',
+ 'Елисей','Назар','Никита','Роман','Кузьма','Терентий','Фрол','Демьян',
+ 'Лука','Кирилл','Афанасий','Добрыня','Радомир','Любомир','Яромир','Всеволод'
+];
 const directions=[[1,0],[0,1],[-1,0],[0,-1],[1,1],[-1,1],[-1,-1],[1,-1]];
 const index=(x,z)=>z*WORLD.width+x;
 const inside=(x,z)=>Number.isInteger(x)&&Number.isInteger(z)&&x>=0&&z>=0&&x<WORLD.width&&z<WORLD.height;
@@ -36,6 +43,30 @@ function revealAt(state,player,pos,radius){
 function revealCurrent(state,player){for(const c of visionCenters(state,player))revealAt(state,player,c,c.r);}
 function randomFor(seed){let n=seed>>>0;return()=>{n=(n+0x6D2B79F5)|0;let t=Math.imul(n^(n>>>15),1|n);t^=t+Math.imul(t^(t>>>7),61|t);return((t^(t>>>14))>>>0)/4294967296;};}
 
+
+function namesForSeed(seed){
+ const names=WORKER_NAMES.slice(),random=randomFor((seed>>>0)^0xA341316C);
+ for(let i=names.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[names[i],names[j]]=[names[j],names[i]];}
+ return names;
+}
+export function assignWorkerIdentity(state){
+ const next=structuredClone(state),workers=next.units.filter(u=>u.owner===0&&u.kind==='worker');
+ assert(workers.length===6,'В прогулке должно быть шесть рабочих');
+ const usedNames=new Set(),usedPortraits=new Set();
+ const existingNames=workers.map(u=>{const name=typeof u.name==='string'?u.name.trim():'';if(!name||/^Рабочий(?:\s*\d+)?$/iu.test(name)||usedNames.has(name.toLowerCase()))return null;usedNames.add(name.toLowerCase());return name;});
+ const existingPortraits=workers.map(u=>{if(!Number.isInteger(u.portrait)||u.portrait<0||u.portrait>5||usedPortraits.has(u.portrait))return null;usedPortraits.add(u.portrait);return u.portrait;});
+ const names=namesForSeed(next.seed);let cursor=0;
+ for(let i=0;i<workers.length;i++){
+  const u=workers[i];
+  if(existingNames[i])u.name=existingNames[i];
+  else{while(usedNames.has(names[cursor].toLowerCase()))cursor++;u.name=names[cursor++];usedNames.add(u.name.toLowerCase());}
+  if(existingPortraits[i]!==null)u.portrait=existingPortraits[i];
+  else{let portrait=0;while(usedPortraits.has(portrait))portrait++;u.portrait=portrait;usedPortraits.add(portrait);}
+  if(!Number.isInteger(u.number)||u.number<1||u.number>6)u.number=i+1;
+ }
+ return next;
+}
+
 export function createMovementWorld({seed=4811}={}){
  const worldSeed=seed>>>0,random=randomFor(worldSeed),base=WORLD.bases[0],center=WORLD.center;
  const state={version:'movement-1',sandbox:true,mode:'movement',seed:worldSeed,round:1,serial:6,tiles:[],units:[],players:[],buildings:[{id:'castle0',kind:'castle',owner:0,x:base.x,z:base.z,ready:1}],sources:[],point:{owner:null,progress:0},lastMove:null};
@@ -58,7 +89,7 @@ export function createMovementWorld({seed=4811}={}){
   state.units.push({id:'worker-'+(i+1),number:i+1,name:'Рабочий '+(i+1),owner:0,kind:'worker',x:base.x+dx,z:base.z+dz,hp:WORKER.hp,ready:1,attacked:0});
  }
  revealCurrent(state,0);
- return state;
+ return assignWorkerIdentity(state);
 }
 
 function blockedTiles(state,movingId,reserved=[]){
