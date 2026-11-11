@@ -162,3 +162,5 @@
 .table-hand .table-card{flex-basis:58px;width:58px;height:100px;margin-left:0!important;transform:none!important}
 .tall-table .table-hand:has(.table-card){padding:2px 0;gap:4px}
 .tall-table .table-hand .table-card{flex-basis:54px;width:54px;height:82px;margin-left:0!important;transform:none!important}
+.tall-table .outside-city{left:10px;right:auto;top:236px;max-height:42px;width:178px}
+.tall-table .outside-city .table-card{height:42px;width:30px}
