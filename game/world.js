@@ -8,6 +8,7 @@ const SKIN=0xdcc39a,WOOD=0x795f43,STONE=0xc8c6ac,DARK=0x374343;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const noise=(x,z)=>{const n=Math.sin(x*127.1+z*311.7)*43758.5453;return n-Math.floor(n);};
 const shortest=(a,b)=>Math.atan2(Math.sin(b-a),Math.cos(b-a));
+const escapeLabel=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const WORKER_COLORS=[0x66764a,0xa35b42,0x596f86,0xba9758,0x78604a,0x806475];
 export const CAMERA_EDGE_MARGIN=24;
 /** Screen-space navigation is independent of camera yaw and device pixel ratio */
@@ -105,7 +106,7 @@ export class WorldView{
     else if(tracked.button===2||e.shiftKey){this.cancelFollow();this.desiredYaw-=dx*.006;this.desiredPitch=clamp(this.desiredPitch+dy*.004,.35,1.28);}
     else if(tracked.moved)this.panPixels(dx,dy);
     tracked.x=e.clientX;tracked.y=e.clientY;return;}
-   const obj=this.pickAt(e);this.setHoveredUnit(obj?.type==='unit'?obj.id:null);this.hoverMarker.visible=!!obj&&obj.type==='ground'&&obj.x>=0&&obj.z>=0&&obj.x<WORLD.width&&obj.z<WORLD.height&&!this.menu&&!this.inputPaused;if(this.hoverMarker.visible){this.hoverMarker.position.set(obj.x,this.heightAt(obj.x,obj.z)+.12,obj.z);this.hoverMarker.material.color.setHex(this.build&&!this.canBuildAt(obj.x,obj.z)?0xc88c7a:0xffe7b1);}this.onHover?.(obj);};
+   const obj=this.pickAt(e);this.setHoveredUnit(obj?.type==='unit'?obj.id:null);this.hoverMarker.visible=this.state?.mode!=='placement'&&!!obj&&obj.type==='ground'&&obj.x>=0&&obj.z>=0&&obj.x<WORLD.width&&obj.z<WORLD.height&&!this.menu&&!this.inputPaused;if(this.hoverMarker.visible){this.hoverMarker.position.set(obj.x,this.heightAt(obj.x,obj.z)+.12,obj.z);this.hoverMarker.material.color.setHex(this.build&&!this.canBuildAt(obj.x,obj.z)?0xc88c7a:0xffe7b1);}this.onHover?.(obj);};
   this.onUp=e=>{const tracked=this.pointers.get(e.pointerId);this.pointers.delete(e.pointerId);this.canvas.style.cursor='grab';if(!this.inputPaused&&tracked&&!tracked.moved&&tracked.button===0&&this.pointers.size===0){const obj=this.pickAt(e);if(obj)this.onPick?.(obj);}try{this.canvas.releasePointerCapture(e.pointerId);}catch{}};
   this.onCancel=e=>{this.pointers.delete(e.pointerId);this.canvas.style.cursor='grab';};
   this.onWheel=e=>{if(this.inputPaused)return;e.preventDefault();this.setZoom(-e.deltaY*.0015);};this.onContext=e=>e.preventDefault();this.onWindowWheel=()=>this.cancelFollow();
@@ -161,7 +162,7 @@ export class WorldView{
   // River highlights are continuous, translucent ribbons rather than tiled water blocks
   const waterPositions=[],waterColors=[];for(const t of s.tiles){if(t.type!=='water'||(!menu&&!known(s,p,t)))continue;const x=t.x,z=t.z,sh=.51;for(const v of [[x-sh,z-sh],[x+sh,z-sh],[x+sh,z+sh],[x-sh,z-sh],[x+sh,z+sh],[x-sh,z+sh]]){waterPositions.push(v[0],-.005,v[1]);const n=noise(v[0],v[1]);waterColors.push(.34+n*.05,.59+n*.07,.58+n*.08);}}
   if(waterPositions.length){const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(waterPositions,3));g.setAttribute('color',new T.Float32BufferAttribute(waterColors,3));g.computeVertexNormals();this.waterMaterial=new T.MeshStandardMaterial({vertexColors:true,transparent:true,opacity:.82,roughness:.25,metalness:.08,side:T.DoubleSide});const water=new T.Mesh(g,this.waterMaterial);this.terrain.add(water);}
-  const trees=[],rocks=[],tufts=[];for(const t of s.tiles){if(!menu&&!known(s,p,t))continue;const nearFeature=s.buildings.some(b=>Math.hypot(b.x-t.x,b.z-t.z)<1.8)||s.sources.some(m=>Math.hypot(m.x-t.x,m.z-t.z)<.7);if(nearFeature)continue;
+  const trees=[],rocks=[],tufts=[];for(const t of s.tiles){if(!menu&&!known(s,p,t))continue;const nearFeature=s.buildings.some(b=>Math.hypot(b.x-t.x,b.z-t.z)<1.8)||s.sources.some(m=>Math.hypot(m.x-t.x,m.z-t.z)<.7)||(s.mode==='placement'&&(s.locations??[]).some(l=>Math.hypot(l.x-t.x,l.z-t.z)<1.3));if(nearFeature)continue;
    if(t.type==='forest'){for(let i=0;i<2;i++){const x=t.x+(noise(t.x+i*11,t.z)-.5)*.7,z=t.z+(noise(t.x,t.z+i*13)-.5)*.7;trees.push({x,z,y:this.heightAt(x,z),s:.72+noise(t.z+i,t.x)*.48,r:noise(t.x,t.z+i)*Math.PI*2,kind:noise(t.x,t.z)>.38?'pine':'oak'});}}
    if(t.type==='rock')rocks.push({x:t.x,z:t.z,y:this.heightAt(t.x,t.z),s:.55+noise(t.x,t.z)*.6,r:noise(t.z,t.x)*6});
    if((t.type==='plain'||t.type==='meadow')&&noise(t.x*2,t.z)>.72)tufts.push({x:t.x,z:t.z,y:this.heightAt(t.x,t.z)});
@@ -227,6 +228,53 @@ export class WorldView{
   const workers=Math.min(m.workers?.length??0,2);for(let i=0;i<workers;i++){const figure=this.figure('worker',m.owner??0,i*2);figure.position.set(i===0?-.55:.52,0,.55);figure.scale.setScalar(.67);figure.userData.working={phase:i*2.4};g.add(figure);}
   this.tagged(g,{type:'source',id:m.id});return g;
  }
+ placementLocation(location){
+  let group;
+  if(location.id==='forest'||location.id==='common-wood'||location.id==='quarry'){
+   group=this.source({...location,resource:location.id==='quarry'?'stone':'wood',owner:null,workers:[]});
+  }else if(location.id.startsWith('workshop')){
+   group=this.building({...location,kind:'forge'},true,this.state);
+  }else if(location.id==='market'){
+   group=this.building({...location,kind:'house',owner:2},true,this.state);
+   this.box(group,.70,.35,.20,.65,.12,.50,WOOD);
+   for(let i=0;i<3;i++)this.sphere(group,.50+i*.18,.49,.20,.10,i===1?0xb68b59:0xa89c68,1,.9,1);
+  }else{
+   group=new T.Group();group.position.set(location.x,this.heightAt(location.x,location.z),location.z);
+   this.box(group,0,.04,0,1.40,.08,1.10,0x887d56);
+   for(let row=0;row<3;row++)for(let col=0;col<5;col++){
+    const x=-.52+col*.26,z=-.34+row*.31;
+    this.cylinder(group,x,.20,z,.018,.34,0xc3b879,5);
+    this.sphere(group,x,.39,z,.065,0xcbbb7a,.65,1.5,.7);
+   }
+   this.cylinder(group,.88,.23,.25,.19,.42,0xad976a,9,.14);
+   for(const x of [-.84,.84])this.cylinder(group,x,.22,-.61,.035,.44,WOOD,6);
+   this.box(group,0,.31,-.61,1.75,.06,.06,WOOD);
+  }
+  const occupant=location.capacity===null?null:this.state.units.find(u=>location.workers?.includes(u.id));
+  const owner=occupant?.owner??location.owner;
+  const ring=this.ring(.88,.94,owner===null?0xd3c18d:TEAM[owner]??TEAM[2],.7);ring.position.y=.07;group.add(ring);
+  if(occupant&&location.owner===null)this.flag(group,.85,.48,-.30,occupant.owner,.46);
+  this.tagged(group,{type:'location',id:location.id});return group;
+ }
+ renderPlacementLocations(state){
+  const symbols={wood:'♣',stone:'◆',food:'●'},resourceNames={wood:'древесины',stone:'камня',food:'еды'};
+  for(const location of state.locations??[]){
+   const workers=location.workers??[],owner=location.owner,full=location.capacity!==null&&workers.length>=location.capacity;
+   this.syncEntity('location:'+location.id,`${owner}:${workers.join(',')}`,()=>this.placementLocation(location));
+   const values=value=>Object.entries(value??{}).filter(([,n])=>n>0).map(([resource,n])=>`${n} ${symbols[resource]??resource}`).join(' ');
+   const gain=values(location.reward),cost=values(location.cost),effect=(cost?`${cost} → `:'')+(gain?'+'+gain:'')+(location.draw?`${gain?' · ':''}+${location.draw} ▱`:'');
+   const capacity=location.capacity===null?'∞':`${workers.length}/${location.capacity}`;
+   const privateMark=owner===null?'':` · ${owner+1}`;
+   const label=this.addLabel('location:'+location.id,location.x,location.z,`<b>${escapeLabel(location.name)}</b><span>${effect}</span><span>${capacity}${privateMark}</span>`,'placement-label'+(full?' occupied':'')+(owner!==null?' private-location':''),()=>this.onPick({type:'location',id:location.id}),location.id.startsWith('workshop')?2.2:location.id==='market'?1.7:1.35);
+   const words=value=>Object.entries(value??{}).filter(([,n])=>n>0).map(([resource,n])=>`${n} ${resourceNames[resource]??resource}`).join(', ');
+   label.el.title=[location.name,location.description,owner!==null?`Только для игрока ${owner+1}`:'',full?'Место занято':location.capacity===null?'Общая локация':`Свободно мест: ${location.capacity-workers.length}`,cost?`Стоимость: ${words(location.cost)}`:'',gain?`Получить: ${words(location.reward)}`:'',location.draw?`Взять карт: ${location.draw}`:''].filter(Boolean).join(' — ');
+   label.el.setAttribute('aria-label',label.el.title);
+   label.el.style.borderColor=full?'#8f9279':owner!==null?(owner===0?'#92a6c4':'#94b5a0'):'#c9c195';
+   label.el.style.color=full?'#bdc3b4':'#eee3c7';
+   label.el.dataset.occupied=String(full);
+   label.width=label.el.offsetWidth||110;label.height=label.el.offsetHeight||22;
+  }
+ }
  addLabel(key,x,z,html,cls='',onClick,height=1.4,entity=null){let label=this.labelMap?.get(key);if(!label){const el=document.createElement('button');el.className='world-label '+cls;el.style.pointerEvents='auto';el.style.visibility='hidden';el.type='button';el.onclick=e=>{e.stopPropagation();onClick?.();};this.labelLayer.appendChild(el);label={el,pos:new T.Vector3(x,height,z),entity};this.labelMap??=new Map();this.labelMap.set(key,label);}label.el.innerHTML=html;label.el.className='world-label '+cls;label.el.dataset.mapKind=key.split(':')[0];label.el.dataset.mapId=key.split(':').slice(1).join(':');label.el.title=label.el.textContent;label.hoverOnly=key.startsWith('unit:');if(label.hoverOnly){label.el.style.background='#1d343c';label.el.style.opacity='1';label.el.style.backdropFilter='none';label.el.removeAttribute('title');}if(this.state?.sandbox&&key.startsWith('unit:')){const u=this.state.units.find(v=>v.id===key.slice(5));if(u){label.el.setAttribute('aria-label',u.name);label.el.removeAttribute('title');}}label.pos.set(x,height,z);label.entity=entity;label.seen=true;label.width=label.el.offsetWidth||70;label.height=label.el.offsetHeight||22;return label;}
  syncEntity(key,signature,build,target=null){let entity=this.entities.get(key);if(!entity||entity.signature!==signature){const previous=entity?.group.position.clone(),previousMoveSerial=entity?.moveSerial;if(entity)this.disposeObject(entity.group);const group=build();this.actors.add(group);entity={signature,group,from:null,to:null,moving:false,elapsed:0,duration:0,moveSerial:previousMoveSerial,startedMove:false};if(target){group.position.set(target.x,this.heightAt(target.x,target.z),target.z);if(previous){group.position.copy(previous);entity.from=previous;entity.to=new T.Vector3(target.x,this.heightAt(target.x,target.z),target.z);entity.duration=.6;entity.moving=previous.distanceTo(entity.to)>.08;entity.startedMove=entity.moving;}}this.entities.set(key,entity);}
   if(target){const dest=new T.Vector3(target.x,this.heightAt(target.x,target.z),target.z);const oldDest=entity.to??entity.group.position;if(oldDest.distanceTo(dest)>.08){entity.from=entity.group.position.clone();entity.to=dest;entity.elapsed=0;entity.duration=clamp(entity.from.distanceTo(dest)*.15,.45,1.15);entity.moving=true;entity.path=null;entity.startedMove=true;const diff=dest.clone().sub(entity.from);entity.facing=Math.atan2(-diff.x,-diff.z);this.spawnDust(entity.from);}}
@@ -235,16 +283,17 @@ export class WorldView{
  spawnDust(pos){const puff=this.sphere(this.effectLayer,pos.x,.12,pos.z,.13,0xd7c89d,1,.55,1);puff.material.transparent=true;puff.material.opacity=.32;puff.material.depthWrite=false;this.effects.push({mesh:puff,start:this.t,duration:.65,type:'dust'});}
  battleEffect(b){const pos=b.target??b.position??(Number.isFinite(b.x)?b:WORLD.center);const ring=this.ring(.25,.43,b.win?0xe6c078:0xd09876,.85);ring.position.set(pos.x,this.heightAt(pos.x,pos.z)+.15,pos.z);this.effectLayer.add(ring);this.effects.push({mesh:ring,start:this.t,duration:1,type:'battle'});for(let i=0;i<8;i++){const p=this.sphere(this.effectLayer,pos.x,.45,pos.z,.045,i%2?0xe6c68a:0xb2b69c);this.effects.push({mesh:p,start:this.t,duration:.7,type:'spark',angle:i/8*Math.PI*2});}}
  render(s,p,{selected=null,menu=false,build=null}={}){
-  const enteringGame=this.menu&&!menu,newWorld=this.gameSeed!==s.seed,changedPlayer=this.lastViewer!==p;this.state=s;this.p=p;this.menu=menu;this.selected=selected;this.build=build;
+  const placement=s.mode==='placement',roundChanged=placement&&this.state&&this.state.round!==s.round,enteringGame=this.menu&&!menu,newWorld=this.gameSeed!==s.seed,changedPlayer=this.lastViewer!==p;this.state=s;this.p=p;this.menu=menu;this.selected=selected;this.build=build;
   if(newWorld){for(const entity of this.entities.values())this.disposeObject(entity.group);this.entities.clear();this.labelLayer.innerHTML='';this.labelMap=new Map();this.staticKey='';this.lastBattleKey=null;this.gameSeed=s.seed;this.cancelFollow();this.setHoveredUnit(null);}
-  if(newWorld||enteringGame||changedPlayer){this.resetCamera();if(newWorld){this.target.copy(this.desiredTarget);this.zoom=this.desiredZoom;this.yaw=this.desiredYaw;this.pitch=this.desiredPitch;}this.lastViewer=p;}
-  const explored=menu?'all':s.players[p].explored.reduce((a,b,i)=>b?(a+i*13+1)%2147483647:a,0),staticKey=`${s.seed}:${p}:${menu}:${explored}:${s.buildings.length}`;if(this.staticKey!==staticKey){this.rebuildTerrain(s,p,menu);this.staticKey=staticKey;}
+  if(newWorld||enteringGame||changedPlayer&&!placement){this.resetCamera();if(newWorld){this.target.copy(this.desiredTarget);this.zoom=this.desiredZoom;this.yaw=this.desiredYaw;this.pitch=this.desiredPitch;}this.lastViewer=p;}
+  const explored=menu?'all':s.players[p].explored.reduce((a,b,i)=>b?(a+i*13+1)%2147483647:a,0),staticKey=`${s.seed}:${p}:${menu}:${explored}:${s.buildings.length}:${placement?s.locations?.map(l=>l.id).join(','):''}`;if(this.staticKey!==staticKey){this.rebuildTerrain(s,p,menu);this.staticKey=staticKey;}
   for(const entity of this.entities.values())entity.seen=false;for(const label of this.labelMap?.values()??[])label.seen=false;
+  if(placement&&!menu)this.renderPlacementLocations(s);
   for(const m of s.sources){if(!menu&&!known(s,p,m))continue;this.syncEntity('source:'+m.id,`${m.owner}:${m.workers?.length}`,()=>this.source(m));if(!menu)this.addLabel('source:'+m.id,m.x,m.z,`<span class="source-symbol">${{gold:'◈',wood:'♣',stone:'◆'}[m.resource]}</span><span class="source-label-name">${{gold:'Золотая жила',wood:'Лесная делянка',stone:'Каменоломня'}[m.resource]}</span><span>${m.workers?.length??0}/${m.slots}</span>`,m.owner===p?'owned':'',()=>this.onPick({type:'source',id:m.id}),.98);}
   for(const b of s.buildings){if(!menu&&b.owner!==p&&!visible(s,p,b))continue;const level=s.players[b.owner]?.level??1;this.syncEntity('building:'+b.id,`${b.kind}:${b.owner}:${b.ready<=s.round}:${level}`,()=>this.building(b,b.ready<=s.round,s));}
   if(!s.sandbox){const point={id:'point',kind:'point',owner:s.point.owner??2,...WORLD.center};this.syncEntity('point:point',String(point.owner),()=>{const group=this.castle(point,2);group.scale.setScalar(1.06);return group;});if(!menu)this.addLabel('point:point',point.x,point.z,`<span>✧</span><span>${s.point.owner===null?'Крепость Пограничья':`${s.point.progress}/${WORLD.hold} · ${FACTIONS[s.point.owner].short}`}</span>`,'point-label',()=>this.onPick({type:'point'}),4.05);}
   for(let player=0;player<s.players.length;player++){const base=WORLD.bases[player];if(!base||(!menu&&player!==p&&!visible(s,p,base)))continue;const free=Math.max(0,s.players[player].workers-s.sources.filter(m=>m.owner===player).reduce((n,m)=>n+(m.workers?.length??0),0)-s.units.filter(u=>u.owner===player&&u.kind==='worker').reduce((n,u)=>n+count(u),0));if(free)this.syncEntity('citizens:'+player,String(free),()=>{const group=new T.Group();group.position.set(base.x,this.heightAt(base.x,base.z),base.z);for(let i=0;i<Math.min(3,free);i++){const citizen=this.figure('worker',player,i*1.6);citizen.position.set(-1.15+i*.46,0,1.35+(i%2)*.2);citizen.scale.setScalar(.66);citizen.userData.working={phase:i*2.3};group.add(citizen);}this.tagged(group,{type:'building',id:'castle'+player});return group;});}
-  for(const u of s.units){if(!menu&&u.owner!==p&&!visible(s,p,u))continue;const entity=this.syncEntity('unit:'+u.id,`${u.owner}:${u.kind}:${count(u)}:${u.portrait??''}`,()=>this.unit(u),u);entity.unit=u;entity.group.userData.unitId=u.id;const move=s.lastMove;if(entity.startedMove&&move?.id===u.id&&move.serial!==entity.moveSerial&&move.path?.length>1){const end=move.path.at(-1);if(Math.hypot(end.x-u.x,end.z-u.z)<.2){entity.path=[entity.from.clone(),...move.path.slice(1).map(v=>new T.Vector3(v.x,this.heightAt(v.x,v.z),v.z))];entity.pathLengths=[0];for(let i=1;i<entity.path.length;i++)entity.pathLengths.push(entity.pathLengths.at(-1)+entity.path[i].distanceTo(entity.path[i-1]));entity.duration=s.sandbox?clamp(entity.pathLengths.at(-1)*.28,.5,14):clamp(entity.pathLengths.at(-1)*.18,.5,1.6);entity.moveSerial=move.serial;}}entity.startedMove=false;if(!menu){const team=u.owner===2?'neutral':u.owner===p?'friendly':'enemy',kind=TROOPS[u.kind]??{};this.addLabel('unit:'+u.id,u.x,u.z,`<span>${kind.icon??'♟'}</span><b>${s.sandbox?(u.name??TROOPS[u.kind]?.name??'Рабочий'):(u.owner===p?(kind.short??u.kind)+' · ':'')+count(u)}</b>${u.attacked===s.round?'<i>✓</i>':''}`,team+(u.id===selected?' selected':''),()=>this.onPick({type:'unit',id:u.id}),u.kind==='horse'?2.05:u.kind==='worker'?1.35:1.65,entity);}}
+  for(const u of s.units){if(!placement&&!menu&&u.owner!==p&&!visible(s,p,u))continue;const entity=this.syncEntity('unit:'+u.id,`${u.owner}:${u.kind}:${count(u)}:${u.portrait??''}`,()=>this.unit(u),u);entity.unit=u;entity.group.userData.unitId=u.id;if(roundChanged){entity.group.position.set(u.x,this.heightAt(u.x,u.z),u.z);entity.moving=false;entity.from=null;entity.to=null;entity.path=null;entity.startedMove=false;}const move=s.lastMove;if(entity.startedMove&&move?.id===u.id&&move.serial!==entity.moveSerial&&move.path?.length>1){const end=move.path.at(-1);if(Math.hypot(end.x-u.x,end.z-u.z)<.2){entity.path=[entity.from.clone(),...move.path.slice(1).map(v=>new T.Vector3(v.x,this.heightAt(v.x,v.z),v.z))];entity.pathLengths=[0];for(let i=1;i<entity.path.length;i++)entity.pathLengths.push(entity.pathLengths.at(-1)+entity.path[i].distanceTo(entity.path[i-1]));entity.duration=s.sandbox?clamp(entity.pathLengths.at(-1)*.28,.5,14):clamp(entity.pathLengths.at(-1)*.18,.5,1.6);entity.moveSerial=move.serial;}}entity.startedMove=false;if(!menu){const team=u.owner===2?'neutral':u.owner===p?'friendly':'enemy',kind=TROOPS[u.kind]??{};this.addLabel('unit:'+u.id,u.x,u.z,`<span>${kind.icon??'♟'}</span><b>${s.sandbox?(u.name??TROOPS[u.kind]?.name??'Рабочий'):(u.owner===p?(kind.short??u.kind)+' · ':'')+count(u)}</b>${u.attacked===s.round?'<i>✓</i>':''}`,team+(u.id===selected?' selected':''),()=>this.onPick({type:'unit',id:u.id}),u.kind==='horse'?2.05:u.kind==='worker'?1.35:1.65,entity);}}
   for(const [key,entity]of this.entities)if(!entity.seen){this.disposeObject(entity.group);this.entities.delete(key);}for(const [key,label]of this.labelMap??[])if(!label.seen){label.el.remove();this.labelMap.delete(key);}
   this.labels=[...(this.labelMap?.values()??[])].sort((a,b)=>{const priority=l=>l.el.classList.contains('city-label')||l.el.classList.contains('point-label')?0:l.el.classList.contains('selected')?1:l.el.classList.contains('friendly')?2:3;return priority(a)-priority(b);});this.flags=[];this.smoke=[];this.actors.traverse(o=>{if(o.userData.wave)this.flags.push(o);if(o.userData.smoke)this.smoke.push(o);});
   const unit=s.units.find(u=>u.id===selected),entity=unit?this.entities.get('unit:'+unit.id):null;this.selection.visible=!!entity&&!menu;this.reach.visible=!!entity&&unit.owner===p&&!menu&&!build&&!s.sandbox;if(entity){this.selection.position.copy(entity.group.position);this.selection.position.y+=.1;this.reach.position.copy(this.selection.position);this.reach.scale.setScalar(moveRange(s,unit));}
