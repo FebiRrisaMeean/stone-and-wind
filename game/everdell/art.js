@@ -16,3 +16,12 @@ const shapes={
  ANY:'<path d="m12 2 9 10-9 10L3 12z" fill="#cfba8c" stroke="#897249"/><circle cx="12" cy="12" r="3" fill="#f3e6c5"/>'
 };
 export function resourceIcon(name){return `<svg class="resource-icon" viewBox="0 0 24 24" aria-hidden="true">${shapes[name]??shapes.ANY}</svg>`;}
+
+const cardMarks={
+ PRODUCTION:'<path d="M4 18C2 7 13 1 22 3c-1 11-6 18-16 17L18 7M6 20l-2 2"/>',
+ GOVERNANCE:'<path d="M7 4h13v15H7c-5 0-5-6 0-6h11M7 4c-5 0-5 6 0 6M10 8h7m-7 4h7"/>',
+ DESTINATION:'<ellipse cx="12" cy="16" rx="6" ry="5"/><ellipse cx="4" cy="8" rx="2.5" ry="3.5"/><ellipse cx="10" cy="4" rx="2.5" ry="3.5"/><ellipse cx="17" cy="5" rx="2.5" ry="3.5"/><ellipse cx="22" cy="10" rx="2" ry="3"/>',
+ PROSPERITY:'<path d="m12 2 3 6 7 1-5 5 1 8-6-4-6 4 1-8-5-5 7-1z"/>',
+ TRAVELER:'<path d="m3 21 17-18M6 5q10-5 12 5-1 6-8 5L6 5z"/>'
+};
+export function cardTypeIcon(type){return `<svg class="card-type-icon" viewBox="0 0 24 24" aria-hidden="true" fill="${type==='DESTINATION'?'currentColor':'none'}" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${cardMarks[type]??cardMarks.PRODUCTION}</svg>`;}

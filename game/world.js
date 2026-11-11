@@ -1,7 +1,8 @@
 import * as T from '../vendor/three.module.js';
+import {resourceIcon} from './everdell/art.js?v=20261111-19';
 import {FACTIONS,TROOPS,WORLD,BUILDINGS} from './data.js?v=20261111-14';
 import {count,visible,known,moveRange} from './movement.js?v=20261111-14';
-import {woodlandCottage,ancientTree,woodlandFigure,woodlandSource,woodlandLocation,addWoodlandTerrain,animateWoodland} from './woodland-world.js?v=20261111-woodland';
+import {woodlandCottage,ancientTree,woodlandFigure,woodlandSource,woodlandLocation,addWoodlandTerrain,animateWoodland} from './woodland-world.js?v=20261111-19';
 
 const PALETTE={plain:0x7f9857,meadow:0x9eae69,forest:0x617d48,road:0xc7b589,rock:0x9da186,water:0x79b2a7,mist:0x506d59};
 const TEAM=[0x617baf,0x4f8c73,0x9b8058,0x977e9d];
@@ -25,6 +26,23 @@ export function unitHitRegion(id,bounds){
 }
 export function nearestUnitHit(regions,x,y){
  let best=null,bestDistance=Infinity;for(const r of regions){const dx=x-r.x,dy=y-r.y;if((dx/r.halfWidth)**2+(dy/r.halfHeight)**2>1)continue;const distance=dx*dx+dy*dy;if(distance<bestDistance){best=r.id;bestDistance=distance;}}return best;
+}
+
+
+/** Find the nearest genuinely free rectangle by sweeping all obstacle edges */
+export function placeMapLabel(anchorX,anchorY,width,height,obstacles,viewportWidth,viewportHeight,gap=8){
+ const margin=10,left=margin+width/2,right=viewportWidth-margin-width/2,top=margin+height,bottom=viewportHeight-margin;
+ const ys=new Set([clamp(anchorY-18,top,bottom),clamp(anchorY+height+18,top,bottom),top,bottom]);
+ for(const o of obstacles){ys.add(clamp(o.top-gap,top,bottom));ys.add(clamp(o.bottom+gap+height,top,bottom));}
+ let best=null;
+ for(const y of ys){
+  const intervals=obstacles.filter(o=>y>o.top-gap&&y-height<o.bottom+gap).map(o=>[Math.max(left,o.left-gap-width/2),Math.min(right,o.right+gap+width/2)]).filter(([a,b])=>b>a).sort((a,b)=>a[0]-b[0]);
+  const free=[];let cursor=left;for(const [a,b]of intervals){if(a>cursor)free.push([cursor,a]);cursor=Math.max(cursor,b);}if(cursor<right)free.push([cursor,right]);
+  for(const [a,b]of free){const x=clamp(anchorX,a,b),r={left:x-width/2,right:x+width/2,top:y-height,bottom:y},edgeX=clamp(anchorX,r.left,r.right),edgeY=clamp(anchorY,r.top,r.bottom),distance=Math.hypot(anchorX-edgeX,anchorY-edgeY),score=distance+Math.hypot(x-anchorX,y-height/2-anchorY)*.12+(y-height>anchorY?5:0);
+   if(!best||score<best.score)best={x,y,r,score};
+  }
+ }
+ return best;
 }
 
 
@@ -178,24 +196,71 @@ export class WorldView{
  source(m){return woodlandSource(this,m);}
  placementLocation(location){return woodlandLocation(this,location);}
  renderPlacementLocations(state){
-  const symbols={wood:'♣',stone:'◆',food:'●',twig:'♣',resin:'⬟',pebble:'◆',berry:'●'},resourceNames={wood:'древесины',stone:'камня',food:'еды',twig:'веток',resin:'смолы',pebble:'камушков',berry:'ягод'};
+  const resourceNames={wood:'древесины',stone:'камня',food:'еды',twig:'веток',resin:'смолы',pebble:'камушков',berry:'ягод'};
+  const journeys=(state.locations??[]).filter(l=>(l.actualName??l.id).includes('JOURNEY'));
+  if(journeys.length&&(!this.journeyBoard||!this.journeyBoard.isConnected)){
+   this.journeyBoard=document.createElement('section');this.journeyBoard.className='journey-board';this.journeyBoard.setAttribute('aria-label','Путешествие');
+   this.journeyBoard.innerHTML='<header><b>Путешествие</b><span>Только осенью</span></header><div class="journey-stops"></div>';
+   this.labelLayer.appendChild(this.journeyBoard);
+  }
+  if(this.journeyBoard){this.journeyBoard.hidden=!journeys.length;this.journeyBoard.dataset.active=String(journeys.some(l=>l.available));}
+  const reward=(key,value)=>`<span class="location-reward-item"><b>${value}</b>${resourceIcon(key)}</span>`;
+  const paw='<svg viewBox="0 0 32 32" aria-hidden="true"><ellipse cx="16" cy="21" rx="8" ry="7"/><ellipse cx="7" cy="12" rx="3.4" ry="4.2" transform="rotate(-25 7 12)"/><ellipse cx="14" cy="7" rx="3.4" ry="4.2"/><ellipse cx="23" cy="10" rx="3.4" ry="4.2" transform="rotate(25 23 10)"/></svg>';
   for(const location of state.locations??[]){
-   const workers=location.workers??[],owner=location.owner,full=location.capacity!==null&&workers.length>=location.capacity;
+   const id=location.actualName??location.id,journey=id.includes('JOURNEY'),workers=location.workers??[],owner=location.owner,full=location.capacity!==null&&workers.length>=location.capacity;
    this.syncEntity('location:'+location.id,`${owner}:${workers.join(',')}`,()=>this.placementLocation(location));
-   const values=value=>Object.entries(value??{}).filter(([,n])=>n>0).map(([resource,n])=>`${n} ${symbols[resource]??resource}`).join(' ');
-   const gain=values(location.reward),cost=values(location.cost),effect=location.effectText!==undefined?location.effectText:(cost?`${cost} → `:'')+(gain?'+'+gain:'')+(location.draw?`${gain?' · ':''}+${location.draw} ▱`:'');
-   const capacity=location.capacity===null?'∞':`${workers.length}/${location.capacity}`;
-   const privateMark=owner===null?'':` · ${owner+1}`;
-   const label=this.addLabel('location:'+location.id,location.x,location.z,`<b>${escapeLabel(location.name)}</b><span>${effect}</span><span>${capacity}${privateMark}</span>`,'placement-label'+(full?' occupied':'')+(owner!==null?' private-location':''),()=>this.onPick({type:'location',id:location.id}),location.id.startsWith('workshop')?2.2:location.id==='market'?1.7:1.35);
-   const words=value=>Object.entries(value??{}).filter(([,n])=>n>0).map(([resource,n])=>`${n} ${resourceNames[resource]??resource}`).join(', ');
-   label.el.title=[location.name,location.description,owner!==null?`Только для игрока ${owner+1}`:'',full?'Место занято':location.capacity===null?'Общая локация':`Свободно мест: ${location.capacity-workers.length}`,cost?`Стоимость: ${words(location.cost)}`:'',gain&&!location.description?`Получить: ${words(location.reward)}`:'',location.draw?`Взять карт: ${location.draw}`:''].filter(Boolean).join(' — ');
-   label.el.setAttribute('aria-label',label.el.title);
-   label.el.style.borderColor=full?'#8f9279':owner!==null?(owner===0?'#92a6c4':'#94b5a0'):'#c9c195';
-   label.el.style.color=full?'#bdc3b4':'#eee3c7';
-   label.el.dataset.occupied=String(full);
-   label.width=label.el.offsetWidth||110;label.height=label.el.offsetHeight||22;
+   const gains=location.rewardIcons??Object.fromEntries(Object.entries(location.reward??{}).map(([key,value])=>[({wood:'TWIG',stone:'PEBBLE',food:'BERRY'})[key]??key.toUpperCase(),value]));
+   if(!location.rewardIcons){if(id.includes('CARD'))gains.CARD=id.startsWith('TWO_CARDS')?2:id==='ONE_PEBBLE_THREE_CARD'?3:1;if(id==='TWO_CARDS_AND_ONE_VP')gains.VP=1;}
+   let gain=Object.entries(gains).filter(([,n])=>n>0).map(([key,n])=>reward(key,n)).join('');
+   if(!gain){
+    if(id==='HAVEN')gain=reward('CARD',2)+'<span class="location-arrow">→</span>'+reward('ANY',1);
+    else if(id==='TWO_WILD')gain=reward('ANY',2);
+    else if(id==='TWO_CARDS_ONE_WILD')gain=reward('CARD',2)+reward('ANY',1);
+    else if(id==='COPY_BASIC_ONE_CARD')gain=reward('CARD',1)+'<span class="location-reward-note">+ копия места</span>';
+    else if(id==='DRAW_TWO_MEADOW_PLAY_ONE_FOR_ONE_LESS')gain=reward('CARD',2)+'<span class="location-reward-note">· скидка 1</span>'+resourceIcon('ANY');
+    else if(id==='DISCARD_ANY_THEN_DRAW_TWO_PER_CARD')gain='<span class="location-reward-note">Сброс → ×2 карты</span>';
+    else if(id==='DISCARD_UP_TO_THREE_CARDS_TO_GAIN_WILD_PER_CARD')gain='<span class="location-reward-note">До 3 карт → ресурсы</span>';
+    else gain='<span class="location-reward-note">Особый эффект</span>';
+   }
+   if(id==='COPY_BASIC_ONE_CARD'&&Object.keys(gains).length)gain+='<span class="location-reward-note">+ копия</span>';
+   const free=location.capacity===null,capacity=full?'Занято':free?'Общее место':`Место ${workers.length}/${location.capacity}`;
+   let html,cls;
+   if(journey){const number=Number(location.name.match(/\d+/)?.[0]??({JOURNEY_TWO:2,JOURNEY_THREE:3,JOURNEY_FOUR:4,JOURNEY_FIVE:5})[id]??2);html=`<span class="journey-stop-paw">${paw}<b>${number}</b></span><span class="journey-exchange">${number} ${resourceIcon('CARD')}<i>→</i>${number} ${resourceIcon('VP')}</span><span class="location-capacity">${full?'Занято':free?'Общее место':'1 место'}</span>`;cls='placement-label journey-stop';}
+   else {html=`<span class="location-heading"><span class="location-paw">${paw}</span><b>${escapeLabel(location.name)}</b></span><span class="location-rewards">${gain}</span><span class="location-capacity">${capacity}</span>`;cls='placement-label location-plaque'+(location.locationType==='FOREST'?' forest-location':'')+(id==='HAVEN'?' haven-location':'');}
+   const label=this.addLabel('location:'+location.id,location.x,location.z,html,cls+(full?' occupied':'')+(owner!==null?' private-location':''),()=>this.onPick({type:'location',id:location.id}),.45);
+   label.journey=journey;label.location=true;label.el.dataset.occupied=String(full);label.el.dataset.available=String(location.available!==false);
+   if(journey){label.el.style.transform='';label.el.style.visibility='visible';this.journeyBoard.querySelector('.journey-stops').appendChild(label.el);label.el.style.order=String(Number(location.name.match(/\d+/)?.[0]??2));}
+   label.el.title=[location.name,location.description,owner!==null?`Только для игрока ${owner+1}`:'',full?'Место занято':free?'Общая локация':`Свободно мест: ${location.capacity-workers.length}`].filter(Boolean).join(' — ');
+   label.el.setAttribute('aria-label',label.el.title);label.width=label.el.offsetWidth||150;label.height=label.el.offsetHeight||82;
   }
  }
+ updateMapLabels(){
+  const w=this.container.clientWidth,h=this.container.clientHeight,placed=[],bounds=this.container.getBoundingClientRect();
+  const rect=(x,y,width,height)=>({left:x-width/2,right:x+width/2,top:y-height,bottom:y});
+  const overlaps=(a,b,gap=6)=>a.right>b.left-gap&&a.left<b.right+gap&&a.bottom>b.top-gap&&a.top<b.bottom+gap;
+  for(const el of this.container.parentElement?.querySelectorAll('.round-info,.round-actions,.portrait-dock,.minimap-panel')??[]){const r=el.getBoundingClientRect();placed.push({left:r.left-bounds.left,right:r.right-bounds.left,top:r.top-bounds.top,bottom:r.bottom-bounds.top});}
+  const journeys=this.labels.filter(l=>l.journey);
+  if(this.journeyBoard&&journeys.length){
+   const anchor=journeys.reduce((sum,l)=>sum.add(l.pos),new T.Vector3()).multiplyScalar(1/journeys.length);anchor.y=this.heightAt(anchor.x,anchor.z)+.45;const point=anchor.project(this.camera),x=(point.x*.5+.5)*w,y=(-point.y*.5+.5)*h,shown=point.z>-1&&point.z<1&&x>-100&&x<w+100&&y>-50&&y<h+100;
+   const bw=this.journeyBoard.offsetWidth||470,bh=this.journeyBoard.offsetHeight||122,xx=clamp(x,bw/2+12,w-bw/2-12),yy=clamp(y,145+bh,h-124);
+   this.journeyBoard.style.transform=`translate(${xx}px,${yy}px) translate(-50%,-100%)`;this.journeyBoard.style.visibility=shown?'visible':'hidden';if(shown)placed.push(rect(xx,yy,bw,bh));
+  }
+  for(const label of this.labels){
+   if(label.journey)continue;
+   const world=label.entity?label.entity.group.position.clone().add(new T.Vector3(0,label.pos.y,0)):label.pos.clone();if(!label.entity)world.y+=this.heightAt(world.x,world.z);const point=world.project(this.camera),anchorX=(point.x*.5+.5)*w,anchorY=(-point.y*.5+.5)*h;
+   const shown=point.z>-1&&point.z<1&&anchorX>-80&&anchorX<w+80&&anchorY>0&&anchorY<h+30&&(!label.hoverOnly||label.entity?.unit?.id===this.hoveredUnitId);let x=anchorX,y=anchorY;
+   if(shown){const ww=label.el.offsetWidth||label.width,hh=label.el.offsetHeight||label.height;
+    if(label.location){
+     const best=placeMapLabel(anchorX,anchorY,ww,hh,placed,w,h);
+     if(best){x=best.x;y=best.y;placed.push(best.r);}else{x=clamp(anchorX,ww/2+10,w-ww/2-10);y=clamp(anchorY-18,hh+10,h-10);placed.push(rect(x,y,ww,hh));}
+     const lineX=clamp(anchorX,x-ww/2,x+ww/2),lineY=clamp(anchorY,y-hh,y),dx=anchorX-lineX,dy=anchorY-lineY;
+     label.el.style.setProperty('--leader-opacity',Math.hypot(dx,dy)>6?'1':'0');label.el.style.setProperty('--leader-start-x',`${lineX-x}px`);label.el.style.setProperty('--leader-start-y',`${lineY-y}px`);label.el.style.setProperty('--leader-x',`${anchorX-x}px`);label.el.style.setProperty('--leader-y',`${anchorY-y}px`);label.el.style.setProperty('--leader-length',`${Math.hypot(dx,dy)}px`);label.el.style.setProperty('--leader-angle',`${Math.atan2(dy,dx)}rad`);
+    }else{for(let attempt=0;attempt<10;attempt++){const hit=placed.find(r=>overlaps(rect(x,y,ww,hh),r,3));if(!hit)break;y=hit.top-5;}placed.push(rect(x,y,ww,hh));}
+   }
+   label.el.style.transform=`translate(${x}px,${y}px) translate(-50%,-100%)`;label.el.style.visibility=shown?'visible':'hidden';
+  }
+ }
+
  addLabel(key,x,z,html,cls='',onClick,height=1.4,entity=null){let label=this.labelMap?.get(key);if(!label){const el=document.createElement('button');el.className='world-label '+cls;el.style.pointerEvents='auto';el.style.visibility='hidden';el.type='button';el.onclick=e=>{e.stopPropagation();onClick?.();};this.labelLayer.appendChild(el);label={el,pos:new T.Vector3(x,height,z),entity};this.labelMap??=new Map();this.labelMap.set(key,label);}label.el.innerHTML=html;label.el.className='world-label '+cls;label.el.dataset.mapKind=key.split(':')[0];label.el.dataset.mapId=key.split(':').slice(1).join(':');label.el.title=label.el.textContent;label.hoverOnly=key.startsWith('unit:');if(label.hoverOnly){label.el.style.background='#1d343c';label.el.style.opacity='1';label.el.style.backdropFilter='none';label.el.removeAttribute('title');}if(this.state?.sandbox&&key.startsWith('unit:')){const u=this.state.units.find(v=>v.id===key.slice(5));if(u){label.el.setAttribute('aria-label',u.name);label.el.removeAttribute('title');}}label.pos.set(x,height,z);label.entity=entity;label.seen=true;label.width=label.el.offsetWidth||70;label.height=label.el.offsetHeight||22;return label;}
  syncEntity(key,signature,build,target=null){let entity=this.entities.get(key);if(!entity||entity.signature!==signature){const previous=entity?.group.position.clone(),previousMoveSerial=entity?.moveSerial;if(entity)this.disposeObject(entity.group);const group=build();this.actors.add(group);entity={signature,group,from:null,to:null,moving:false,elapsed:0,duration:0,moveSerial:previousMoveSerial,startedMove:false};if(target){group.position.set(target.x,this.heightAt(target.x,target.z),target.z);if(previous){group.position.copy(previous);entity.from=previous;entity.to=new T.Vector3(target.x,this.heightAt(target.x,target.z),target.z);entity.duration=.6;entity.moving=previous.distanceTo(entity.to)>.08;entity.startedMove=entity.moving;}}this.entities.set(key,entity);}
   if(target){const dest=new T.Vector3(target.x,this.heightAt(target.x,target.z),target.z);const oldDest=entity.to??entity.group.position;if(oldDest.distanceTo(dest)>.08){entity.from=entity.group.position.clone();entity.to=dest;entity.elapsed=0;entity.duration=clamp(entity.from.distanceTo(dest)*.15,.45,1.15);entity.moving=true;entity.path=null;entity.startedMove=true;const diff=dest.clone().sub(entity.from);entity.facing=Math.atan2(-diff.x,-diff.z);this.spawnDust(entity.from);}}
@@ -236,7 +301,7 @@ export class WorldView{
   if(this.waterMaterial){this.waterMaterial.opacity=.68+Math.sin(this.t*1.4)*.035;this.waterMaterial.roughness=.24+Math.sin(this.t*.8)*.08;}
   if(this.selection.visible){const entity=this.entities.get('unit:'+this.selected);if(entity){this.selection.position.copy(entity.group.position);this.selection.position.y+=.12;this.reach.position.copy(this.selection.position);}this.selection.material.opacity=.65+Math.sin(this.t*3)*.15;}
   for(const fx of [...this.effects]){const age=(this.t-fx.start)/fx.duration;if(age>=1){this.disposeObject(fx.mesh);this.effects.splice(this.effects.indexOf(fx),1);continue;}fx.mesh.material.opacity=(1-age)*(fx.type==='battle'?.85:.38);if(fx.type==='spark'){fx.mesh.position.x+=Math.cos(fx.angle)*dt*1.9;fx.mesh.position.z+=Math.sin(fx.angle)*dt*1.9;fx.mesh.position.y+=dt*(.8-age*2);}else fx.mesh.scale.setScalar(1+age*(fx.type==='battle'?4:2));}
-  const w=this.container.clientWidth,h=this.container.clientHeight,placed=[];for(const label of this.labels){const world=label.entity?label.entity.group.position.clone().add(new T.Vector3(0,label.pos.y,0)):label.pos.clone();if(!label.entity)world.y+=this.heightAt(world.x,world.z);const point=world.project(this.camera),x=(point.x*.5+.5)*w,y=(-point.y*.5+.5)*h,shown=point.z>-1&&point.z<1&&x>-80&&x<w+80&&y>0&&y<h+30&&(!label.hoverOnly||label.entity?.unit?.id===this.hoveredUnitId);let yy=y;if(shown){const ww=label.width,hh=label.height;for(let attempt=0;attempt<10;attempt++){const hit=placed.find(r=>x+ww/2>r.left-3&&x-ww/2<r.right+3&&yy>r.top-3&&yy-hh<r.bottom+3);if(!hit)break;yy=hit.top-5;}placed.push({left:x-ww/2,right:x+ww/2,top:yy-hh,bottom:yy});}label.el.style.transform=`translate(${x}px,${yy}px) translate(-50%,-100%)`;label.el.style.visibility=shown?'visible':'hidden';}
+  this.updateMapLabels();
   this.renderer.render(this.scene,this.camera);
  }
  dispose(){cancelAnimationFrame(this.frame);this.resizeObserver.disconnect();for(const [name,fn]of [['pointerdown',this.onDown],['pointermove',this.onMove],['pointerup',this.onUp],['pointercancel',this.onCancel],['contextmenu',this.onContext]])this.canvas.removeEventListener(name,fn);this.canvas.removeEventListener('wheel',this.onWheel);window.removeEventListener('keydown',this.onKeyDown);window.removeEventListener('keyup',this.onKeyUp);window.removeEventListener('blur',this.onBlur);window.removeEventListener('focus',this.onFocus);window.removeEventListener('pointermove',this.onWindowMove,true);window.removeEventListener('pointerout',this.onWindowOut);window.removeEventListener('wheel',this.onWindowWheel,true);document.documentElement.removeEventListener('mouseleave',this.onWindowLeave);document.removeEventListener('visibilitychange',this.onVisibility);for(const group of [this.terrain,this.detail,this.actors,this.markers,this.effectLayer])this.clear(group);this.renderer.dispose();this.container.innerHTML='';}
