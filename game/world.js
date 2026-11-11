@@ -1,6 +1,6 @@
 import * as T from '../vendor/three.module.js';
-import { FACTIONS,TROOPS,WORLD } from './data.js?v=20261111-4';
-import { count,visible,known,moveRange } from './engine.js?v=20261111-4';
+import { FACTIONS,TROOPS,WORLD } from './data.js?v=20261111-5';
+import { count,visible,known,moveRange } from './engine.js?v=20261111-5';
 const COLORS={plain:0x92ad72,meadow:0xa8bc78,forest:0x6b9568,road:0xccbd91,rock:0x9caaa0,water:0x5baeb3,mist:0x273f43};
 export class WorldView{
  constructor(container,onPick,onHover){
