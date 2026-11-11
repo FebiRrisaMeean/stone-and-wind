@@ -1,4 +1,4 @@
-import {mountGame} from './main.js?v=20261111-11';
+import {mountGame} from './main.js?v=20261111-12';
 const node=document.querySelector('[data-game-host]');
 if(node&&!node.dataset.mounted){
  node.dataset.mounted='true';
