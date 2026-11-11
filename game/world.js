@@ -3,7 +3,7 @@ import {FACTIONS,TROOPS,WORLD,BUILDINGS} from './data.js?v=20261111-14';
 import {count,visible,known,moveRange} from './movement.js?v=20261111-14';
 
 const PALETTE={plain:0xa2ad73,meadow:0xb8bd83,forest:0x81956a,road:0xc8b88b,rock:0x9ca58b,water:0x76aaa6,mist:0x465d63};
-const TEAM=[0x617baf,0x4f8c73,0x9b8058];
+const TEAM=[0x617baf,0x4f8c73,0x9b8058,0x977e9d];
 const SKIN=0xdcc39a,WOOD=0x795f43,STONE=0xc8c6ac,DARK=0x374343;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const noise=(x,z)=>{const n=Math.sin(x*127.1+z*311.7)*43758.5453;return n-Math.floor(n);};
@@ -230,11 +230,11 @@ export class WorldView{
  }
  placementLocation(location){
   let group;
-  if(location.id==='forest'||location.id==='common-wood'||location.id==='quarry'){
-   group=this.source({...location,resource:location.id==='quarry'?'stone':'wood',owner:null,workers:[]});
+  if(location.kind==='wood'||location.kind==='stone'||location.id==='forest'||location.id==='common-wood'||location.id==='quarry'){
+   group=this.source({...location,resource:location.id==='quarry'||location.kind==='stone'?'stone':'wood',owner:null,workers:[]});
   }else if(location.id.startsWith('workshop')){
    group=this.building({...location,kind:'forge'},true,this.state);
-  }else if(location.id==='market'){
+  }else if(location.id==='market'||location.kind==='house'){
    group=this.building({...location,kind:'house',owner:2},true,this.state);
    this.box(group,.70,.35,.20,.65,.12,.50,WOOD);
    for(let i=0;i<3;i++)this.sphere(group,.50+i*.18,.49,.20,.10,i===1?0xb68b59:0xa89c68,1,.9,1);
@@ -257,17 +257,17 @@ export class WorldView{
   this.tagged(group,{type:'location',id:location.id});return group;
  }
  renderPlacementLocations(state){
-  const symbols={wood:'♣',stone:'◆',food:'●'},resourceNames={wood:'древесины',stone:'камня',food:'еды'};
+  const symbols={wood:'♣',stone:'◆',food:'●',twig:'♣',resin:'⬟',pebble:'◆',berry:'●'},resourceNames={wood:'древесины',stone:'камня',food:'еды',twig:'веток',resin:'смолы',pebble:'камушков',berry:'ягод'};
   for(const location of state.locations??[]){
    const workers=location.workers??[],owner=location.owner,full=location.capacity!==null&&workers.length>=location.capacity;
    this.syncEntity('location:'+location.id,`${owner}:${workers.join(',')}`,()=>this.placementLocation(location));
    const values=value=>Object.entries(value??{}).filter(([,n])=>n>0).map(([resource,n])=>`${n} ${symbols[resource]??resource}`).join(' ');
-   const gain=values(location.reward),cost=values(location.cost),effect=(cost?`${cost} → `:'')+(gain?'+'+gain:'')+(location.draw?`${gain?' · ':''}+${location.draw} ▱`:'');
+   const gain=values(location.reward),cost=values(location.cost),effect=location.effectText!==undefined?location.effectText:(cost?`${cost} → `:'')+(gain?'+'+gain:'')+(location.draw?`${gain?' · ':''}+${location.draw} ▱`:'');
    const capacity=location.capacity===null?'∞':`${workers.length}/${location.capacity}`;
    const privateMark=owner===null?'':` · ${owner+1}`;
    const label=this.addLabel('location:'+location.id,location.x,location.z,`<b>${escapeLabel(location.name)}</b><span>${effect}</span><span>${capacity}${privateMark}</span>`,'placement-label'+(full?' occupied':'')+(owner!==null?' private-location':''),()=>this.onPick({type:'location',id:location.id}),location.id.startsWith('workshop')?2.2:location.id==='market'?1.7:1.35);
    const words=value=>Object.entries(value??{}).filter(([,n])=>n>0).map(([resource,n])=>`${n} ${resourceNames[resource]??resource}`).join(', ');
-   label.el.title=[location.name,location.description,owner!==null?`Только для игрока ${owner+1}`:'',full?'Место занято':location.capacity===null?'Общая локация':`Свободно мест: ${location.capacity-workers.length}`,cost?`Стоимость: ${words(location.cost)}`:'',gain?`Получить: ${words(location.reward)}`:'',location.draw?`Взять карт: ${location.draw}`:''].filter(Boolean).join(' — ');
+   label.el.title=[location.name,location.description,owner!==null?`Только для игрока ${owner+1}`:'',full?'Место занято':location.capacity===null?'Общая локация':`Свободно мест: ${location.capacity-workers.length}`,cost?`Стоимость: ${words(location.cost)}`:'',gain&&!location.description?`Получить: ${words(location.reward)}`:'',location.draw?`Взять карт: ${location.draw}`:''].filter(Boolean).join(' — ');
    label.el.setAttribute('aria-label',label.el.title);
    label.el.style.borderColor=full?'#8f9279':owner!==null?(owner===0?'#92a6c4':'#94b5a0'):'#c9c195';
    label.el.style.color=full?'#bdc3b4':'#eee3c7';
