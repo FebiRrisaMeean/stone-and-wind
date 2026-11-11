@@ -1,11 +1,12 @@
-import {cardArt,portraitStyle,placeArt,resourceIcon,cardTypeIcon} from './everdell/art.js?v=20261111-19';
-import {createGame,stepGame,serializeGame,restoreGame,getPaymentOptions,getScores,Card,Location,Event,CardName,LocationOccupancy,GameInputType,Season,CardType,PlayerStatus} from './everdell/engine.js?v=20261111-19';
-import {CARD_NAMES,CARD_TEXT,LOCATION_NAMES,LOCATION_TEXT,EVENT_NAMES,EVENT_TEXT,SEASONS,CARD_TYPES,RESOURCE_NAMES,translateText} from './everdell/locale.js?v=20261111-19';
-import {createMovementWorld,moveWorker} from './movement.js?v=20261111-19';
-import {WORLD} from './data.js?v=20261111-19';
-import {WorldView} from './world.js?v=20261111-19';
+import {LIVING_CITIES,LIVING_TREE,MARKET_POSITIONS,BASIC_POSITIONS,FOREST_POSITIONS,inCity,cityCardEntries,validCityPosition,reconcileCityLayout} from './living-board-state.js?v=living-1';
+import {cardArt,portraitStyle,placeArt,resourceIcon,cardTypeIcon} from './everdell/art.js?v=20261111-20';
+import {createGame,stepGame,serializeGame,restoreGame,getPaymentOptions,getScores,Card,Location,Event,CardName,LocationOccupancy,GameInputType,Season,CardType,PlayerStatus} from './everdell/engine.js?v=20261111-20';
+import {CARD_NAMES,CARD_TEXT,LOCATION_NAMES,LOCATION_TEXT,EVENT_NAMES,EVENT_TEXT,SEASONS,CARD_TYPES,RESOURCE_NAMES,translateText} from './everdell/locale.js?v=20261111-20';
+import {createMovementWorld,moveWorker} from './movement.js?v=20261111-20';
+import {WORLD} from './data.js?v=20261111-20';
+import {WorldView} from './world.js?v=20261111-20';
 
-const SAVE='stone-wind-everdell-v1';
+const SAVE='stone-wind-everdell-v1',LAYOUT_SAVE='stone-wind-living-layout-v1';
 const RESOURCE_KEYS=['TWIG','RESIN','PEBBLE','BERRY'];
 const SYMBOL={TWIG:'♣',RESIN:'⬟',PEBBLE:'◆',BERRY:'●',VP:'✧',CARD:'▱',ANY:'◇'};
 const COLORS={TWIG:'#a6b98b',RESIN:'#e3b77a',PEBBLE:'#c4ced0',BERRY:'#dc9691',VP:'#ecd797'};
@@ -21,33 +22,47 @@ const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
 const placeKey=w=>w.location?'l:'+w.location:w.event?'e:'+w.event:'c:'+w.playedCard?.cardOwnerId+':'+w.playedCard?.cardName;
 
 export function mountGame(root){
- let game=createGame({playerCount:2}),drawing=null,selected=null,tab='meadow',open=false,cityPlayer=null,pendingIndex=0,promptChoice=[],promptResources={},payment=null,menu=false,toastTimer,actions=new Map(),actionCounter=0;
+ let game=createGame({playerCount:2}),drawing=null,selected=null,tab='meadow',open=false,cityPlayer=null,pendingIndex=0,promptChoice=[],promptResources={},payment=null,menu=false,toastTimer,actions=new Map(),actionCounter=0,cityLayout={},placement=null,stagedPosition=null,placementQueue=[],hoverKey=null,hoverTimer=null;
  try{const saved=JSON.parse(localStorage.getItem(SAVE)||'null');if(saved)game=restoreGame(saved);}catch{}
+ try{cityLayout=JSON.parse(localStorage.getItem(LAYOUT_SAVE)||'{}');}catch{}
  const baseMap=createMovementWorld({seed:4811}),names=['Данила','Еремей','Ефим','Тихон','Иван','Терентий','Мирон','Савва','Матвей','Яков','Игнат','Пётр','Борис','Глеб','Назар','Лукьян','Прохор','Роман','Семён','Фёдор','Кузьма','Андрей','Степан','Елисей'];
- root.innerHTML=`<div class="game-shell placement-shell everdell-shell"><div class="world-stage" id="world-stage" aria-label="Карта Эверделла"></div><section class="round-info" id="round-info" data-camera-ui aria-label="Игрок, сезон и ресурсы"></section><nav class="round-actions" data-camera-ui aria-label="Действия"><button id="cards-toggle" aria-controls="card-drawer" aria-expanded="false">Карты</button><button id="season-action"></button><button id="game-menu" aria-label="Настройки партии">☰</button></nav><section class="card-drawer" id="card-drawer" data-camera-ui hidden><div class="card-toolbar"><div role="tablist" aria-label="Разделы игры">${[['meadow','Поляна'],['hand','Рука'],['city','Города'],['events','События'],['places','Места']].map(([id,name])=>`<button role="tab" id="tab-${id}" data-tab="${id}">${name}</button>`).join('')}</div><button id="close-cards" aria-label="Закрыть карты">×</button></div><div id="panel-extra"></div><div class="card-list" id="card-list" role="tabpanel" tabindex="0"></div></section><div class="minimap-panel" data-camera-ui><canvas id="minimap" width="360" height="230" role="img" aria-label="Миникарта"></canvas></div><nav class="portrait-dock" id="workers" data-camera-ui aria-label="Работники текущего игрока"></nav><div id="decision-layer"></div><div class="toast" id="toast" role="status"></div><span class="sr-only" id="turn-announcement" aria-live="polite"></span></div>`;
+ root.innerHTML=`<div class="game-shell placement-shell everdell-shell living-shell"><div class="world-stage" id="world-stage" aria-label="Живой Эверделл"></div><div class="hand-fan" id="hand-fan" data-camera-ui aria-label="Карты в руке"></div><aside id="object-detail" class="object-detail" data-camera-ui hidden></aside><div id="placement-caption" class="placement-caption" hidden></div><div id="decision-layer"></div><div class="toast" id="toast" role="status"></div><span class="sr-only" id="turn-announcement" aria-live="polite"></span></div>`;
  const $=id=>root.querySelector('#'+id);
- const world=new WorldView($('world-stage'),pick);
+ const world=new WorldView($('world-stage'),pick,hover);
  const player=()=>game.getActivePlayer();
  const cardText=name=>name===CardName.FOOL&&game.gameOptions.solo?'В одиночной игре сбросьте шута и выбранную карту из города Ругворта':CARD_TEXT[name];
  const playerIndex=()=>game.players.findIndex(p=>p.playerId===game.activePlayerId);
- function save(){try{localStorage.setItem(SAVE,JSON.stringify(serializeGame(game)));}catch{}}
+ function save(){try{localStorage.setItem(SAVE,JSON.stringify(serializeGame(game)));localStorage.setItem(LAYOUT_SAVE,JSON.stringify(cityLayout));}catch{}}
  function toast(s){$('toast').textContent=tr(s);$('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('show'),3600);}
  function command(data){const id='a'+(++actionCounter);actions.set(id,data);return id;}
  function labelForWorkerPlace(w){return w.location?ln(w.location):w.event?en(w.event):cn(w.playedCard.cardName);}
  function allowed(type){return game.getPossibleGameInputs().some(i=>i.inputType===type);}
  function activeTemplate(type){return game.getPossibleGameInputs().find(i=>i.inputType===type);}
  function project(){
-  const old=drawing,view=structuredClone(baseMap);view.mode='placement';view.seed=4811;view.round=1+game.players.reduce((n,p)=>n+[Season.WINTER,Season.SPRING,Season.SUMMER,Season.AUTUMN].indexOf(p.currentSeason),0);view.serial=game.gameStateId;view.lastMove=null;view.locations=[];view.units=[];view.currentPlayer=playerIndex();
+  const old=drawing,view=structuredClone(baseMap);view.mode='placement';view.livingBoard=true;view.livingTree=LIVING_TREE;view.livingObjects=[];view.buildings=[];view.sources=[];view.sandbox=false;view.seed=481114;view.round=1+game.players.reduce((n,p)=>n+[Season.WINTER,Season.SPRING,Season.SUMMER,Season.AUTUMN].indexOf(p.currentSeason),0);view.serial=game.gameStateId;view.lastMove=null;view.locations=[];view.units=[];view.currentPlayer=playerIndex();
   view.players=game.players.map((p,i)=>({id:i,level:1,workers:0,gifts:[],explored:Array(WORLD.width*WORLD.height).fill(true)}));
   const availableLocations=new Set(game.getPlayableLocations());
   const locations=Object.keys(game.locationsMap),basics=locations.filter(n=>Location.fromName(n).type==='BASIC'),forests=locations.filter(n=>Location.fromName(n).type==='FOREST');
-  const coords=[[3,16],[8,13],[14,14],[19,18],[21,24],[18,31],[12,35],[5,34]],fcoords=[[3,9],[13,7],[23,10],[26,16]];
-  const locCoords=new Map();basics.forEach((n,i)=>locCoords.set(n,coords[i]));forests.forEach((n,i)=>locCoords.set(n,fcoords[i]));locCoords.set('HAVEN',[3,26]);['JOURNEY_TWO','JOURNEY_THREE','JOURNEY_FOUR','JOURNEY_FIVE'].forEach((n,i)=>locCoords.set(n,[22+i*2,37]));
+  const coords=BASIC_POSITIONS,fcoords=FOREST_POSITIONS;
+  const locCoords=new Map();basics.forEach((n,i)=>locCoords.set(n,coords[i]));forests.forEach((n,i)=>locCoords.set(n,fcoords[i]));locCoords.set('HAVEN',[20,34]);['JOURNEY_TWO','JOURNEY_THREE','JOURNEY_FOUR','JOURNEY_FIVE'].forEach((n,i)=>locCoords.set(n,[25+i*3.2,35]));
   for(const n of locations){const loc=Location.fromName(n),pos=locCoords.get(n);if(!pos)continue;
    const gain=loc.resourcesToGain??{},reward={};for(const r of RESOURCE_KEYS)if(gain[r])reward[r.toLowerCase()]=gain[r];
    let capacity=loc.occupancy==='UNLIMITED'?null:loc.occupancy==='EXCLUSIVE_FOUR'&&game.players.length===4?2:1;
-   view.locations.push({id:'ever:'+n,name:ln(n),x:pos[0],z:pos[1],capacity,owner:null,workers:[],reward,cost:{},description:LOCATION_TEXT[n]??fmt(loc.description??loc.shortName),kind:n.includes('TWIG')||n.includes('RESIN')?'wood':n.includes('STONE')||n.includes('PEBBLE')?'stone':n==='HAVEN'?'house':'food',effectText:'',actualName:n,rewardIcons:{...gain},locationType:loc.type,available:availableLocations.has(n),season:player().currentSeason});
+   view.locations.push({id:'ever:'+n,name:n.includes('JOURNEY')?ln(n).replace('Путешествие','Путь'):ln(n),x:pos[0],z:pos[1],capacity,owner:null,workers:[],reward,cost:{},description:LOCATION_TEXT[n]??fmt(loc.description??loc.shortName),kind:n.includes('TWIG')||n.includes('RESIN')?'wood':n.includes('STONE')||n.includes('PEBBLE')?'stone':n==='HAVEN'?'house':'food',effectText:'',actualName:n,rewardIcons:{...gain},locationType:loc.type,available:availableLocations.has(n),season:player().currentSeason});
   }
+  const layoutResult=reconcileCityLayout(game,cityLayout,stagedPosition);cityLayout=layoutResult.positions;
+  const objects=view.livingObjects;
+  game.players.slice(0,2).forEach((q,owner)=>{
+   const center=LIVING_CITIES[owner];
+   objects.push({id:'city-area:'+owner,type:'city-area',owner,...center,label:q.name,active:q.playerId===game.activePlayerId});
+   objects.push({id:'supplies:'+owner,type:'supplies',owner,x:center.x-3,z:26,label:'Запасы',costHtml:'',resources:q.getResources()});
+   objects.push({id:'season:'+owner,type:'season',owner,x:center.x+3,z:26,label:SEASONS[q.currentSeason],active:q.playerId===game.activePlayerId,available:q.playerId===game.activePlayerId&&allowed(q.currentSeason===Season.AUTUMN?GameInputType.GAME_END:GameInputType.PREPARE_FOR_SEASON)});
+   for(const e of cityCardEntries(q)){const pos=cityLayout[e.key],c=Card.fromName(e.cardName);objects.push({id:e.key,type:'city-card',owner,...pos,cardName:e.cardName,critter:c.isCritter,roamCenter:center,roamRadius:5.8,label:cn(e.cardName),costHtml:'',played:e.played,available:game.getVisitableDestinationCards().some(p=>same(p,e.played))});}
+  });
+  game.meadowCards.forEach((name,index)=>{const c=Card.fromName(name);objects.push({id:'market:'+index,type:'market',...MARKET_POSITIONS[index],owner:0,cardName:name,critter:c.isCritter,label:cn(name),costHtml:stock(c.baseCost)||'0',index,available:game.getPlayableCards().some(p=>p.card===name&&p.source==='MEADOW'&&(p.sourceIdx===undefined||p.sourceIdx===index))});});
+  Object.entries(game.eventsMap).forEach(([name,owner],index)=>{objects.push({id:'event:'+name,type:'event',x:22+index%4*5.2,z:1.5+Math.floor(index/4)*2.7,label:en(name),costHtml:'',eventName:name,available:game.getClaimableEvents().includes(name),owner:game.players.findIndex(p=>p.playerId===owner)});});
+  view.livingClearings=[...LIVING_CITIES.map(c=>({...c,radius:9.5})),{x:30.5,z:27,radius:10.5},{...LIVING_TREE,radius:5},{x:30,z:3,radius:11}];
+  for(const t of view.tiles){const clear=view.livingClearings.some(c=>Math.hypot(t.x-c.x,t.z-c.z)<c.radius)||(t.x>13&&t.x<47&&t.z<37);if(clear)t.type='meadow';}
   // Worker identity is visual only; the rules engine owns every placement
   for(let pi=0;pi<game.players.length;pi++){
    const p=game.players[pi],pj=p.toJSON(true),previous=old?.units.filter(u=>u.owner===pi&&u.number<=pj.numWorkers)??[],used=new Set(),assignments=[];
@@ -58,14 +73,14 @@ export function mountGame(root){
     const id=`e-${pi}-${num}`;used.add(id);assignments.push({w,id,num,key,oldUnit});
    }
    for(let num=1;num<=pj.numWorkers;num++){
-    const id=`e-${pi}-${num}`,a=assignments.find(x=>x.id===id),home={x:4+(num-1)*2,z:22+pi*2};
+    const id=`e-${pi}-${num}`,a=assignments.find(x=>x.id===id),home={x:(LIVING_CITIES[pi]?.x??30)-1+(num-1)%3,z:28+Math.floor((num-1)/3)};
     let x=home.x,z=home.z,locationId=null;
     if(a){const l=a.w.location?view.locations.find(l=>l.actualName===a.w.location):null;locationId=l?.id??a.key;
      if(l){const existing=view.units.filter(u=>u.locationId===l.id).length;x=l.x+(existing%3)-1;z=l.z+1+Math.floor(existing/3);l.workers.push(id);}
-     else{x=23+pi*2;z=22+(num-1)*2;}
+     else{const dest=a.w.event?objects.find(o=>o.eventName===a.w.event):objects.find(o=>o.type==='city-card'&&o.cardName===a.w.playedCard?.cardName&&game.players[o.owner]?.playerId===a.w.playedCard?.cardOwnerId);x=dest?.x??30;z=(dest?.z??20)+.8;}
     }
-    if(view.tiles[z*WORLD.width+x]?.type==='water')x-=2;
-    view.units.push({id,number:num,name:names[pi*6+num-1],portrait:(num-1)%6,owner:pi,kind:'worker',x,z,home,hp:baseMap.units[0].hp,ready:1,attacked:0,locationId,placementKey:a?.key??null});
+    if(view.tiles[Math.round(z)*WORLD.width+Math.round(x)]?.type==='water')x-=2;
+    view.units.push({id,number:num,name:names[pi*6+num-1],portrait:(num-1)%6,owner:pi,kind:'worker',x,z,home,roamCenter:LIVING_CITIES[pi],roamRadius:5.5,hp:baseMap.units[0].hp,ready:1,attacked:0,locationId,placementKey:a?.key??null});
    }
   }
   if(old){const moved=view.units.find(u=>{const before=old.units.find(v=>v.id===u.id);return before&&u.locationId!==null&&u.placementKey!==before.placementKey;});
@@ -77,50 +92,65 @@ export function mountGame(root){
  }
  function selectAvailable(){const p=playerIndex();if(!drawing.units.some(u=>u.id===selected&&u.owner===p&&u.locationId===null))selected=drawing.units.find(u=>u.owner===p&&u.locationId===null)?.id??drawing.units.find(u=>u.owner===p)?.id??null;}
  function step(input){
-  try{game=stepGame(game,input);payment=null;pendingIndex=0;promptChoice=[];promptResources={};cityPlayer=null;project();selectAvailable();save();render();if(drawing.lastMove)world.followUnit(drawing.lastMove.id);else if(input.inputType===GameInputType.PREPARE_FOR_SEASON)world.cancelFollow();if(game.isGameOver())toast('Партия завершена');}
-  catch(e){toast(String(e.message).split('\n')[0]);}
+  try{const previousKeys=new Set(Object.keys(cityLayout));game=stepGame(game,input);payment=null;pendingIndex=0;promptChoice=[];promptResources={};cityPlayer=null;project();for(const q of game.players.slice(0,2))for(const entry of cityCardEntries(q)){if(!previousKeys.has(entry.key)&&!(stagedPosition?.used&&entry.cardName===stagedPosition.cardName&&cityLayout[entry.key]?.owner===stagedPosition.owner))placementQueue.push({...entry,owner:game.players.indexOf(q)});}stagedPosition=null;selectAvailable();save();render();nextQueuedPlacement();world.cancelFollow();if(game.isGameOver())toast('Партия завершена');}
+  catch(e){stagedPosition=null;toast(String(e.message).split('\n')[0]);}
  }
  function pick(obj){
   if(menu||payment||game.pendingGameInputs.length||game.isGameOver())return;
-  if(obj.type==='unit'){const u=drawing.units.find(u=>u.id===obj.id);if(u?.owner===playerIndex()){selected=u.id;world.cancelFollow();render();}return;}
-  let l=obj.type==='location'?drawing.locations.find(l=>l.id===obj.id):obj.type==='ground'?drawing.locations.find(l=>Math.hypot(l.x-obj.x,l.z-obj.z)<2):null;
-  if(!l)return;
-  const u=drawing.units.find(u=>u.id===selected);if(!u||u.locationId){toast('Выберите свободного работника');return;}
-  step({inputType:GameInputType.PLACE_WORKER,clientOptions:{location:l.actualName}});
+  if(placement){
+   if(obj.type!=='ground'&&obj.type!=='city-area')return;
+   const x=obj.x,z=obj.z;
+   if(!validCityPosition(placement.owner,x,z,cityLayout,placement.existingKey)){toast('Выберите свободное место в городе '+game.players[placement.owner].name);return;}
+   const chosen=placement;placement=null;world.setLivingPlacementPreview?.(null);$('placement-caption').hidden=true;
+   if(chosen.existingKey){cityLayout[chosen.existingKey]={...cityLayout[chosen.existingKey],x,z};project();save();render();nextQueuedPlacement();return;}
+   stagedPosition={owner:chosen.owner,cardName:chosen.name,x,z};showPayment(chosen.name,chosen.source,chosen.index);return;
+  }
+  if(obj.type==='unit'){const u=drawing.units.find(u=>u.id===obj.id);if(u?.owner===playerIndex()&&!u.locationId){selected=u.id;world.cancelFollow();render();}return;}
+  const object=drawing.livingObjects.find(o=>o.id===obj.id&&o.type===obj.type);
+  if(object?.type==='market'){beginPlacement(object.cardName,'MEADOW',object.index);return;}
+  if(object?.type==='city-card'){const c=Card.fromName(object.cardName);if(c.maxWorkerSpots&&game.getVisitableDestinationCards().some(p=>same(p,object.played)))step({inputType:GameInputType.VISIT_DESTINATION_CARD,clientOptions:{playedCard:object.played}});else hover({...obj,pinned:true});return;}
+  if(object?.type==='event'){if(game.getClaimableEvents().includes(object.eventName))step({inputType:GameInputType.CLAIM_EVENT,clientOptions:{event:object.eventName}});else hover({...obj,pinned:true});return;}
+  if(object?.type==='season'){if(object.owner!==playerIndex())return;const type=player().currentSeason===Season.AUTUMN?GameInputType.GAME_END:GameInputType.PREPARE_FOR_SEASON;if(allowed(type))step({inputType:type});else toast('Сначала разместите свободных работников');return;}
+  if(object?.type==='supplies'){hover({...obj,pinned:true});return;}
+  let l=obj.type==='location'?drawing.locations.find(l=>l.id===obj.id):obj.type==='ground'?drawing.locations.find(l=>Math.hypot(l.x-obj.x,l.z-obj.z)<1.7):null;
+  if(!l)return;const u=drawing.units.find(u=>u.id===selected);if(!u||u.locationId)selected=drawing.units.find(u=>u.owner===playerIndex()&&!u.locationId)?.id;
+  if(!selected){toast('Нет свободных работников');return;}step({inputType:GameInputType.PLACE_WORKER,clientOptions:{location:l.actualName}});
  }
- function workerDock(){return drawing.units.filter(u=>u.owner===playerIndex()).map(u=>`<button class="worker-portrait ${u.id===selected?'selected':''} ${u.locationId?'assigned':''}" data-worker="${u.id}" aria-label="${u.name}${u.locationId?', занят':''}" aria-pressed="${u.id===selected}"><span class="portrait-image" aria-hidden="true" style="${portraitStyle(u.portrait)}">${u.locationId?'<span class="assigned-mark">✓</span>':''}</span><span class="portrait-name">${u.name}</span></button>`).join('');}
+ function beginPlacement(name,source,index){
+  if(game.pendingGameInputs.length||menu||payment||placementQueue.length)return;
+  if(!getPaymentOptions(game,name,source,index).length){toast('Недостаточно ресурсов или нет места в городе');return;}
+  placement={name,source,index,owner:name===CardName.FOOL?1-playerIndex():playerIndex()};hideDetail();$('placement-caption').textContent=cn(name)+' · выберите место в городе '+game.players[placement.owner].name;$('placement-caption').hidden=false;renderHand();
+ }
+ function nextQueuedPlacement(){if(placement||payment||game.pendingGameInputs.length||!placementQueue.length)return;const e=placementQueue.shift();if(!cityLayout[e.key]){nextQueuedPlacement();return;}placement={name:e.cardName,owner:e.owner,existingKey:e.key};$('placement-caption').textContent=cn(e.cardName)+' · выберите место в городе '+game.players[e.owner].name;$('placement-caption').hidden=false;renderHand();}
+ function renderHand(){
+  const cards=player().getCardsInHand(),fan=$('hand-fan');fan.classList.toggle('placing',!!placement);fan.innerHTML=cards.map((name,index)=>`<div class="hand-card" data-hand-index="${index}" data-hand-name="${esc(name)}" style="--hand-offset:${index-(cards.length-1)/2};--hand-count:${cards.length}" tabindex="0" role="button" aria-label="${esc(cn(name))} — карта в руке">${cardHtml(name,{source:'HAND',index})}</div>`).join('');
+ }
+ function hideDetail(){clearTimeout(hoverTimer);hoverTimer=null;$('object-detail').hidden=true;hoverKey=null;}
+ function hover(obj){
+  if(placement){hideDetail();if(obj?.type==='ground'){world.setLivingPlacementPreview?.({cardName:placement.name,owner:placement.owner,x:obj.x,z:obj.z,valid:validCityPosition(placement.owner,obj.x,obj.z,cityLayout,placement.existingKey)});}return;}
+  if(menu||payment||game.pendingGameInputs.length)return;
+  const d=$('object-detail');if(!obj||obj.type==='ground'||obj.type==='unit'||obj.type==='city-area'){if(!hoverTimer)hoverTimer=setTimeout(()=>{hoverTimer=null;if(!d.matches(':hover'))hideDetail();},160);return;}
+  const key=obj.type+':'+obj.id;if(hoverKey===key){clearTimeout(hoverTimer);hoverTimer=null;return;}
+  const object=drawing.livingObjects.find(o=>o.type===obj.type&&o.id===obj.id),location=drawing.locations.find(l=>obj.type==='location'&&l.id===obj.id);let html='';
+  if(object?.type==='market')html=cardHtml(object.cardName,{source:'MEADOW',index:object.index});
+  else if(object?.type==='city-card')html=cardHtml(object.cardName,{played:object.played,owner:game.players[object.owner]});
+  else if(object?.type==='event'){const e=Event.fromName(object.eventName);html=`<div class="world-note"><h2>${esc(en(object.eventName))}</h2><p>${esc(EVENT_TEXT[object.eventName]??fmt(e.eventDescription))}</p>${e.requiredCards?`<p>${e.requiredCards.map(cn).map(esc).join(' + ')}</p>`:''}<p>${object.owner>=0?'Получено: '+esc(game.players[object.owner].name):object.available?'Нажмите, чтобы разместить работника':'Условия пока не выполнены'}</p></div>`;}
+  else if(object?.type==='supplies'){const q=game.players[object.owner];html=`<div class="world-note"><h2>${esc(q.name)}</h2><div class="world-resources">${stock(q.getResources(),true)}</div><p>${SEASONS[q.currentSeason]} · город ${q.getNumOccupiedSpacesInCity()}/15</p><p>Свободные работники: ${q.toJSON(true).numWorkers-q.toJSON(true).placedWorkers.length}</p></div>`;}
+  else if(object?.type==='season'){const q=game.players[object.owner],seasons=[Season.WINTER,Season.SPRING,Season.SUMMER,Season.AUTUMN];html=`<div class="world-note"><h2>${esc(q.name)} · ${SEASONS[q.currentSeason]}</h2><p>${q.currentSeason===Season.AUTUMN?'Нажмите, чтобы завершить свою игру':'Следующий сезон: '+SEASONS[seasons[seasons.indexOf(q.currentSeason)+1]]}</p><p>${object.available?'Можно перейти сейчас':'Сначала разместите всех свободных работников'}</p></div>`;}
+  else if(location)html=`<div class="world-note"><h2>${esc(location.name)}</h2><p>${esc(location.description)}</p><p>${location.capacity===null?'Общее место':`Занято мест: ${location.workers.length}/${location.capacity}`}</p></div>`;
+  if(!html){hideDetail();return;}clearTimeout(hoverTimer);hoverTimer=null;hoverKey=key;d.innerHTML=html;d.hidden=false;const x=obj.clientX??world.windowPointer?.x??innerWidth/2,y=obj.clientY??world.windowPointer?.y??innerHeight/2;d.style.left=Math.max(12,Math.min(innerWidth-320,x>innerWidth*.6?x-322:x+24))+'px';d.style.top=Math.max(12,Math.min(innerHeight-d.offsetHeight-16,y-100))+'px';
+ }
  function render(){
-  actions=new Map();const p=player(),idx=playerIndex();
-  root.querySelector('.everdell-shell').dataset.player=idx;
-  world.render(drawing,0,{selected,menu:false});
-  $('round-info').innerHTML=`<div class="turn-line"><span class="player-dot player-${idx}"></span><strong>${esc(p.name)}</strong><span class="round-number">${SEASONS[p.currentSeason]??p.currentSeason}</span></div><div class="resource-stock">${stock(p.getResources(),true)}</div><div class="player-seasons">${game.players.map((q,i)=>`<span class="${q.playerId===p.playerId?'current':''}" title="${esc(q.name)}">${esc(q.name)} · ${q.getStatus()===PlayerStatus.GAME_ENDED?'Завершил':SEASONS[q.currentSeason]}</span>`).join('')}</div>`;
-  $('turn-announcement').textContent=`Ход: ${p.name}, ${SEASONS[p.currentSeason]}`;
-  const seasons=[Season.WINTER,Season.SPRING,Season.SUMMER,Season.AUTUMN],seasonButton=$('season-action');
-  seasonButton.textContent=p.currentSeason===Season.AUTUMN?'Завершить игру':`Перейти: ${SEASONS[seasons[seasons.indexOf(p.currentSeason)+1]]}`;
-  seasonButton.disabled=game.isGameOver()||!!game.pendingGameInputs.length||!allowed(p.currentSeason===Season.AUTUMN?GameInputType.GAME_END:GameInputType.PREPARE_FOR_SEASON);
-  seasonButton.title=seasonButton.disabled&&!game.isGameOver()?'Сначала разместите всех работников и завершите текущий эффект':'';
-  $('workers').innerHTML=workerDock();renderPanel();renderDecision();drawMini();
+  actions=new Map();root.querySelector('.living-shell').dataset.player=playerIndex();world.render(drawing,playerIndex(),{selected,menu:false});
+  $('turn-announcement').textContent=`Ход: ${player().name}, ${SEASONS[player().currentSeason]}`;
+  hideDetail();renderHand();renderDecision();
  }
+
  function cardHtml(name,{source,index,played,owner,optionIndex}={}){
   const c=Card.fromName(name),blocked=source==='MEADOW'&&game.gameOptions.solo?.blockedMeadow?.includes(index),playable=!blocked&&source&&game.getPlayableCards().some(x=>x.card===name&&x.source===source&&(x.sourceIdx===undefined||x.sourceIdx===index)),visitable=played&&game.getVisitableDestinationCards().some(x=>same(x,played));
   const association=c.associatedCard?.type==='CARD'?cn(c.associatedCard.cardName):c.associatedCard?.type==='HUSBAND_WIFE'?'Муж или жена':c.associatedCard?.type==='ANY'?'Любое существо':null;
   const action=optionIndex!==undefined?'':source?`<button class="play-card" data-command="${command({kind:'play',name,source,index})}" ${playable&&!game.pendingGameInputs.length?'':'disabled'}>${blocked?'Занято Ругвортом':playable?'Разыграть':'Недоступно сейчас'}</button>`:played&&c.maxWorkerSpots>0?`<button class="play-card" data-command="${command({kind:'input',input:{inputType:GameInputType.VISIT_DESTINATION_CARD,clientOptions:{playedCard:played}}})}" ${visitable&&!game.pendingGameInputs.length?'':'disabled'}>${visitable?'Разместить работника':played.workers?.length?'Занято':'Недоступно сейчас'}</button>`:'';
   return `<article class="game-card printed-card ${CATEGORY[c.cardType]??''}" aria-label="${esc(cn(name))}"><div class="card-illustration">${cardArt(name)}<div class="card-cost-medallion" aria-label="Стоимость">${c.isCritter&&association?`<span class="card-building-alternative" title="Бесплатно через ${esc(association)}">${esc(association)}</span><span class="card-cost-or">или</span>`:''}${stock(c.baseCost)||'<span class="card-free">0</span>'}</div><span class="base-points" title="Базовые победные очки" aria-label="${c.baseVP} победных очков"><b>${c.baseVP}</b>${resourceIcon('VP')}</span><div class="card-title-ribbon"><span class="card-sigil" title="${esc(CARD_TYPES[c.cardType])}" aria-label="${esc(CARD_TYPES[c.cardType])}">${cardTypeIcon(c.cardType)}<i title="Копий в колоде">${c.numInDeck}</i></span><h2>${esc(cn(name))}</h2></div></div><div class="card-paper"><div class="card-type-line">${c.isUnique?'Уникальное':'Обычное'} ${c.isCritter?'существо':'сооружение'}</div><div class="card-rules" tabindex="0" aria-label="Эффект: ${esc(cn(name))}"><p class="card-effect">${esc(cardText(name)??fmt(c.cardDescription))}</p>${played?.resources&&Object.values(played.resources).some(Boolean)?`<div class="card-storage">На карте: ${stock(played.resources)}</div>`:''}</div>${association&&!c.isCritter?`<div class="card-association"><span>${c.isCritter?'Бесплатно через':'Принимает'}</span><b>${esc(association)}</b>${!c.isCritter?`<i class="card-door ${played?.usedForCritter?'closed':''}" title="${played?.usedForCritter?'Занято':'Свободное сооружение'}" aria-label="${played?.usedForCritter?'Занято':'Свободное сооружение'}"></i>`:''}</div>`:''}</div>${action?`<div class="card-action">${action}</div>`:''}</article>`;
- }
- function renderPanel(){
-  const p=player();$('card-drawer').hidden=!open;$('cards-toggle').setAttribute('aria-expanded',String(open));
-  for(const name of ['meadow','hand','city','events','places']){const n=$('tab-'+name);n.setAttribute('aria-selected',String(name===tab));n.tabIndex=name===tab?0:-1;}
-  $('tab-meadow').textContent=`Поляна · ${game.meadowCards.length}`;$('tab-hand').textContent=`Рука · ${p.numCardsInHand}/8`;
-  $('card-list').setAttribute('aria-labelledby','tab-'+tab);let html='',extra='';
-  if(tab==='meadow')html=game.meadowCards.map((name,index)=>cardHtml(name,{source:'MEADOW',index})).join('');
-  if(tab==='hand')html=p.getCardsInHand().map((name,index)=>cardHtml(name,{source:'HAND',index})).join('')||'<p class="empty-cards">На руке нет карт</p>';
-  if(tab==='city'){
-   const q=game.players.find(q=>q.playerId===cityPlayer)??p;extra=`<div class="city-picker">${game.players.map(x=>`<button data-city="${x.playerId}" class="${x.playerId===q.playerId?'active':''}">${esc(x.name)}</button>`).join('')}<span>${q.getNumOccupiedSpacesInCity()}/15 ячеек</span></div>`;
-   html=q.getPlayedCards().map(played=>cardHtml(played.cardName,{played,owner:q})).join('')||'<p class="empty-cards">Город пока пуст</p>';
-  }
-  if(tab==='events')html=Object.entries(game.eventsMap).map(([name,owner])=>{const e=Event.fromName(name),available=game.getClaimableEvents().includes(name),by=game.players.find(p=>p.playerId===owner);return `<article class="game-card prosperity event-card printed-card"><div class="card-illustration">${cardArt(e.requiredCards?.[0]??'Fairgrounds','event-art')}<div class="card-title-ribbon"><h2>${esc(en(name))}</h2></div></div><div class="card-paper"><div class="card-type-line">${e.type==='BASIC'?'Основное':'Особое'} событие</div><div class="card-rules" tabindex="0" aria-label="Условия события"><p class="card-effect">${esc(EVENT_TEXT[name]??fmt(e.eventDescription))}</p></div>${e.requiredCards?`<div class="card-association"><span>Нужны</span><b>${e.requiredCards.map(cn).map(esc).join(' + ')}</b></div>`:''}</div><div class="card-action"><button class="play-card" data-command="${command({kind:'input',input:{inputType:GameInputType.CLAIM_EVENT,clientOptions:{event:name}}})}" ${available&&!game.pendingGameInputs.length?'':'disabled'}>${by?esc(by.name):available?'Разместить работника':'Условия не выполнены'}</button></div></article>`;}).join('');
-  if(tab==='places')html=Object.keys(game.locationsMap).map(name=>{const l=Location.fromName(name),available=game.getPlayableLocations().includes(name),count=game.locationsMap[name].length;return `<article class="game-card location place-card printed-card"><div class="card-illustration">${cardArt(placeArt(name),'place-art')}<div class="card-title-ribbon"><h2>${esc(ln(name))}</h2></div></div><div class="card-paper"><div class="card-type-line">${l.type==='FOREST'?'Лес':l.type==='JOURNEY'?'Путешествие':'Место работы'}</div><div class="card-rules" tabindex="0" aria-label="Эффект места"><p class="card-effect">${esc(LOCATION_TEXT[name]??fmt(l.description??l.shortName))}</p></div><div class="card-association"><b>${l.occupancy==='UNLIMITED'?'Общее место':l.occupancy==='EXCLUSIVE_FOUR'&&game.players.length===4?'Два места, по одному на игрока':'Одно место'}</b><span>Занято: ${count}</span></div></div><div class="card-action"><button class="play-card" data-command="${command({kind:'input',input:{inputType:GameInputType.PLACE_WORKER,clientOptions:{location:name}}})}" ${available&&!game.pendingGameInputs.length?'':'disabled'}>${available?'Разместить работника':'Недоступно сейчас'}</button></div></article>`;}).join('');
-  $('panel-extra').innerHTML=extra;const scroll=$('card-list').scrollLeft;$('card-list').innerHTML=html;$('card-list').scrollLeft=scroll;
  }
  function showPayment(name,source,index){
   try{const choices=getPaymentOptions(game,name,source,index);if(!choices.length){toast('Нет доступного способа оплаты');return;}
@@ -131,7 +161,7 @@ export function mountGame(root){
  function paymentLabel(p){return [p.useAssociatedCard?'Заселить свободное сооружение':null,p.cardToUse?`Использовать: ${cn(p.cardToUse)}`:null,p.cardToDungeon?`В темницу: ${cn(p.cardToDungeon)}`:null,RESOURCE_KEYS.filter(k=>p.resources[k]).map(k=>`${RESOURCE_NAMES[k]}: ${p.resources[k]}`).join(' · ')||'Без ресурсов'].filter(Boolean).join(' — ');}
  function renderDecision(){
   const layer=$('decision-layer');world.inputPaused=!!payment||menu||game.pendingGameInputs.length>0||game.isGameOver();
-  if(menu){layer.innerHTML=`<div class="decision-backdrop" data-camera-ui><section class="decision-modal" role="dialog" aria-modal="true" aria-labelledby="menu-title"><h2 id="menu-title">Новая партия</h2><p>Текущая партия будет заменена</p><label class="setup-field">Режим<select id="player-count" aria-label="Режим"><option value="2">Два игрока за одним компьютером</option><option value="3">Три игрока</option><option value="4">Четыре игрока</option><option value="solo1">Ругворт — первый год</option><option value="solo2">Ругворт — второй год</option><option value="solo3">Ругворт — третий год</option></select></label><div class="decision-footer"><button data-dialog="cancel">Отмена</button><button data-dialog="new" class="primary">Начать</button></div></section></div>`;return;}
+  if(menu){layer.innerHTML=`<div class="decision-backdrop" data-camera-ui><section class="decision-modal" role="dialog" aria-modal="true" aria-labelledby="menu-title"><h2 id="menu-title">Партия</h2><p>Текущая партия будет заменена</p><label class="setup-field">Режим<select id="player-count" aria-label="Режим"><option value="2">Два игрока за одним компьютером</option></select></label><div class="decision-footer"><button data-dialog="cancel">Отмена</button><button data-dialog="new" class="primary">Начать</button></div></section></div>`;return;}
   if(game.isGameOver()){
    const scores=getScores(game).sort((a,b)=>b.total-a.total||b.eventCount-a.eventCount||b.resources-a.resources);
    const winners=scores.filter(s=>s.total===scores[0].total&&s.eventCount===scores[0].eventCount&&s.resources===scores[0].resources);
@@ -175,31 +205,30 @@ export function mountGame(root){
   else{const info=optionsFor(input);if(promptChoice.length<info.min||promptChoice.length>info.max){$('decision-error').textContent=`Выберите от ${info.min} до ${info.max}`;return;}const values=promptChoice.map(i=>info.options[i]);input.clientOptions[info.field]=info.single?(values[0]??null):values;}
   step(input);
  }
- function drawMini(){if(!drawing)return;const c=$('minimap'),ctx=c.getContext('2d'),sx=c.width/WORLD.width,sz=c.height/WORLD.height,colors={plain:'#96a35c',meadow:'#b5b977',forest:'#3d6547',rock:'#aaa48a',road:'#c9ad72',water:'#578f8b'};for(const t of drawing.tiles){ctx.fillStyle=colors[t.type]??colors.plain;ctx.fillRect(t.x*sx,t.z*sz,sx+.5,sz+.5);}for(const l of drawing.locations){ctx.fillStyle='#e7d6a4';ctx.fillRect(l.x*sx-2,l.z*sz-2,4,4);}for(const u of drawing.units){const p=world.getUnitPosition(u.id)??u;ctx.fillStyle=u.id===selected?'#fff0c2':['#8caee0','#85c9a8','#d3af7c','#cb9bc7'][u.owner];ctx.beginPath();ctx.arc(p.x*sx,p.z*sz,2.3,0,Math.PI*2);ctx.fill();}}
+
  function click(e){
   const choice=e.target.closest('[data-choice]');if(choice){const i=Number(choice.dataset.choice),info=optionsFor(game.pendingGameInputs[pendingIndex]);promptChoice=info.max===1?[i]:choice.checked?[...promptChoice,i]:promptChoice.filter(n=>n!==i);const count=$('choice-count');if(count)count.textContent=promptChoice.length;for(const el of root.querySelectorAll('.choice-item'))el.classList.toggle('checked',el.querySelector('input').checked);return;}
   const pending=e.target.closest('[data-pending]');if(pending){pendingIndex=Number(pending.dataset.pending);promptChoice=[];promptResources={};renderDecision();return;}
   const pay=e.target.closest('[data-payment]');if(pay){const p=payment;step({inputType:GameInputType.PLAY_CARD,clientOptions:{card:p.name,source:p.source,sourceIdx:p.index,paymentOptions:p.choices[Number(pay.dataset.payment)]}});return;}
-  const cmd=e.target.closest('[data-command]');if(cmd){const data=actions.get(cmd.dataset.command);if(data?.kind==='play')showPayment(data.name,data.source,data.index);if(data?.kind==='input')step(data.input);return;}
-  const w=e.target.closest('[data-worker]');if(w){selected=w.dataset.worker;world.cancelFollow();render();const pos=world.getUnitPosition(selected);if(pos)world.focusAt(pos.x,pos.z);return;}
-  const pane=e.target.closest('[data-tab]');if(pane){tab=pane.dataset.tab;renderPanel();$('card-list').scrollLeft=0;return;}
-  const city=e.target.closest('[data-city]');if(city){cityPlayer=city.dataset.city;renderPanel();$('card-list').scrollLeft=0;return;}
-  if(e.target.closest('#cards-toggle')){open=!open;renderPanel();}
-  if(e.target.closest('#close-cards')){open=false;renderPanel();$('cards-toggle').focus();}
-  if(e.target.closest('#season-action'))step({inputType:player().currentSeason===Season.AUTUMN?GameInputType.GAME_END:GameInputType.PREPARE_FOR_SEASON});
-  if(e.target.closest('#game-menu')){menu=true;renderDecision();}
+  const cmd=e.target.closest('[data-command]');if(cmd){const data=actions.get(cmd.dataset.command);if(data?.kind==='play')beginPlacement(data.name,data.source,data.index);if(data?.kind==='input')step(data.input);return;}
+  const hand=e.target.closest('[data-hand-index]');if(hand&&!e.target.closest('button')){beginPlacement(hand.dataset.handName,'HAND',Number(hand.dataset.handIndex));return;}
   const dialog=e.target.closest('[data-dialog]')?.dataset.dialog;
-  if(dialog==='cancel'){menu=false;payment=null;renderDecision();}
+  if(dialog==='cancel'){menu=false;payment=null;stagedPosition=null;renderDecision();}
   if(dialog==='menu'){menu=true;renderDecision();}
   if(dialog==='submit')submitPending();
   if(dialog==='undo')step({inputType:GameInputType.UNDO});
   if(dialog==='new'){
-   const mode=$('player-count').value;try{game=createGame(mode.startsWith('solo')?{soloYear:Number(mode.slice(4))}:{playerCount:Number(mode)});menu=false;payment=null;pendingIndex=0;promptChoice=[];promptResources={};cityPlayer=null;tab='meadow';open=false;clearTimeout(toastTimer);$('toast').classList.remove('show');$('toast').textContent='';drawing=null;world.gameSeed=null;project();selectAvailable();save();render();world.focusAt(13,23);world.desiredZoom=.8;}catch(e){toast(e.message);}
+   const mode=$('player-count').value;try{game=createGame(mode.startsWith('solo')?{soloYear:Number(mode.slice(4))}:{playerCount:Number(mode)});menu=false;payment=null;pendingIndex=0;promptChoice=[];promptResources={};cityPlayer=null;tab='meadow';open=false;clearTimeout(toastTimer);$('toast').classList.remove('show');$('toast').textContent='';drawing=null;cityLayout={};placement=null;stagedPosition=null;placementQueue=[];world.gameSeed=null;project();selectAvailable();save();render();world.focusAt(30,22);world.desiredYaw=0;world.desiredPitch=.88;world.desiredZoom=.62;}catch(e){toast(e.message);}
   }
  }
  function change(e){if(e.target.matches('[data-resource]')){const value=Number(e.target.value);promptResources[e.target.dataset.resource]=Number.isFinite(value)?Math.max(0,Math.floor(value)):0;}}
- function key(e){if(e.altKey||e.metaKey||e.ctrlKey||/INPUT|SELECT|TEXTAREA/.test(e.target.tagName))return;if(e.key==='Escape'){if(menu||payment){menu=false;payment=null;renderDecision();}else{open=false;renderPanel();}return;}if(/^[1-6]$/.test(e.key)&&!world.inputPaused){const u=drawing.units.filter(u=>u.owner===playerIndex())[Number(e.key)-1];if(u){selected=u.id;render();const pos=world.getUnitPosition(u.id)??u;world.focusAt(pos.x,pos.z);}}}
- root.addEventListener('click',click);root.addEventListener('input',change);window.addEventListener('keydown',key);$('minimap').addEventListener('click',e=>{if(world.inputPaused)return;const r=$('minimap').getBoundingClientRect();world.focusAt((e.clientX-r.left)/r.width*WORLD.width,(e.clientY-r.top)/r.height*WORLD.height);});
- project();selectAvailable();save();render();world.focusAt(13,23);world.desiredZoom=.8;const timer=setInterval(drawMini,200);
- return()=>{clearInterval(timer);clearTimeout(toastTimer);root.removeEventListener('click',click);root.removeEventListener('input',change);window.removeEventListener('keydown',key);world.dispose();};
+ function key(e){if(e.altKey||e.metaKey||e.ctrlKey||/INPUT|SELECT|TEXTAREA/.test(e.target.tagName))return;
+  if(e.key==='Escape'){hideDetail();if(placement){if(!placement.existingKey){placement=null;stagedPosition=null;world.setLivingPlacementPreview?.(null);$('placement-caption').hidden=true;renderHand();}return;}if(menu||payment){menu=false;payment=null;stagedPosition=null;renderDecision();}else{menu=true;renderDecision();}return;}
+  if(e.key==='Enter'&&e.target.matches('[data-hand-index]')){beginPlacement(e.target.dataset.handName,'HAND',Number(e.target.dataset.handIndex));return;}
+  if(/^[1-6]$/.test(e.key)&&!world.inputPaused){const u=drawing.units.filter(u=>u.owner===playerIndex()&&!u.locationId)[Number(e.key)-1];if(u){selected=u.id;render();}}
+ }
+
+ root.addEventListener('click',click);root.addEventListener('input',change);window.addEventListener('keydown',key);$('object-detail').addEventListener('mouseenter',()=>{clearTimeout(hoverTimer);hoverTimer=null;});$('object-detail').addEventListener('mouseleave',hideDetail);
+ project();selectAvailable();save();render();world.focusAt(30,22);world.desiredYaw=0;world.desiredPitch=.88;world.desiredZoom=.62;
+ return()=>{clearTimeout(toastTimer);clearTimeout(hoverTimer);root.removeEventListener('click',click);root.removeEventListener('input',change);window.removeEventListener('keydown',key);world.dispose();};
 }

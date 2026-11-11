@@ -1,21 +1,16 @@
-# Эверделл — прототип правил
+# Living Everdell prototype
 
-Базовая игра: существа и сооружения, личные сезоны, поляна, события, путешествия и подсчёт очков
+Two players, 48 card types and the base Everdell rules engine
 
-Игроки по очереди размещают работника, разыгрывают карту или готовятся к следующему сезону. Сезоны у каждого игрока свои. Работники не возвращаются после хода соперника
+Hand cards fan out at the bottom. Eight market miniatures, two freely arranged cities and worker locations surround the ancient tree
 
-Поляна, рука, города всех игроков, события и места работы доступны через кнопку «Карты». Многошаговые эффекты требуют выбора карт, ресурсов или игрока
+Hover an object or its fixed city foundation to inspect its card. Select a playable hand card or market object, then choose a free position in the appropriate city
 
-Версия с трёхмерной картой и свободной камерой. Новая партия и число участников выбираются в меню. Состояние сохраняется отдельно от настольного варианта
+Free camera: drag, right drag to rotate, wheel to zoom, WASD and Q/E
 
-Лесная долина, зверьки и уютные постройки, оригинальные иллюстрации 48 карт, бумажные карточки и природные материалы интерфейса. Управление камерой сохранено
+Resources are available by hovering the supplies at each settlement. The season wheel advances the current player's season when legal. Escape opens the game menu
 
-## Источники
+Tabletop archive remains available at archive/tabletop-pages-12a/
 
-Механики сверены с русскими правилами базового Эверделла, версия 2.0, Hobby World 2025
-
-Движок и данные карт адаптированы из https://github.com/ymichael/everdell — MIT, Copyright (c) 2021 Michael Yong. Лицензия: vendor/EVERDELL-ENGINE-LICENSE.txt
-
-Иллюстрации 48 карт созданы для прототипа. Настольная версия с компонентами из PDF сохранена отдельно в архиве
-
-Three.js 0.180.0 — MIT, лицензия: vendor/THREE-LICENSE.txt
+Engine and card data adapted from https://github.com/ymichael/everdell — MIT
+Three.js — MIT

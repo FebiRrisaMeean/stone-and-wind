@@ -115,3 +115,83 @@
 @media(max-width:950px){.everdell-shell .world-label.location-plaque{width:130px;min-height:73px;padding:5px 7px 4px;gap:2px}.everdell-shell .location-heading>b{font-size:13px}.everdell-shell .location-paw{width:19px;height:20px}.everdell-shell .location-rewards{gap:5px}.everdell-shell .location-reward-item>b{font-size:16px}}
 
 .everdell-shell .world-label.location-plaque::before,.everdell-shell .world-label.location-plaque::after{opacity:var(--leader-opacity,0)}
+
+/* The landscape is the board: permanent screen chrome is limited to the hand */
+.living-shell{background:#718751}
+.living-shell .world-stage{inset:0}
+.living-shell .world-label.living-object-label{--living-label-scale:1;position:absolute;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;width:max-content;max-width:134px;min-width:0;min-height:0;padding:4px 8px;border:0;border-radius:5px;color:#f9efd0;background:#33462ae0;box-shadow:0 2px 8px #21301a25;backdrop-filter:none;white-space:normal;line-height:1.12;text-align:center;font:600 12px/1.15 Georgia,serif;opacity:.95;transition:background .15s,opacity .15s;cursor:pointer;transform-origin:50% 0}
+.living-shell .world-label.living-object-label:before,.living-shell .world-label.living-object-label:after{display:none}
+.living-shell .world-label.living-object-label:hover,.living-shell .world-label.living-object-label:focus-visible{background:#f4e7c2;color:#33402b;opacity:1;outline:1px solid #fff4d2;z-index:10}
+.living-object-name{display:block;font:inherit;max-width:120px}
+.living-object-cost{display:flex;align-items:center;justify-content:center;gap:5px;font:600 12px/1 Georgia,serif}
+.living-object-cost>span{display:inline-flex;align-items:center;gap:2px}
+.living-object-cost .stock-item{display:flex;align-items:center;gap:2px;min-width:0}
+.living-object-cost .resource-icon{width:15px;height:15px;filter:drop-shadow(0 1px 1px #15231155)}
+.living-shell .world-label.living-location-label{max-width:112px;background:#435235c9;font-size:11px;padding:3px 6px}
+.living-shell .world-label.living-event-label{max-width:114px;font-size:10px;background:#64503dc9;padding:4px 5px}
+.living-shell .world-label.living-city-area-label{background:transparent;box-shadow:none;color:#fff4d4;font:700 20px/1.2 Georgia,serif;text-shadow:0 1px 4px #30451b;max-width:none;padding:0;pointer-events:none}
+.living-shell .world-label.living-city-area-label .living-object-name{max-width:none}
+.living-shell .world-label.living-supplies-label,.living-shell .world-label.living-season-label{font-size:11px;background:#3f4e31b3;padding:3px 6px}
+.living-shell .world-label.living-city-card-label{max-width:120px;font-size:11px;background:#36482cc9}
+.living-shell .world-label.living-market-label{min-width:72px;background:#304126e8;border-bottom:2px solid #c7a66c}
+.hand-fan{position:absolute;z-index:40;left:0;right:0;bottom:0;height:155px;pointer-events:none;isolation:isolate}
+.hand-fan:empty{display:none}
+.hand-card{--spread:108px;position:absolute;bottom:-122px;left:calc(50% + var(--hand-offset)*var(--spread));width:190px;height:312px;margin-left:-95px;pointer-events:auto;cursor:pointer;transform:translateY(calc(var(--hand-offset)*var(--hand-offset)*3px)) rotate(calc(var(--hand-offset)*3deg));transform-origin:50% 120%;transition:transform .18s,bottom .18s,filter .18s;filter:drop-shadow(0 3px 7px #15200a70);z-index:calc(10 + var(--hand-offset));outline:0}
+.living-shell .hand-card .printed-card{--card-height:312px;display:flex;flex-direction:column;width:190px;height:312px;min-height:312px;min-width:0;border-radius:13px;border:2px solid #c3aa72;box-shadow:0 0 0 1px #f2dfae inset;pointer-events:none}
+.living-shell .hand-card .card-illustration{flex-basis:155px}
+.living-shell .hand-card .card-cost-medallion{min-width:30px;padding:6px 4px;left:6px;top:6px;gap:3px}
+.living-shell .hand-card .card-cost-medallion .stock-item{font-size:13px;min-height:15px}
+.living-shell .hand-card .card-cost-medallion .stock-item b{font-size:14px}
+.living-shell .hand-card .card-cost-medallion .resource-icon{width:17px;height:17px}
+.living-shell .hand-card .card-building-alternative{font-size:8px;max-width:52px}
+.living-shell .hand-card .card-title-ribbon{padding:6px 7px 6px 37px;min-height:32px;gap:4px}
+.living-shell .hand-card .card-title-ribbon h2{font-size:15px;line-height:1.08}
+.living-shell .hand-card .card-sigil{width:21px;height:21px}
+.living-shell .hand-card .card-sigil i{font-size:9px}
+.living-shell .hand-card .base-points{left:6px;bottom:20px;min-width:32px;height:28px}
+.living-shell .hand-card .base-points b{font-size:17px}
+.living-shell .hand-card .card-paper{padding:7px 9px;gap:5px;min-height:0;flex:1;overflow:hidden}
+.living-shell .hand-card .card-type-line{font-size:9px}
+.living-shell .hand-card .card-effect{font-size:10px;line-height:1.25}
+.living-shell .hand-card .card-rules{padding:0;overflow:auto}
+.living-shell .hand-card .card-association{font-size:9px;padding-top:3px}
+.living-shell .hand-card .card-association b{font-size:10px}
+.living-shell .hand-card .card-action{display:none}
+.living-shell .hand-card:hover,.living-shell .hand-card:focus-visible,.living-shell .hand-card:focus-within{bottom:22px;transform:translateY(-30px) scale(1.28);z-index:90;filter:drop-shadow(0 5px 16px #12200db0)}
+.living-shell .hand-card:hover .printed-card,.living-shell .hand-card:focus-visible .printed-card{border-color:#f1d18b}
+.hand-fan.placing{opacity:.18;pointer-events:none}
+.hand-fan.placing .hand-card{pointer-events:none}
+.object-detail{position:fixed;z-index:110;width:300px;max-height:calc(100dvh - 28px);overflow:auto;overscroll-behavior:contain;filter:drop-shadow(0 9px 20px #1b28166b);pointer-events:auto}
+.object-detail[hidden]{display:none}
+.living-shell .object-detail .printed-card{--card-height:500px;display:flex;flex-direction:column;width:300px;min-width:300px;height:500px;min-height:500px;border-radius:14px}
+.living-shell .object-detail .card-rules{overflow:auto;min-height:0}
+.living-shell .object-detail .card-effect{font:14px/1.4 Georgia,serif}
+.living-shell .object-detail .card-action{margin-top:auto}
+.world-note{padding:18px 20px;border:1px solid #b99c62;border-radius:12px;background:linear-gradient(135deg,#f7edd1,#ded0a6);color:#34402b;font:15px/1.45 Georgia,serif;box-shadow:0 0 0 3px #fff1cf66 inset}
+.world-note h2{margin:0 0 12px;font:700 22px/1.2 Georgia,serif}
+.world-note p{margin:9px 0 0}
+.world-resources{display:flex;flex-wrap:wrap;gap:12px}
+.world-resources .stock-item{display:flex;align-items:center;gap:4px}
+.world-resources .stock-item>span{font-size:12px}
+.world-resources .resource-icon{width:23px;height:23px}
+.placement-caption{position:fixed;top:22px;left:50%;transform:translateX(-50%);z-index:70;padding:9px 17px;background:#34472de8;border:1px solid #cbb57a;border-radius:8px;color:#f8ebcb;font:15px/1.2 Georgia,serif;pointer-events:none;box-shadow:0 5px 20px #20331625}
+.placement-caption[hidden]{display:none}
+.living-shell .decision-backdrop{background:#1b2d1b66;backdrop-filter:blur(5px)}
+.living-shell .decision-modal{background:#f2e6c7;color:#34402b;border:1px solid #ad935e;box-shadow:0 20px 80px #14211180;max-height:calc(100dvh - 48px);overflow:auto}
+.living-shell .toast{bottom:230px;background:#35452ce8;color:#fff1c6;border-color:#b79d68}
+@media(max-width:1300px){.hand-card{--spread:88px}.living-shell .world-label.living-object-label{font-size:10px;max-width:108px}.living-shell .world-label.living-event-label{font-size:9px}}
+/* Override the legacy universal map-button skin */
+.living-shell .world-label.living-object-label{background:#33462add!important;border:0!important;color:#fff0cb!important}
+.living-shell .world-label.living-object-label span{color:inherit;font:inherit}
+.living-shell .world-label.living-object-label .stock-item b{font:700 12px/1 Georgia,serif}
+.living-shell .world-label.living-object-label:hover,.living-shell .world-label.living-object-label:focus-visible{background:#f4e7c2!important;color:#33402b!important}
+.living-shell .world-label.living-city-area-label{background:transparent!important;color:#f9efce!important;box-shadow:none;font-size:20px}
+.living-shell .world-label.living-event-label{background:#64503dbb!important}
+.living-shell .world-label.living-location-label{background:#405031bb!important}
+.game-root:has(.living-shell){position:fixed;inset:0;width:100vw;height:100dvh;overflow:hidden}
+.living-shell{position:absolute!important;inset:0!important;width:100%;height:100%;overflow:hidden}
+.living-shell .world-label.living-market-label{max-width:96px;padding:4px 6px;font-size:12px}
+.living-shell .world-label.living-city-card-label{max-width:83px;padding:3px 5px;font-size:11px}
+/* Focused, fanned cards must never scroll their scene ancestor */
+.game-root:has(.living-shell),.living-shell{overflow:clip!important}
+.living-shell .hand-fan{position:fixed;bottom:0}
