@@ -50,7 +50,7 @@ export function mountGame(root){
   const availableLocations=new Set(canActShared(game,sharedMeta,game.activePlayerId)?game.getPlayableLocations():[]);
   const locations=Object.keys(game.locationsMap),basics=locations.filter(n=>Location.fromName(n).type==='BASIC'),forests=locations.filter(n=>Location.fromName(n).type==='FOREST');
   const coords=BASIC_POSITIONS,fcoords=FOREST_POSITIONS;
-  const locCoords=new Map();basics.forEach((n,i)=>locCoords.set(n,coords[i]));forests.forEach((n,i)=>locCoords.set(n,fcoords[i]));locCoords.set('HAVEN',[20,35]);['JOURNEY_TWO','JOURNEY_THREE','JOURNEY_FOUR','JOURNEY_FIVE'].forEach((n,i)=>locCoords.set(n,[25+i*4,36]));
+  const locCoords=new Map();basics.forEach((n,i)=>locCoords.set(n,coords[i]));forests.forEach((n,i)=>locCoords.set(n,fcoords[i]));locCoords.set('HAVEN',[19,37]);['JOURNEY_TWO','JOURNEY_THREE','JOURNEY_FOUR','JOURNEY_FIVE'].forEach((n,i)=>locCoords.set(n,[25+i*6,37]));
   for(const n of locations){const loc=Location.fromName(n),pos=locCoords.get(n);if(!pos)continue;
    const gain=loc.resourcesToGain??{},reward={};for(const r of RESOURCE_KEYS)if(gain[r])reward[r.toLowerCase()]=gain[r];
    let capacity=loc.occupancy==='UNLIMITED'?null:loc.occupancy==='EXCLUSIVE_FOUR'&&game.players.length===4?2:1;
@@ -231,7 +231,7 @@ export function mountGame(root){
   if(dialog==='submit')submitPending();
   if(dialog==='undo')step({inputType:GameInputType.UNDO});
   if(dialog==='new'){
-   try{teams=teamDraft.slice();game=createGame({playerCount:2});sharedMeta=createSharedSeasonState(game);({game,meta:sharedMeta}=normalizeSharedGame(game,sharedMeta));arrivalMap.clear();setupOnly=false;menu=false;payment=null;pendingIndex=0;promptChoice=[];promptResources={};cityPlayer=null;tab='meadow';open=false;clearTimeout(toastTimer);$('toast').classList.remove('show');$('toast').textContent='';drawing=null;cityLayout={};placement=null;stagedPosition=null;placementQueue=[];world.gameSeed=null;project();selectAvailable();save();render();world.focusAt(30,24);world.desiredYaw=0;world.desiredPitch=.88;world.desiredZoom=.64;world.target.copy(world.desiredTarget);world.yaw=0;world.pitch=.88;world.zoom=.64;world.updateCamera(1);}catch(e){toast(e.message);}
+   try{teams=teamDraft.slice();game=createGame({playerCount:2});sharedMeta=createSharedSeasonState(game);({game,meta:sharedMeta}=normalizeSharedGame(game,sharedMeta));arrivalMap.clear();setupOnly=false;menu=false;payment=null;pendingIndex=0;promptChoice=[];promptResources={};cityPlayer=null;tab='meadow';open=false;clearTimeout(toastTimer);$('toast').classList.remove('show');$('toast').textContent='';drawing=null;cityLayout={};placement=null;stagedPosition=null;placementQueue=[];world.gameSeed=null;project();selectAvailable();save();render();world.focusAt(30,25);world.desiredYaw=0;world.desiredPitch=.88;world.desiredZoom=.64;world.target.copy(world.desiredTarget);world.yaw=0;world.pitch=.88;world.zoom=.64;world.updateCamera(1);}catch(e){toast(e.message);}
   }
  }
  function change(e){if(e.target.matches('[data-resource]')){const value=Number(e.target.value);promptResources[e.target.dataset.resource]=Number.isFinite(value)?Math.max(0,Math.floor(value)):0;}}
@@ -242,6 +242,6 @@ export function mountGame(root){
  }
 
  root.addEventListener('click',click);root.addEventListener('input',change);window.addEventListener('keydown',key);$('object-detail').addEventListener('mouseenter',()=>{clearTimeout(hoverTimer);hoverTimer=null;});$('object-detail').addEventListener('mouseleave',hideDetail);
- project();selectAvailable();save();render();world.focusAt(30,24);world.desiredYaw=0;world.desiredPitch=.88;world.desiredZoom=.64;world.target.copy(world.desiredTarget);world.yaw=0;world.pitch=.88;world.zoom=.64;world.updateCamera(1);
+ project();selectAvailable();save();render();world.focusAt(30,25);world.desiredYaw=0;world.desiredPitch=.88;world.desiredZoom=.64;world.target.copy(world.desiredTarget);world.yaw=0;world.pitch=.88;world.zoom=.64;world.updateCamera(1);
  return()=>{clearTimeout(toastTimer);clearTimeout(hoverTimer);root.removeEventListener('click',click);root.removeEventListener('input',change);window.removeEventListener('keydown',key);world.dispose();};
 }
