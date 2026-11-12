@@ -1,0 +1,122 @@
+[
+  {
+    "name": "Architect",
+    "title": "Архитектор",
+    "id": "01"
+  },
+  {
+    "name": "Bard",
+    "title": "Бард",
+    "id": "03"
+  },
+  {
+    "name": "Barge Toad",
+    "title": "Квакша",
+    "id": "05"
+  },
+  {
+    "name": "Chip Sweep",
+    "title": "Дворник",
+    "id": "07"
+  },
+  {
+    "name": "Doctor",
+    "title": "Ученый",
+    "id": "09"
+  },
+  {
+    "name": "Fool",
+    "title": "Паяц",
+    "id": "11"
+  },
+  {
+    "name": "Historian",
+    "title": "Летописец",
+    "id": "13"
+  },
+  {
+    "name": "Husband",
+    "title": "Хозяин",
+    "id": "15"
+  },
+  {
+    "name": "Wife",
+    "title": "Хозяйка",
+    "id": "16"
+  },
+  {
+    "name": "Innkeeper",
+    "title": "Трактирщик",
+    "id": "19"
+  },
+  {
+    "name": "Judge",
+    "title": "Судья",
+    "id": "21"
+  },
+  {
+    "name": "King",
+    "title": "Король",
+    "id": "23"
+  },
+  {
+    "name": "Miner Mole",
+    "title": "Крот-Шахтер",
+    "id": "25"
+  },
+  {
+    "name": "Monk",
+    "title": "Монах",
+    "id": "27"
+  },
+  {
+    "name": "Peddler",
+    "title": "Коробейник",
+    "id": "29"
+  },
+  {
+    "name": "Postal Pigeon",
+    "title": "Почтальон",
+    "id": "31"
+  },
+  {
+    "name": "Queen",
+    "title": "Королева",
+    "id": "33"
+  },
+  {
+    "name": "Ranger",
+    "title": "Следопыт",
+    "id": "35"
+  },
+  {
+    "name": "Shepherd",
+    "title": "Пастырь",
+    "id": "37"
+  },
+  {
+    "name": "Shopkeeper",
+    "title": "Лавочник",
+    "id": "39"
+  },
+  {
+    "name": "Teacher",
+    "title": "Учитель",
+    "id": "41"
+  },
+  {
+    "name": "Undertaker",
+    "title": "Могильщик",
+    "id": "43"
+  },
+  {
+    "name": "Wanderer",
+    "title": "Странник",
+    "id": "45"
+  },
+  {
+    "name": "Woodcarver",
+    "title": "Резчик",
+    "id": "47"
+  }
+]

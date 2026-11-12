@@ -1,7 +1,7 @@
 import {fitLivingZone,constrainPresetFrame,livingCameraLimits,constrainLivingTarget} from './camera-framing.js?v=field19d';
 import {seasonVisuals,addSeasonGroundDetails} from './seasonal-visuals.js?v=resources17';
 import * as T from '../vendor/three.module.js';
-import {renderLivingBoard,updateLivingLabels,animateLivingBoard,refreshLivingHover,renderLivingPlacementPreview} from './living-world.js?v=field19d';
+import {renderLivingBoard,updateLivingLabels,animateLivingBoard,refreshLivingHover,renderLivingPlacementPreview} from './living-world.js?v=pages23-local';
 import {resourceIcon} from './everdell/art.js?v=20261112-23';
 import {FACTIONS,TROOPS,WORLD,BUILDINGS} from './data.js?v=20261112-23';
 import {count,visible,known,moveRange} from './movement.js?v=20261112-23';
@@ -59,11 +59,11 @@ export class WorldView{
   this.yaw=Math.PI*.22;this.desiredYaw=this.yaw;this.pitch=.82;this.desiredPitch=this.pitch;this.zoom=.7;this.desiredZoom=.7;
   this.scene=new T.Scene();this.scene.background=new T.Color('#506d59');this.scene.fog=new T.FogExp2('#506d59',.007);
   this.renderer=new T.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'});
-  this.renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=T.PCFSoftShadowMap;this.renderer.outputColorSpace=T.SRGBColorSpace;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.2;
+  this.renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=T.PCFSoftShadowMap;this.renderer.outputColorSpace=T.SRGBColorSpace;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.0;
   this.canvas=this.renderer.domElement;this.canvas.tabIndex=0;this.canvas.setAttribute('aria-label','Карта: тяните для движения камеры, правая кнопка для вращения, колесо для масштаба');this.canvas.style.cursor='grab';this.canvas.style.touchAction='none';container.appendChild(this.canvas);
   this.camera=new T.OrthographicCamera(-20,20,14,-14,.1,220);
-  this.scene.add(new T.HemisphereLight(0xffefd1,0x526b49,2.6));
-  this.sun=new T.DirectionalLight(0xffdfa8,2.7);this.sun.position.set(-15,35,18);this.sun.castShadow=true;this.sun.shadow.mapSize.set(2048,2048);this.sun.shadow.camera.left=-22;this.sun.shadow.camera.right=22;this.sun.shadow.camera.top=22;this.sun.shadow.camera.bottom=-22;this.sun.shadow.camera.far=110;this.sun.shadow.normalBias=.07;this.sun.shadow.bias=-.0001;this.scene.add(this.sun);this.scene.add(this.sun.target);
+  this.scene.add(new T.HemisphereLight(0xffefd1,0x526b49,1.7));
+  this.sun=new T.DirectionalLight(0xffedcf,2.3);this.sun.position.set(-15,35,18);this.sun.castShadow=true;this.sun.shadow.mapSize.set(2048,2048);this.sun.shadow.camera.left=-22;this.sun.shadow.camera.right=22;this.sun.shadow.camera.top=22;this.sun.shadow.camera.bottom=-22;this.sun.shadow.camera.far=110;this.sun.shadow.normalBias=.07;this.sun.shadow.bias=-.0001;this.scene.add(this.sun);this.scene.add(this.sun.target);
   const fill=new T.DirectionalLight(0xc7d8d4,.75);fill.position.set(30,18,-25);this.scene.add(fill);
   this.terrain=new T.Group();this.detail=new T.Group();this.actors=new T.Group();this.markers=new T.Group();this.effectLayer=new T.Group();this.scene.add(this.terrain,this.detail,this.actors,this.markers,this.effectLayer);
   this.labelLayer=document.createElement('div');this.labelLayer.className='world-labels';container.appendChild(this.labelLayer);
@@ -84,7 +84,7 @@ export class WorldView{
  beam(g,a,b,r,color){const d=new T.Vector3().subVectors(b,a),m=this.cylinder(g,0,0,0,r,d.length(),color,6);m.position.copy(a).add(b).multiplyScalar(.5);m.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),d.normalize());return m;}
  roof(g,w,h,d,color,y){const shape=new T.Shape();shape.moveTo(-w/2,0);shape.lineTo(0,h);shape.lineTo(w/2,0);shape.closePath();const geometry=new T.ExtrudeGeometry(shape,{depth:d,bevelEnabled:false,steps:1});geometry.translate(0,0,-d/2);return this.mesh(g,geometry,color,0,y,0);}
  ring(inner,outer,color,opacity=1){const m=new T.Mesh(new T.RingGeometry(inner,outer,64),new T.MeshBasicMaterial({color,transparent:true,opacity,side:T.DoubleSide,depthWrite:false,depthTest:false}));m.rotation.x=-Math.PI/2;m.position.y=.23;m.renderOrder=9;return m;}
- disposeObject(object){object.traverse(o=>{o.geometry?.dispose();if(Array.isArray(o.material))o.material.forEach(m=>m.dispose());else o.material?.dispose();});object.removeFromParent();}
+ disposeObject(object){object.traverse(o=>{if(o.geometry&&!o.geometry.userData.sharedAsset)o.geometry.dispose();for(const m of (Array.isArray(o.material)?o.material:o.material?[o.material]:[]))if(!m.userData.sharedAsset)m.dispose();});object.removeFromParent();}
  clear(group){for(const o of [...group.children])this.disposeObject(o);}
  tagged(g,pick){g.traverse(o=>{if(o.isMesh)o.userData.pick=pick;});}
  tileAt(x,z){return this.state?.tiles[Math.round(z)*WORLD.width+Math.round(x)];}

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Учёный — локальная скульптура</title>
+  <link rel="stylesheet" href="./study.css">
+</head>
+<body>
+  <header><a href="../scholar-study/">← Предыдущие этюды</a><h1>Учёный</h1><span>Локальная скульптура</span></header>
+  <main>
+    <div class="controls" role="group" aria-label="Ракурс и отображение">
+      <div class="control-group" aria-label="Ракурс">
+        <button data-view="reference" aria-pressed="true">Как на эталоне</button>
+        <button data-view="front" aria-pressed="false">Спереди</button>
+        <button data-view="side" aria-pressed="false">Сбоку</button>
+        <button data-view="back" aria-pressed="false">Сзади</button>
+      </div>
+      <div class="control-group" aria-label="Режим">
+        <button id="rotate" aria-pressed="false">Вращение</button>
+        <button id="clay" aria-pressed="false">Без цвета</button>
+        <button id="animation" aria-pressed="true">Анимация</button>
+        <button id="game-scale" aria-pressed="false">Игровой размер</button>
+        <button id="crowd" aria-pressed="false">24 фигурки</button>
+      </div>
+    </div>
+    <section class="comparison" aria-label="Сравнение эталона и объёмной модели">
+      <article class="reference-panel">
+        <div class="panel-heading"><h2>Утверждённый эталон A</h2><span>Изображение</span></div>
+        <div class="reference-image"><img id="reference" src="./reference.png" alt="Утверждённый скульптурный образ Учёного"></div>
+        <p id="reference-status">Силуэт, выражение лица и характер деталей</p>
+      </article>
+      <article class="model-panel">
+        <div class="panel-heading"><h2>3D-модель</h2><span id="mode-label">Студийный вид</span></div>
+        <div id="viewport" tabindex="0" role="img" aria-label="Модель Учёного, перетаскивание вращает камеру, колесо меняет масштаб, стрелки влево и вправо меняют ракурс">
+          <div id="status" role="status">Загружаем модель…</div>
+          <div class="metrics" aria-label="Производительность"><span id="triangles">— треугольников</span><span id="draw-calls">— вызовов</span><span id="fps">— FPS</span></div>
+        </div>
+        <p>Перетаскивание — ракурс · Колесо — масштаб · ← → — поворот</p>
+      </article>
+    </section>
+  </main>
+  <script type="module" src="./study.js"></script>
+</body>
+</html>

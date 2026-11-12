@@ -16,7 +16,9 @@ Hover an object or its fixed city foundation to inspect its card. Select a playa
 
 Starting placement frames the destination city. Right-click during placement cancels the complete action, including payment and choices. Paired Husband and Wife share one logical city space and appear beside each other, even when the city is full
 
-The separate world-study/ gallery compares six animated 3D samples with their source cards: Architect, Bard, Doctor, Crane, Resin Refinery and Clock Tower. These samples establish a visual direction; they have not yet replaced the main board models
+The character-library/ gallery compares all 24 local animated critters with their card illustrations. These meshes also appear in the market and cities, with independent movement and shared geometry. The three approved Crane, Resin Refinery and Clock Tower models are now on the board, batched without changing their shapes
+
+The separate world-study/ gallery preserves six animated 3D samples with their source cards: Architect, Bard, Doctor, Crane, Resin Refinery and Clock Tower. Earlier samples remain available as a historical visual reference
 
 Four camera buttons frame your city, production, the market and the opponentâ€™s city. Moving the pointer releases the preset without changing its current view
 
@@ -26,11 +28,15 @@ Your supplies and next-season forecast stay at the top left. Hover the opponentâ
 
 Seasons are shared: a player may pass, then the other may continue. Advance only after both pass or run out of legal actions, resolving production choices before the shared landscape changes. No free workers alone does not end a season while card actions remain
 
-Production clearings contain resource miniatures and physical worker seats. Hover for exact rewards, exchanges and remaining capacity. Locks explain unavailable actions on hover
+Production clearings contain resource miniatures and physical worker seats. Hover for exact rewards, exchanges and occupied/total capacity. Locks explain unavailable actions on hover
 
 Snow, flowers and autumn foliage follow the season. Market residents wander, recruited residents walk into the city, and animal porters carry new buildings. Escape opens the game menu
 
 Choice dialogs share original resource and victory-point symbols. Use plus/minus counters to choose amounts; X, Cancel or Escape restores the complete state before your initiated action. Mandatory rewards triggered after the opponent ends the shared season must be resolved
+
+The stock HUD also shows free workers and free city spaces, respecting paired residents and capacity exceptions. City worker destinations have a distinct availability marker, and Storehouse stock uses high-contrast original icons
+
+At game end, the camera visits score sources while both counters animate. Skip or Escape reveals exact engine totals, and a completed saved party opens directly on its final table
 
 Tabletop archive remains available at archive/tabletop-pages-12a/
 

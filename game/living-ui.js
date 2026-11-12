@@ -14,10 +14,32 @@ export function zoneRecipe(name,gains={}){
  if(name==='DISCARD_ANY_THEN_DRAW_TWO_PER_CARD')return amount('n','CARD')+arrow+amount('2n','CARD');
  if(name==='DISCARD_UP_TO_THREE_CARDS_TO_GAIN_WILD_PER_CARD')return `<span class="zone-math-limit">n≤3</span>`+amount('n','CARD')+arrow+amount('n','ANY');
  if(name==='COPY_BASIC_ONE_CARD')return '<span class="zone-copy" aria-hidden="true">▦↻</span>'+plus+amount(1,'CARD');
- if(name==='DRAW_TWO_MEADOW_PLAY_ONE_FOR_ONE_LESS')return `<span class="zone-two-lines"><span>${amount(2,'CARD')}${arrow}${amount(1,'CARD')}</span><span><svg class="zone-build" viewBox="0 0 24 24" aria-hidden="true"><path d="m2 11 10-9 10 9M5 10v12h14V10M10 22v-8h5v8" fill="none" stroke="currentColor" stroke-width="2"/></svg>${amount('−1','ANY')}</span></span>`;
+ if(name==='DRAW_TWO_MEADOW_PLAY_ONE_FOR_ONE_LESS')return `<span class="zone-discount-steps"><span>${amount(2,'CARD')}<span>Возьмите 2 карты с поляны</span></span><span>${amount(1,'CARD')}<span>Разыграйте 1 из них</span></span><span class="zone-discount">${resourceIcon('ANY')}<span>Скидка: 1 любой ресурс</span></span></span>`;
  return Object.entries(gains).filter(([,n])=>n>0).map(([r,n])=>amount(n,r)).join('');
 }
 export function zoneBadge(location){return location.locked?`<span class="zone-lock" aria-hidden="true">${lockIcon}</span>`:'';}
-export function zoneDetail(location){const free=location.capacity===null?null:Math.max(0,location.capacity-(location.workers?.length??0));return `<div class="production-tooltip"><h2>${esc(location.name)}</h2><div class="zone-reward">${zoneRecipe(location.actualName,location.rewardIcons)}</div>${free===null?'':`<div class="zone-capacity">${resourceIcon('worker')}<b>${free} / ${location.capacity}</b><span>свободно</span></div>`}${location.locked?`<p class="zone-unavailable">${lockIcon}${esc(location.reason)}</p>`:''}</div>`;}
-export function supplyStatus(player,forecast,active=false){const r={...player.getResources(),CARD:player.numCardsInHand},f=forecast?.resources??{},conditional=forecast?.conditional??[];return `<div class="supply-totals${active?' current':''}">${['TWIG','RESIN','PEBBLE','BERRY','VP','CARD'].map(key=>`<div class="supply-total" title="${names[key]}: ${r[key]??0}${forecast?', следующий сезон: +'+(f[key]??0):''}" aria-label="${names[key]}: ${r[key]??0}${forecast?', прирост в следующем сезоне '+(f[key]??0):''}">${resourceIcon(key)}<strong>${r[key]??0}</strong><small>${forecast?'+'+(f[key]??0):'—'}</small></div>`).join('')}${conditional.length?`<span class="supply-conditional" title="Дополнительный прирост зависит от выбора эффектов" aria-label="Дополнительный прирост зависит от выбора эффектов">+?</span>`:''}</div>`;}
+export function zoneCapacity(location){
+ if(location.capacity===null)return '';
+ const occupied=location.workers?.length??0,total=location.capacity;
+ return `<div class="zone-capacity" aria-label="Занято мест: ${occupied} из ${total}">${resourceIcon('worker')}<b>${occupied} / ${total}</b><span>занято</span></div>`;
+}
+export function zoneDetail(location){return `<div class="production-tooltip"><h2>${esc(location.name)}</h2><div class="zone-reward">${zoneRecipe(location.actualName,location.rewardIcons)}</div>${zoneCapacity(location)}${location.locked?`<p class="zone-unavailable">${lockIcon}${esc(location.reason)}</p>`:''}</div>`;}
+const countWord=(n,one,few,many)=>n%100>=11&&n%100<=14?many:n%10===1?one:n%10>=2&&n%10<=4?few:many;
+export function playerSpaceStatus(player){
+ const workers=player.numAvailableWorkers,total=player.maxCitySize,occupied=player.getNumOccupiedSpacesInCity(),free=Math.max(0,total-occupied);
+ const slots='<svg class="city-slot-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h7v7H3zm11 0h7v7h-7zM3 14h7v7H3zm11 0h7v7h-7z" fill="none" stroke="currentColor" stroke-width="1.7"/></svg>';
+ return `<div class="supply-spaces"><span title="Свободные рабочие: ${workers}" aria-label="Свободные рабочие: ${workers}">${resourceIcon('worker')}<strong>${workers}</strong><span>${countWord(workers,'рабочий','рабочих','рабочих')} в запасе</span></span><span title="Свободные ячейки города: ${free} из ${total}; занято ${occupied}. Пары и исключения учтены" aria-label="Свободные ячейки города: ${free} из ${total}">${slots}<strong>${free}</strong><span>${countWord(free,'свободная ячейка','свободные ячейки','свободных ячеек')}</span></span></div>`;
+}
+export function storedResources(resources={}){
+ const values=['TWIG','RESIN','PEBBLE','BERRY','VP'].filter(r=>resources[r]>0);
+ if(!values.length)return '';
+ return `<span class="stored-resources" role="group" aria-label="Запас на карте: ${esc(values.map(r=>`${names[r]}: ${resources[r]}`).join(', '))}">${values.map(r=>`<span class="stored-resource">${resourceIcon(r)}<b>${resources[r]}</b></span>`).join('')}</span>`;
+}
+export function cityWorkerMarker({name,available,occupied,capacity}){
+ return `<span class="city-worker-marker${available?' is-available':''}" aria-hidden="true">${resourceIcon('worker')}</span><span class="city-worker-name">${esc(name)}</span><span class="sr-only">Место рабочего, ${occupied} / ${capacity} занято</span>`;
+}
+export function cityWorkerDetail({capacity,workers,available,reason,open}){
+ return `<div class="city-worker-detail">${zoneCapacity({capacity,workers})}<p>${esc(available?'Нажмите на основание, чтобы разместить рабочего':reason)}</p>${open?'<small>Открыто для обоих игроков · владелец получает 1 очко за гостя</small>':''}</div>`;
+}
+export function supplyStatus(player,forecast,active=false){const r={...player.getResources(),CARD:player.numCardsInHand},f=forecast?.resources??{},conditional=forecast?.conditional??[];return `<div class="supply-totals${active?' current':''}">${['TWIG','RESIN','PEBBLE','BERRY','VP','CARD'].map(key=>`<div class="supply-total" title="${names[key]}: ${r[key]??0}${forecast?', следующий сезон: +'+(f[key]??0):''}" aria-label="${names[key]}: ${r[key]??0}${forecast?', прирост в следующем сезоне '+(f[key]??0):''}">${resourceIcon(key)}<strong>${r[key]??0}</strong><small>${forecast?'+'+(f[key]??0):'—'}</small></div>`).join('')}${conditional.length?`<span class="supply-conditional" title="Дополнительный прирост зависит от выбора эффектов" aria-label="Дополнительный прирост зависит от выбора эффектов">+?</span>`:''}</div>${active?playerSpaceStatus(player):''}`;}
 export const SPECIES=[{id:1,name:'Белочки',card:'Shopkeeper'},{id:3,name:'Зайцы',card:'Wanderer'},{id:0,name:'Мыши',card:'Husband'},{id:2,name:'Ежи',card:'Peddler'},{id:4,name:'Кроты',card:'Miner Mole'},{id:5,name:'Бобры',card:'Woodcarver'}];

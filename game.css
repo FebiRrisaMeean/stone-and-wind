@@ -328,6 +328,42 @@
 .production-tooltip .zone-reward{padding:0;background:none;border:0;border-radius:0;box-shadow:none;color:#fff2d6!important;min-height:26px}
 .production-tooltip .zone-capacity .original-icon{background:#e6d9b9;border-radius:5px;padding:2px;box-sizing:border-box}
 .living-shell .living-zone-badge .zone-lock{transform:translate(30%,-50%) scale(var(--zone-lock-scale,1))}
+/* Human counters stay beside the stock and use the engine's city occupancy */
+.supply-spaces{display:flex;align-items:center;gap:14px;margin-top:7px;padding-top:7px;border-top:1px solid #d6c28b38;font:12px/1.25 system-ui,sans-serif;color:#e7e6cc}
+.supply-spaces>span{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.supply-spaces strong{font:700 16px/1 system-ui,sans-serif;color:#fff5de;min-width:10px}
+.supply-spaces .original-icon{width:21px!important;height:21px!important;background:#e9dfc3;border-radius:4px;padding:2px;box-sizing:border-box}
+.city-slot-icon{width:19px;height:19px;color:#e3d7b4;flex:none}
+.zone-discount-steps{display:grid;gap:8px;font:13px/1.35 system-ui,sans-serif}
+.zone-discount-steps>span{display:flex;align-items:center;gap:9px}
+.zone-discount-steps .zone-value{width:47px;flex:none}
+.zone-discount-steps .zone-discount{padding-top:6px;border-top:1px solid #d6c28b38;color:#d6e8c3}
+.zone-discount>.original-icon{background:#ecdfbf;border-radius:4px;padding:2px;box-sizing:border-box}
+/* A small marker sits on the existing foundation; names appear on hover */
+.living-shell .world-label.living-city-card-label:has(.city-worker-marker){padding:0;gap:3px;background:transparent!important;box-shadow:none;max-width:150px}
+.city-worker-marker{display:grid;place-items:center;width:27px;height:27px;border:1px solid #97876c;border-radius:50%;background:#e6dcc3;box-shadow:0 1px 4px #17251b66;opacity:.8}
+.city-worker-marker .original-icon{width:19px!important;height:19px!important;filter:none}
+.city-worker-marker.is-available{background:#edf1d1;border-color:#b4df91;box-shadow:0 0 0 2px #52894fbb,0 1px 5px #17251b66;opacity:1}
+.city-worker-name{display:none;padding:4px 7px;border-radius:5px;background:#233b29f5;color:#fff3d8;font:600 12px/1.18 system-ui,sans-serif;max-width:140px}
+.is-hovered .city-worker-name,:focus-visible>.city-worker-name{display:block}
+.living-shell .world-label.living-city-card-label:has(.city-worker-marker):focus-visible{outline:2px solid #fff1c8;outline-offset:4px}
+.city-worker-detail{box-sizing:border-box;padding:9px 11px;background:#263b2efa;border:1px solid #cfbb8e99;border-radius:9px 9px 0 0;color:#fff0d1;font:12px/1.3 system-ui,sans-serif}
+.city-worker-detail .zone-capacity{display:flex;align-items:center;gap:6px;font:600 13px/1.2 system-ui,sans-serif}
+.city-worker-detail .zone-capacity .original-icon{width:18px!important;height:18px!important;background:#e9dfc3;padding:2px;border-radius:3px;box-sizing:border-box}
+.city-worker-detail .zone-capacity>span{font-weight:400}
+.city-worker-detail p{margin:5px 0 0;color:#ffedc9}
+.city-worker-detail small{display:block;margin-top:4px;color:#d6dec3;font:11px/1.3 system-ui,sans-serif}
+/* Stored tokens have separate light icon wells and high contrast values */
+.stored-resources{display:inline-flex;align-items:center;flex-wrap:wrap;justify-content:center;gap:6px;padding:4px 6px;border:1px solid #d4c496aa;border-radius:6px;background:#21392bf7;color:#fff6df}
+.stored-resource{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.stored-resource .original-icon{width:24px!important;height:24px!important;padding:2px;border-radius:4px;box-sizing:border-box;background:#f2e8ce;filter:none}
+.stored-resource b{font:800 18px/1 system-ui,sans-serif;color:#fff8e7!important;text-shadow:none;min-width:10px}
+.living-shell .card-counters{right:7px;top:7px;padding:0;background:none;border:0;max-width:calc(100% - 14px)}
+.living-shell .world-label .stored-resources{gap:5px;padding:3px 5px;flex-wrap:nowrap}
+.living-shell .world-label .stored-resource{gap:3px}
+.living-shell .world-label .stored-resource .original-icon{width:20px!important;height:20px!important}
+.living-shell .world-label .stored-resource b{font:800 14px/1 system-ui,sans-serif;color:#fff8e7!important}
+.living-shell .world-label.living-city-card-label:not(.is-hovered):not(:focus-visible)>.stored-resources{display:none}
 
 /* Shared dialogue language: evergreen frame, warm paper, original resource symbols */
 .living-shell .decision-backdrop:has(.choice-dialog){padding:24px;background:#1220198c;backdrop-filter:blur(2px)}
@@ -377,3 +413,27 @@
 .bot-status[hidden]{display:none}
 .bot-status button{margin-left:8px;border:1px solid #c7bd8a;border-radius:5px;background:#4c6a40;color:#fff3d8;padding:4px 9px;font:inherit;cursor:pointer}
 .bot-status button:focus-visible{outline:2px solid #fff3d8;outline-offset:2px}
+
+/* The reveal counts presentation totals only; the finished party remains immutable */
+.final-scoring-panel{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);width:min(550px,calc(100% - 48px));z-index:180;color:#fff3d7;font:14px/1.35 system-ui,sans-serif}
+.final-scoring-panel[hidden]{display:none}
+.final-scoring-panel>section{padding:14px 18px 12px;background:#20382bf7;border:1px solid #d9c395;border-radius:14px;box-shadow:0 6px 24px #13251999}
+.final-scoring-heading{display:flex;align-items:center;justify-content:space-between;gap:14px}
+.final-scoring-heading h2{margin:0;color:#fff1d0;font:600 16px/1.2 system-ui,sans-serif}
+.final-scoring-heading button,.final-results-actions button{border:1px solid #af9b70;background:#e9dfc2;color:#293d2d;border-radius:6px;padding:7px 11px;font:600 12px/1.2 system-ui,sans-serif;cursor:pointer}
+.final-scoring-heading button:focus-visible,.final-results-actions button:focus-visible{outline:3px solid #dcf1b8;outline-offset:3px}
+.final-scoring-totals{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:12px}
+.final-scoring-totals>div{display:grid;grid-template-columns:1fr 28px 52px;align-items:center;gap:7px;padding:8px 11px;border-radius:8px;background:#152f24;border:1px solid #a68e5b55;transition:border-color .2s,background .2s}
+.final-scoring-totals>div.is-counting{border-color:#d6c589;background:#324c32}
+.final-scoring-totals strong{color:#fff0b9;font:750 29px/1 system-ui,sans-serif;font-variant-numeric:tabular-nums;text-align:right}
+.final-scoring-totals .original-icon{background:#eedfb6;border-radius:50%;padding:2px;box-sizing:border-box}
+.final-scoring-totals .is-counting .original-icon{animation:final-coin-pulse .6s ease-in-out infinite alternate}
+.final-scoring-source{min-height:19px;margin:10px 0 9px;color:#f0e5c8;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.final-scoring-progress{height:3px;background:#af9c6b44;border-radius:3px;overflow:hidden}
+.final-scoring-progress>span{display:block;height:100%;background:#ddcd94;border-radius:inherit}
+.is-final-scoring .hand-fan,.is-final-scoring .camera-zone-controls{visibility:hidden}
+.living-shell.is-final-scoring .world-label.final-score-target{visibility:visible!important;outline:2px solid #f5df9d;outline-offset:5px;filter:drop-shadow(0 0 5px #e6d291);z-index:12}
+.is-final-scoring .final-score-target>.city-worker-name{display:block}
+.final-results-actions{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:14px}
+@keyframes final-coin-pulse{from{transform:translateY(1px) scale(.95)}to{transform:translateY(-2px) scale(1.08)}}
+@media(prefers-reduced-motion:reduce){.final-scoring-totals .is-counting .original-icon{animation:none}.final-scoring-totals>div{transition:none}}

@@ -4,20 +4,20 @@ const rect=(left,top,width,height)=>({left,top,width,height,right:left+width,bot
 
 // The origin is a fixed world footprint, never the pointer or the floating preview
 export function cardPreviewPlacement(anchor,viewport,obstacles=[]){
- const margin=12,gap=18,ratio=.708,maxWidth=Math.min(320,viewport.width-24,(viewport.height-24)*ratio);
- const aboveSpace=anchor.top-gap-margin,aboveWidth=Math.min(maxWidth,aboveSpace*ratio);
+ const margin=12,gap=18,ratio=.708,extra=Math.max(0,viewport.extraHeight??0),maxWidth=Math.min(320,viewport.width-24,(viewport.height-24-extra)*ratio);
+ const aboveSpace=anchor.top-gap-margin,aboveWidth=Math.min(maxWidth,(aboveSpace-extra)*ratio);
  const avoid=obstacles.filter(Boolean),candidates=[];
- const add=(x,y,w,priority)=>{const h=w/ratio,r=rect(clamp(x,margin,viewport.width-w-margin),clamp(y,margin,viewport.height-h-margin),w,h);const collision=avoid.reduce((n,o)=>n+(overlaps(r,o,8)?1:0),0)+(overlaps(r,anchor,gap/2)?4:0);candidates.push({r,score:priority+collision*10000});};
+ const add=(x,y,w,priority)=>{const h=w/ratio+extra,r=rect(clamp(x,margin,viewport.width-w-margin),clamp(y,margin,viewport.height-h-margin),w,h);const collision=avoid.reduce((n,o)=>n+(overlaps(r,o,8)?1:0),0)+(overlaps(r,anchor,gap/2)?4:0);candidates.push({r,score:priority+collision*10000});};
  if(aboveWidth>=210){
-  const w=aboveWidth,y=anchor.top-gap-w/ratio,cx=(anchor.left+anchor.right)/2;
+  const w=aboveWidth,y=anchor.top-gap-w/ratio-extra,cx=(anchor.left+anchor.right)/2;
   add(cx-w/2,y,w,0);
   for(const o of avoid){add(o.right+12,y,w,20);add(o.left-w-12,y,w,20);}
  }
  // Near the top edge, keep a readable card beside the origin instead of covering it
  for(const w of [maxWidth,Math.min(maxWidth,250)]){
-  add(anchor.right+gap,anchor.top-w/ratio,w,60);
-  add(anchor.left-gap-w,anchor.top-w/ratio,w,60);
-  for(const o of avoid){add(o.right+gap,anchor.top-w/ratio,w,80);add(o.left-gap-w,anchor.top-w/ratio,w,80);}
+  add(anchor.right+gap,anchor.top-w/ratio-extra,w,60);
+  add(anchor.left-gap-w,anchor.top-w/ratio-extra,w,60);
+  for(const o of avoid){add(o.right+gap,anchor.top-w/ratio-extra,w,80);add(o.left-gap-w,anchor.top-w/ratio-extra,w,80);}
  }
  candidates.sort((a,b)=>a.score-b.score);return candidates[0].r;
 }

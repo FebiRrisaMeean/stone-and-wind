@@ -1,6 +1,6 @@
 import {applyObjectSeason} from './seasonal-visuals.js?v=resources17';
 import * as T from '../vendor/three.module.js';
-import {createCardMiniature,animateCardMiniature} from './living-models.js?v=20261112-23';
+import {createCardMiniature,animateCardMiniature} from './living-models.js?v=pages23-local';
 import {woodlandCottage,ancientTree,woodlandFigure} from './woodland-world.js?v=resources17';
 import {resourceIcon} from './everdell/art.js?v=20261112-23';
 
@@ -93,7 +93,7 @@ export function renderLivingPlacementPreview(view,preview){
 }
 function renderPlacementGhost(view,state){
  const preview=state.placementPreview,key=preview?.cardName??'';
- if(view.livingGhostName!==key){if(view.livingGhost)view.disposeObject(view.livingGhost);view.livingGhost=null;view.livingGhostName=key;if(key){const ghost=createCardMiniature(view,key,preview.owner??0);ghost.traverse(o=>{delete o.userData.pick;if(o.material){o.material=o.material.clone();o.material.transparent=true;o.material.opacity=.48;o.material.depthWrite=false;}});view.markers.add(ghost);view.livingGhost=ghost;}}
+ if(view.livingGhostName!==key){if(view.livingGhost)view.disposeObject(view.livingGhost);view.livingGhost=null;view.livingGhostName=key;if(key){const ghost=createCardMiniature(view,key,preview.owner??0);ghost.traverse(o=>{delete o.userData.pick;if(o.material){o.material=o.material.clone();o.material.userData.sharedAsset=false;o.material.transparent=true;o.material.opacity=.48;o.material.depthWrite=false;}});view.markers.add(ghost);view.livingGhost=ghost;}}
  if(view.livingGhost)view.livingGhost.visible=false;
 }
 export function updateLivingLabels(view){
@@ -103,7 +103,7 @@ export function updateLivingLabels(view){
   const p=label.pos.clone();p.y=view.heightAt(p.x,p.z)+(label.pos.y??.15);p.project(view.camera);const x=(p.x*.5+.5)*w;let y=(-p.y*.5+.5)*h;
   const cardLabel=['market','city-card'].includes(label.item?.type),hovered=view.hoveredLiving?.id===label.item?.id||label.el.matches(':hover,:focus-visible');
   if(cardLabel)label.el.classList.toggle('is-hovered',hovered);
-  const cardVisible=label.item?.type==='city-card'?hovered:!cardLabel||view.zoom>=.48||hovered;
+  const cardVisible=label.item?.type==='city-card'?(hovered||label.item?.workerDestination===true):!cardLabel||view.zoom>=.48||hovered;
   const eventVisible=label.item?.type!=='event'||view.zoom>.83||view.hoveredLiving?.id===label.item.id;
   const visible=cardVisible&&eventVisible&&p.z>-1&&p.z<1&&x>0&&x<w&&y>0&&y<h-12;
   const pixelsPerUnit=h*view.zoom/26,zone=label.livingZone,supply=label.item?.type==='supplies';
@@ -116,6 +116,7 @@ function idleWalk(view,entity,home,center,radius,dt,seed){
  let walk=entity.livingWalk;
  if(!walk){walk=entity.livingWalk={target:new T.Vector3(home.x,0,home.z),wait:1+hash(seed)*3,visits:0,last:entity.group.position.clone(),walking:false};}
  walk.wait-=dt;const position=entity.group.position;
+ if(!walk.walking&&!entity.unit){const resting=Math.PI+(hash(seed)-.5)*.5;entity.group.rotation.y+=shortest(entity.group.rotation.y,resting)*(1-Math.exp(-dt*2.5));}
  if(position.distanceToSquared(walk.target)<.12||!walk.walking){
   walk.walking=false;
   if(walk.wait<=0){walk.visits++;const returning=walk.visits%3===0,angle=hash(seed+':'+walk.visits)*Math.PI*2,d=radius*(.25+hash(seed+':d:'+walk.visits)*.65);const x=returning?home.x:center.x+Math.cos(angle)*d,z=returning?home.z:center.z+Math.sin(angle)*d;walk.target.set(x,view.heightAt(x,z),z);walk.walking=true;walk.wait=3+hash(seed+':w:'+walk.visits)*4;}
