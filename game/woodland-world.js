@@ -1,3 +1,4 @@
+import {addProductionProps} from './production-props.js';
 import {seasonVisuals} from './seasonal-visuals.js?v=20261112-23';
 import * as T from '../vendor/three.module.js';
 import {WORLD} from './data.js?v=20261112-23';
@@ -96,7 +97,7 @@ function livingProductionSite(view,l){
   if(token('CARD')&&(token('PEBBLE')||token('TWIG')||token('RESIN')||token('BERRY'))){view.cylinder(g,-1.1,.61,.15,.035,.90,bark,7);view.box(g,-1.1,.90,.15,.45,.52,.055,bark);view.box(g,-1.1,.90,.19,.34,.40,.035,cream);view.box(g,-1.1,.95,.22,.22,.025,.015,0x81744a);}
   if(token('VP')){const medal=view.cylinder(g,1.13,.69,-.18,.24,.05,0xe2bb54,20);medal.rotation.x=Math.PI/2;view.cylinder(g,1.13,.39,-.18,.03,.65,bark,7);}
  }
- view.tagged(g,{type:'location',id:l.id});g.userData.productionKind=id;return g;
+ addProductionProps(view,g,l);view.tagged(g,{type:'location',id:l.id});g.userData.productionKind=id;return g;
 }
 
 export function woodlandLocation(view,l){if(view.state?.livingBoard)return livingProductionSite(view,l);const id=l.actualName??l.id;let g;

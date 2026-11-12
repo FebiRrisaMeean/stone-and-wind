@@ -1,7 +1,7 @@
-import {applyObjectSeason} from './seasonal-visuals.js?v=20261112-23';
+import {applyObjectSeason} from './seasonal-visuals.js?v=resources17';
 import * as T from '../vendor/three.module.js';
 import {createCardMiniature,animateCardMiniature} from './living-models.js?v=20261112-23';
-import {woodlandCottage,ancientTree,woodlandFigure} from './woodland-world.js?v=20261112-23';
+import {woodlandCottage,ancientTree,woodlandFigure} from './woodland-world.js?v=resources17';
 import {resourceIcon} from './everdell/art.js?v=20261112-23';
 
 const team=[0x719bb6,0xd7a073,0x97b485,0xb99ac7];
@@ -57,9 +57,9 @@ function labelHover(view,label,pick){
  label.el.onpointerenter=send;label.el.onpointermove=send;label.el.onpointerleave=()=>{view.hoveredLiving=null;view.onHover?.(null);};
 }
 function objectLabel(view,item){
- if(!item.label&&!item.statusHtml)return;
+ if(!item.label&&!item.statusHtml&&item.type!=='supplies')return;
  const type=item.type,html=item.statusHtml??`<span class="living-object-name">${esc(item.label)}</span>${item.costHtml?`<span class="living-object-cost">${item.costHtml}</span>`:''}${item.locked?(item.lockHtml??'<span class="living-object-lock">🔒</span>'):''}`;
- const label=view.addLabel('living:'+item.id,item.x,item.z,html,`living-object-label living-${type}-label`,()=>view.onPick?.({type,id:item.id}),item.labelHeight??.15);
+ const label=view.addLabel('living:'+item.id,item.x,item.z,html,`living-object-label living-${type}-label`,()=>view.onPick?.({type,id:item.id}),item.labelHeight??(type==='supplies'?.5:.15));
  label.living=true;label.item=item;label.hoverOnly=false;label.el.dataset.livingId=item.id;label.el.setAttribute('aria-label',item.ariaLabel??item.label);label.el.removeAttribute('title');label.el.dataset.available=String(item.available!==false);label.el.dataset.locked=String(item.locked===true);labelHover(view,label,{type,id:item.id});
  return label;
 }
@@ -69,8 +69,8 @@ export function renderLivingBoard(view,state){
  const elder=view.entities.get('living-tree');if(elder)applyObjectSeason(elder.group,state.season);
  for(const location of state.locations??[]){
   view.syncEntity('location:'+location.id,`${location.x}:${location.z}:${location.workers?.join(',')}`,()=>view.placementLocation(location));
-  const fallback=Object.entries(location.rewardIcons??{}).filter(([,n])=>n>0).map(([r,n])=>`<span class="zone-reward"><b>${n}</b>${resourceIcon(r)}</span>`).join('');
-  const label=view.addLabel('location:'+location.id,location.x,location.z+(location.badgeOffsetZ??.91),location.badgeHtml??fallback,'living-object-label living-location-label living-zone-badge',()=>view.onPick?.({type:'location',id:location.id}),.20);
+  const fallback='';
+  const label=view.addLabel('location:'+location.id,location.x,location.z+.15,location.badgeHtml??fallback,'living-object-label living-location-label living-zone-badge',()=>view.onPick?.({type:'location',id:location.id}),.20);
   label.living=true;label.livingZone=true;label.item=location;label.hoverOnly=false;label.el.removeAttribute('title');label.el.setAttribute('aria-label',location.ariaLabel??location.name);label.el.dataset.available=String(location.available!==false);label.el.dataset.locked=String(location.locked===true);labelHover(view,label,{type:'location',id:location.id});
   const entity=view.entities.get('location:'+location.id);if(entity)applyObjectSeason(entity.group,state.season);
 
@@ -96,7 +96,7 @@ function renderPlacementGhost(view,state){
  if(view.livingGhost)view.livingGhost.visible=false;
 }
 export function updateLivingLabels(view){
- const w=view.container.clientWidth,h=view.container.clientHeight,labels=view.labels??[],placed=[];
+ const w=view.container.clientWidth,h=view.container.clientHeight,labels=view.labels??[];
  for(const label of labels){
   if(!label.living){label.el.style.visibility='hidden';continue;}
   const p=label.pos.clone();p.y=view.heightAt(p.x,p.z)+(label.pos.y??.15);p.project(view.camera);const x=(p.x*.5+.5)*w;let y=(-p.y*.5+.5)*h;
@@ -105,8 +105,9 @@ export function updateLivingLabels(view){
   const cardVisible=!cardLabel||view.zoom>=.48||hovered;
   const eventVisible=label.item?.type!=='event'||view.zoom>.83||view.hoveredLiving?.id===label.item.id;
   const visible=cardVisible&&eventVisible&&p.z>-1&&p.z<1&&x>0&&x<w&&y>0&&y<h-12;
-  if(visible&&!label.livingZone&&!cardLabel){const ww=label.el.offsetWidth,hh=label.el.offsetHeight;for(let attempt=0;attempt<5&&placed.some(r=>Math.abs(r.x-x)<(r.w+ww)/2+3&&Math.abs(r.y-y)<(r.h+hh)/2+2);attempt++)y+=hh*.65+5;placed.push({x,y,w:ww,h:hh});}
-  label.el.style.transform=`translate(${x}px,${y}px) translate(-50%,${label.livingZone?'-50%':'12px'})${cardLabel?` scale(${clamp(view.zoom/.7,.78,1)})`:''}`;label.el.style.visibility=visible?'visible':'hidden';
+  const pixelsPerUnit=h*view.zoom/26,zone=label.livingZone,supply=label.item?.type==='supplies';
+  if(zone){label.el.style.setProperty('--zone-lock-scale',String(clamp(view.zoom/.7,.35,1)));label.el.style.width=(3.7*pixelsPerUnit)+'px';label.el.style.height=(3.1*pixelsPerUnit*Math.sin(view.pitch))+'px';}
+  label.el.style.transform=`translate(${x}px,${y}px) translate(-50%,${zone||supply?'-50%':'12px'})${cardLabel?` scale(${clamp(view.zoom/.7,.78,1)})`:supply?` scale(${clamp(view.zoom/.7,.5,1.5)})`:''}`;label.el.style.visibility=visible?'visible':'hidden';
   label.el.style.setProperty('--living-label-scale',String(clamp(view.zoom,.72,1)));
  }
 }

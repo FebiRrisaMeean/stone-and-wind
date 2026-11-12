@@ -10,7 +10,7 @@ export function seasonVisuals(season){return SEASON_VISUALS[String(season).toUpp
 export function applyObjectSeason(group,season){
  season=String(season).toUpperCase();
  if(group.userData.visualSeason===season)return;group.userData.visualSeason=season;const palette=seasonVisuals(season);
- group.traverse(o=>{if(!o.isMesh||!o.material?.color)return;const m=o.material;if(m.userData.originalColor===undefined)m.userData.originalColor=m.color.getHex();const c=new T.Color(m.userData.originalColor),green=c.g>c.r*1.05&&c.g>c.b*1.08&&c.g>.20;
+ group.traverse(o=>{if(!o.isMesh||!o.material?.color||o.material.userData.seasonInvariant)return;const m=o.material;if(m.userData.originalColor===undefined)m.userData.originalColor=m.color.getHex();const c=new T.Color(m.userData.originalColor),green=c.g>c.r*1.05&&c.g>c.b*1.08&&c.g>.20;
   if(green){m.color.setHex(palette.foliage[o.id%2]);if(season==='WINTER')m.roughness=1;}else m.color.setHex(m.userData.originalColor);
  });
 }

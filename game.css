@@ -264,21 +264,16 @@
 .living-shell .source-card{display:block;margin:0;max-width:100%;background:transparent;border:0;overflow:hidden;border-radius:5.2%;box-sizing:border-box}
 .living-shell .source-card svg{display:block;width:100%;height:auto;aspect-ratio:inherit}
 .source-card-back{width:100%;aspect-ratio:0.708;background:#49473c center/cover;border-radius:12px}
-.runtime-card{width:320px;max-width:100%;color:#f7efd9}
+.runtime-card{position:relative;width:320px;max-width:100%;color:#f7efd9}
 .runtime-card>.source-card{width:100%!important}
-.card-runtime{padding:9px 12px;background:#233329f5;border:1px solid #cdbd8a66;border-radius:8px;margin-top:6px;font:13px/1.4 system-ui,sans-serif;box-shadow:0 3px 10px #14201530}
-.card-runtime:empty{display:none}
-.card-runtime p{margin:0 0 6px}.card-runtime p:last-child{margin:0}
-.card-runtime .stock-item{display:inline-flex;align-items:center;gap:4px}.card-runtime .resource-icon{width:18px;height:18px}
-.card-runtime .card-lock-reason{padding:0;margin:0;background:transparent;color:#f7efd9;font:inherit;border:0}
 .living-shell .hand-fan{height:220px;z-index:100;--inspect-width:min(320px,calc((100dvh - 100px)*.708));--spread:min(116px,calc((100vw - 240px)/var(--hand-count,8)))}
 .living-shell .hand-card{position:absolute;left:calc(50% + var(--hand-offset)*var(--spread));bottom:0;margin-left:calc(var(--spread)*-.5);width:var(--spread);height:220px;transform:none;filter:none;transition:none;z-index:calc(20 + var(--hand-index));pointer-events:auto;border:0;outline:0;background:transparent}
 .hand-face{position:absolute;bottom:calc(-38px - var(--hand-offset)*var(--hand-offset)*1.3px);left:50%;width:184px;pointer-events:none;transform:translateX(-50%) rotate(calc(var(--hand-offset)*2deg));transform-origin:50% 120%;filter:drop-shadow(0 4px 6px #101a12a0)}
-.hand-face .runtime-card{width:100%}.hand-face .card-runtime{display:none}
-.hand-card.is-playable .hand-face{filter:drop-shadow(0 0 3px #99e796) drop-shadow(0 0 6px #58aa6390) drop-shadow(0 4px 6px #101a12a0)}
+.hand-face .runtime-card{width:100%}
+.hand-card.is-playable .hand-face{filter:drop-shadow(0 0 3px #bdff91) drop-shadow(0 0 8px #83ff52) drop-shadow(0 0 14px #61dc5980) drop-shadow(0 4px 6px #101a12a0)}
 .living-shell .hand-card.is-inspected{z-index:90}
 .hand-card.is-inspected .hand-face{bottom:22px;width:var(--inspect-width);transform:translateX(calc(-50% + var(--inspect-shift,0px)));filter:drop-shadow(0 8px 15px #101a12aa)}
-.hand-card.is-inspected.is-playable .hand-face{filter:drop-shadow(0 0 4px #96e58d) drop-shadow(0 0 9px #65b57190) drop-shadow(0 8px 15px #101a12aa)}
+.hand-card.is-inspected.is-playable .hand-face{filter:drop-shadow(0 0 4px #ceffa8) drop-shadow(0 0 11px #8cff59) drop-shadow(0 0 20px #62d259a0) drop-shadow(0 8px 15px #101a12aa)}
 .hand-card:focus-visible .source-card{outline:2px solid #f5d98e;outline-offset:3px}
 .hand-preview-hit{position:fixed;z-index:10;pointer-events:auto;cursor:pointer}
 .hand-fan.placing .hand-preview-hit{display:none}
@@ -300,9 +295,38 @@
 .living-shell .world-label.living-market-label.is-hovered,.living-shell .world-label.living-city-card-label.is-hovered{background:#233b29f5!important}
 
 .living-shell .hand-card:hover,.living-shell .hand-card:focus-visible,.living-shell .hand-card:focus-within{bottom:0;transform:none;filter:none}
-.hand-card.is-inspected .card-runtime{display:block}
-.living-shell .hand-card.is-inspected .card-runtime .card-lock-reason{display:flex;gap:7px;align-items:center}
-.hand-locked{position:absolute;right:7px;top:7px;display:grid;place-items:center;width:23px;height:23px;background:#f1e2bf;color:#453e2d;border:1px solid #796842;border-radius:50%;box-shadow:0 2px 5px #18251860}.hand-locked .lock-icon{width:14px;height:14px}
 .living-shell .source-card svg{font-synthesis:none}.living-shell .source-card text{font-kerning:none}
 .living-shell .card-runtime .stock-item b{font:700 13px/1.2 system-ui,sans-serif;color:#fff4df}
 .living-market-label .living-object-cost{pointer-events:none}
+
+.runtime-card.is-unavailable>[data-game-card-face]{filter:brightness(.76) saturate(.8)}
+.card-locked{position:absolute;left:-5px;top:5px;display:grid;place-items:center;width:25px;height:25px;background:#f1e2bf;color:#453e2d;border:1px solid #796842;border-radius:50%;box-shadow:0 2px 5px #18251875;z-index:2}
+.card-locked .lock-icon{width:15px;height:15px}
+.object-detail .runtime-card.is-playable{filter:drop-shadow(0 0 4px #aaff87) drop-shadow(0 0 9px #67db69aa)}
+.card-counters{position:absolute;right:8px;top:8px;display:flex;gap:6px;background:#243c2eef;padding:4px 7px;border-radius:5px;color:#fff4da}
+.card-counters .stock-item{display:flex;align-items:center;gap:3px}.card-counters .resource-icon{width:20px;height:20px}
+
+/* Stocks stay in screen space; production rewards and seats belong to the world */
+.player-stock{position:absolute;top:16px;left:18px;z-index:65;pointer-events:auto;border:1px solid #d5c49a80;border-radius:12px;background:#20362bf0;box-shadow:0 3px 14px #10201938;color:#fff3d7;padding:10px 12px}
+.player-stock .supply-totals,.supply-tooltip .supply-totals{display:grid;grid-template-columns:repeat(6,minmax(38px,1fr));gap:8px;position:relative;align-items:start}
+.player-stock .supply-total,.supply-tooltip .supply-total{display:grid;grid-template-columns:26px auto;grid-template-rows:26px 16px;gap:0 3px;align-items:center;justify-content:center;min-width:38px}
+.supply-total .original-icon{grid-row:1}.supply-total strong{font:700 17px/1.2 system-ui,sans-serif;color:#fff5de}.supply-total small{grid-column:1/-1;justify-self:center;font:600 11px/1.2 system-ui,sans-serif;color:#c5dfa6}
+.player-stock .supply-conditional,.supply-tooltip .supply-conditional{position:absolute;right:-7px;bottom:-8px;color:#d4e7bc;font:600 10px/1 system-ui,sans-serif}
+.supply-tooltip,.production-tooltip{padding:14px 16px;background:#263b2ef5;border:1px solid #cfbb8e99;border-radius:12px;color:#fff0d1;font:14px/1.4 system-ui,sans-serif;box-shadow:0 6px 20px #17251c50}
+.supply-tooltip h2,.production-tooltip h2{font:600 16px/1.25 system-ui,sans-serif;color:#fff2d6;margin:0 0 12px}
+.production-tooltip .zone-reward{display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:flex-start}
+.production-tooltip .zone-value{display:inline-flex;align-items:center;gap:5px;min-width:0;padding:0;background:none;border:0;box-shadow:none}.production-tooltip .zone-value b{font:700 18px/1.2 system-ui,sans-serif;color:#fff6de;text-shadow:none}
+.production-tooltip .zone-operator{font:600 17px/1 system-ui,sans-serif;color:#e7d9b5}
+.production-tooltip .zone-capacity{display:flex;align-items:center;gap:7px;margin-top:10px;border-top:1px solid #d6c28b38;padding:9px 0 0;background:none;box-shadow:none;color:#ffedc9;font:600 14px/1.2 system-ui,sans-serif}
+.production-tooltip .zone-capacity span{font-weight:400;color:#ded6bf}
+.production-tooltip .zone-unavailable{display:flex;align-items:center;gap:8px;margin:12px 0 0;color:#eedbb2;font:13px/1.4 system-ui,sans-serif}.zone-unavailable .lock-icon{width:15px;height:15px;flex:none}
+.living-shell .world-label.living-zone-badge{display:block;box-sizing:border-box;width:3.7px;height:3px;min-width:0;min-height:0;padding:0;border:0;border-radius:50%;background:transparent!important;box-shadow:none;opacity:1;outline:none;transform-origin:50% 50%;transition:none;overflow:visible}
+.living-shell .living-zone-badge .zone-lock{position:absolute;right:2%;top:50%;display:grid;place-items:center;width:18px;height:18px;background:#eadbbbeb;color:#4c4933;border:1px solid #8e7e56;border-radius:50%;box-shadow:0 1px 3px #18302140;transform:translate(30%,-50%)}
+.living-zone-badge .zone-lock .lock-icon{width:11px;height:11px}
+.living-shell .world-label.living-zone-badge:hover,.living-shell .world-label.living-zone-badge:focus-visible{outline:1px solid #f6e7bda6;outline-offset:1px;background:#f5e3ba10!important}
+.living-shell .world-label.living-supplies-label{width:50px;height:38px;min-width:0;padding:0;background:transparent!important;border:0;box-shadow:none;border-radius:8px;transition:none;transform-origin:center}
+.living-shell .world-label.living-supplies-label:focus-visible{outline:1px solid #f5e5b7}
+.player-stock .supply-totals,.supply-tooltip .supply-totals{padding:0;background:none;border:0;border-radius:0;box-shadow:none;min-width:0}
+.production-tooltip .zone-reward{padding:0;background:none;border:0;border-radius:0;box-shadow:none;color:#fff2d6!important;min-height:26px}
+.production-tooltip .zone-capacity .original-icon{background:#e6d9b9;border-radius:5px;padding:2px;box-sizing:border-box}
+.living-shell .living-zone-badge .zone-lock{transform:translate(30%,-50%) scale(var(--zone-lock-scale,1))}

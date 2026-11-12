@@ -1,15 +1,16 @@
 import {prepareGameCard,gameCardReady,gameCardFace} from './game-source-cards.js';
+import {workerSeatPosition} from './production-props.js';
 import {SOURCE_CARD_NAMES} from './source-card-map.js';
 import {createHandInteraction} from './hand-interaction.js';
 import {createSharedSeasonState,normalizeSharedGame,stepSharedGame,requestSharedSeason,sharedSeason,canActShared,forecastNextSeason} from './shared-seasons.js?v=20261112-23';
-import {zoneBadge,supplyStatus,lockIcon,SPECIES} from './living-ui.js?v=20261112-23';
+import {zoneBadge,zoneDetail,supplyStatus,lockIcon,SPECIES} from './living-ui.js?v=resources17';
 import {LIVING_CITIES,LIVING_TREE,MARKET_POSITIONS,BASIC_POSITIONS,FOREST_POSITIONS,inCity,cityCardEntries,validCityPosition,reconcileCityLayout} from './living-board-state.js?v=living-2';
 import {cardArt,portraitStyle,placeArt,resourceIcon,cardTypeIcon} from './everdell/art.js?v=20261112-23';
 import {createGame,stepGame,serializeGame,restoreGame,getPaymentOptions,getScores,Card,Location,Event,CardName,LocationOccupancy,GameInputType,Season,CardType,PlayerStatus} from './everdell/engine.js?v=20261112-23';
 import {CARD_NAMES,CARD_TEXT,LOCATION_NAMES,LOCATION_TEXT,EVENT_NAMES,EVENT_TEXT,SEASONS,CARD_TYPES,RESOURCE_NAMES,translateText} from './everdell/locale.js?v=20261112-23';
 import {createMovementWorld,moveWorker} from './movement.js?v=20261112-23';
 import {WORLD} from './data.js?v=20261112-23';
-import {WorldView} from './world.js?v=cards16';
+import {WorldView} from './world.js?v=resources17';
 
 const SAVE='stone-wind-everdell-v1',LAYOUT_SAVE='stone-wind-living-layout-v1',SHARED_SAVE='stone-wind-shared-season-v1',TEAMS_SAVE='stone-wind-worker-teams-v1';
 const RESOURCE_KEYS=['TWIG','RESIN','PEBBLE','BERRY'];
@@ -36,7 +37,7 @@ export function mountGame(root){
  let teamDraft=teams.slice(),disposed=false,tooltipExclusion=null;
  const requestedCards=new Set(),paymentAvailability=new Map();
  const baseMap=createMovementWorld({seed:4811}),names=['Данила','Еремей','Ефим','Тихон','Иван','Терентий','Мирон','Савва','Матвей','Яков','Игнат','Пётр','Борис','Глеб','Назар','Лукьян','Прохор','Роман','Семён','Фёдор','Кузьма','Андрей','Степан','Елисей'];
- root.innerHTML=`<div class="game-shell placement-shell everdell-shell living-shell"><div class="world-stage" id="world-stage" aria-label="Живой Эверделл"></div><div class="hand-fan" id="hand-fan" data-camera-ui aria-label="Карты в руке"></div><aside id="object-detail" class="object-detail" data-camera-ui hidden></aside><div id="placement-caption" class="placement-caption" hidden></div><div id="decision-layer"></div><div class="toast" id="toast" role="status"></div><span class="sr-only" id="turn-announcement" aria-live="polite"></span></div>`;
+ root.innerHTML=`<div class="game-shell placement-shell everdell-shell living-shell"><div class="world-stage" id="world-stage" aria-label="Живой Эверделл"></div><aside id="player-stock" class="player-stock" data-camera-ui aria-label="Ваш запас"></aside><div class="hand-fan" id="hand-fan" data-camera-ui aria-label="Карты в руке"></div><aside id="object-detail" class="object-detail" data-camera-ui hidden></aside><div id="placement-caption" class="placement-caption" hidden></div><div id="decision-layer"></div><div class="toast" id="toast" role="status"></div><span class="sr-only" id="turn-announcement" aria-live="polite"></span></div>`;
  const $=id=>root.querySelector('#'+id);
  const world=new WorldView($('world-stage'),pick,hover);
  const handInteraction=createHandInteraction($('hand-fan'),hideDetail);
@@ -68,7 +69,7 @@ export function mountGame(root){
   game.players.slice(0,2).forEach((q,owner)=>{
    const center=LIVING_CITIES[owner];
    objects.push({id:'city-area:'+owner,type:'city-area',owner,...center,label:q.name,active:q.playerId===game.activePlayerId});
-   const forecast=sharedMeta.transition?null:forecastNextSeason(game,q.playerId,sharedMeta);objects.push({id:'supplies:'+owner,type:'supplies',owner,x:center.x,z:24.5,label:'',ariaLabel:q.name+' — ресурсы и прирост',statusHtml:supplyStatus(q,forecast,q.playerId===game.activePlayerId),resources:q.getResources(),forecast});
+   const forecast=sharedMeta.transition?null:forecastNextSeason(game,q.playerId,sharedMeta);objects.push({id:'supplies:'+owner,type:'supplies',owner,x:center.x,z:24.5,label:'',ariaLabel:q.name+' — ресурсы и прирост',resources:q.getResources(),forecast});
    const passed=sharedMeta.passed?.includes(q.playerId),season=sharedSeason(game,sharedMeta);objects.push({id:'season:'+owner,type:'season',owner,x:center.x+4,z:27,label:passed?'Готов ✓':SEASONS[season],active:q.playerId===game.activePlayerId,available:q.playerId===game.activePlayerId&&!passed&&!sharedMeta.transition,locked:passed||q.playerId!==game.activePlayerId,lockHtml:'<span class="living-object-lock">'+lockIcon+'</span>' ,passed,reason:passed?'Ожидаем завершения действий соперника':q.playerId!==game.activePlayerId?'Сейчас ход соперника':'Нажмите, чтобы закончить действия в этом сезоне'});
    for(const e of cityCardEntries(q)){const pos=cityLayout[e.key],c=Card.fromName(e.cardName);objects.push({id:e.key,type:'city-card',owner,...pos,cardName:e.cardName,critter:c.isCritter,roamCenter:center,roamRadius:5.8,label:cn(e.cardName),costHtml:'',played:e.played,arrival:arrivalMap.get(e.key),available:!c.maxWorkerSpots||game.getVisitableDestinationCards().some(p=>same(p,e.played)),locked:c.maxWorkerSpots>0&&!game.getVisitableDestinationCards().some(p=>same(p,e.played)),lockHtml:'<span class="living-object-lock">'+lockIcon+'</span>' });}
   });
@@ -87,13 +88,13 @@ export function mountGame(root){
    }
    for(let num=1;num<=pj.numWorkers;num++){
     const id=`e-${pi}-${num}`,a=assignments.find(x=>x.id===id),home={x:(LIVING_CITIES[pi]?.x??30)-1+(num-1)%3,z:28+Math.floor((num-1)/3)};
-    let x=home.x,z=home.z,locationId=null;
+    let x=home.x,z=home.z,locationId=null,hiddenAtLocation=false,seatHeight=0;
     if(a){const l=a.w.location?view.locations.find(l=>l.actualName===a.w.location):null;locationId=l?.id??a.key;
-     if(l){const existing=view.units.filter(u=>u.locationId===l.id).length;x=l.x+(existing%3)-1;z=l.z+1+Math.floor(existing/3);l.workers.push(id);}
+     if(l){const existing=view.units.filter(u=>u.locationId===l.id).length;const seat=workerSeatPosition(l,existing);x=seat.x;z=seat.z;hiddenAtLocation=seat.hidden;seatHeight=seat.yOffset??0;l.workers.push(id);}
      else{const dest=a.w.event?objects.find(o=>o.eventName===a.w.event):objects.find(o=>o.type==='city-card'&&o.cardName===a.w.playedCard?.cardName&&game.players[o.owner]?.playerId===a.w.playedCard?.cardOwnerId);x=dest?.x??30;z=(dest?.z??20)+.8;}
     }
     if(view.tiles[Math.round(z)*WORLD.width+Math.round(x)]?.type==='water')x-=2;
-    view.units.push({id,number:num,name:names[pi*6+num-1],portrait:teams[pi]??pi,teamSpecies:teams[pi]??pi,owner:pi,kind:'worker',x,z,home,roamCenter:LIVING_CITIES[pi],roamRadius:5.5,hp:baseMap.units[0].hp,ready:1,attacked:0,locationId,placementKey:a?.key??null});
+    view.units.push({id,number:num,name:names[pi*6+num-1],portrait:teams[pi]??pi,teamSpecies:teams[pi]??pi,owner:pi,kind:'worker',x,z,home,roamCenter:LIVING_CITIES[pi],roamRadius:5.5,hp:baseMap.units[0].hp,ready:1,attacked:0,locationId,hiddenAtLocation,seatHeight,placementKey:a?.key??null});
    }
   }
   if(old){const moved=view.units.find(u=>{const before=old.units.find(v=>v.id===u.id);return before&&u.locationId!==null&&u.placementKey!==before.placementKey;});
@@ -153,7 +154,7 @@ export function mountGame(root){
  }
  function renderHand(){
   const cards=player().getCardsInHand(),fan=$('hand-fan');handInteraction.clear();fan.style.setProperty('--hand-count',cards.length);fan.classList.toggle('placing',!!placement);
-  fan.innerHTML=cards.map((name,index)=>`<div class="hand-card ${isPlayable(name,'HAND',index)?'is-playable':''}" data-hand-index="${index}" data-hand-name="${esc(name)}" style="--hand-offset:${index-(cards.length-1)/2};--hand-index:${index}" tabindex="0" role="button" aria-label="${esc(cn(name))} — ${isPlayable(name,'HAND',index)?'можно разыграть':'пока недоступно'}"><div class="hand-face">${cardHtml(name,{source:'HAND',index})}${isPlayable(name,'HAND',index)?'':`<span class="hand-locked" aria-hidden="true">${lockIcon}</span>`}</div></div>`).join('');
+  fan.innerHTML=cards.map((name,index)=>`<div class="hand-card ${isPlayable(name,'HAND',index)?'is-playable':''}" data-hand-index="${index}" data-hand-name="${esc(name)}" style="--hand-offset:${index-(cards.length-1)/2};--hand-index:${index}" tabindex="0" role="button" aria-label="${esc(cn(name))} — ${isPlayable(name,'HAND',index)?'можно разыграть':'пока недоступно'}"><div class="hand-face">${cardHtml(name,{source:'HAND',index})}</div></div>`).join('');
  }
  function hideDetail(){clearTimeout(hoverTimer);hoverTimer=null;$('object-detail').hidden=true;hoverKey=null;}
  function clampDetail(){
@@ -173,15 +174,16 @@ export function mountGame(root){
   if(object?.type==='market')html=cardHtml(object.cardName,{source:'MEADOW',index:object.index});
   else if(object?.type==='city-card')html=cardHtml(object.cardName,{played:object.played,owner:game.players[object.owner]});
   else if(object?.type==='event'){const e=Event.fromName(object.eventName);html=`<div class="world-note"><h2>${esc(en(object.eventName))}</h2><p>${esc(EVENT_TEXT[object.eventName]??fmt(e.eventDescription))}</p>${e.requiredCards?`<p>${e.requiredCards.map(cn).map(esc).join(' + ')}</p>`:''}<p>${object.owner>=0?'Получено: '+esc(game.players[object.owner].name):object.available?'Нажмите, чтобы разместить работника':'Условия пока не выполнены'}</p></div>`;}
-  else if(object?.type==='supplies'){hideDetail();return;const q=game.players[object.owner];html=`<div class="world-note"><h2>${esc(q.name)}</h2><div class="world-resources">${stock(q.getResources(),true)}</div><p>${SEASONS[q.currentSeason]} · город ${q.getNumOccupiedSpacesInCity()}/15</p><p>Свободные работники: ${q.toJSON(true).numWorkers-q.toJSON(true).placedWorkers.length}</p></div>`;}
+  else if(object?.type==='supplies'){if(object.owner===playerIndex()){hideDetail();return;}const q=game.players[object.owner];html=`<div class="supply-tooltip"><h2>${esc(q.name)}</h2>${supplyStatus(q,object.forecast)}</div>`;}
   else if(object?.type==='season'){html=`<div class="world-note"><h2>${esc(SEASONS[sharedSeason(game,sharedMeta)])}</h2><p>${esc(object.reason)}</p><p>Следующий сезон начнётся, когда оба игрока закончат действия</p></div>`;}
-  else if(location){if(!location.locked){hideDetail();return;}html=`<div class="world-note locked-note">${lockIcon}<p>${esc(location.reason)}</p></div>`;}
+  else if(location)html=zoneDetail(location);
 
-  if(!html){hideDetail();return;}clearTimeout(hoverTimer);hoverTimer=null;hoverKey=key;d.innerHTML=html;d.hidden=false;const x=obj.clientX??world.windowPointer?.x??innerWidth/2,y=obj.clientY??world.windowPointer?.y??innerHeight/2;d.style.width=Math.min(320,(innerHeight-180)*.708)+'px';const width=d.offsetWidth;d.style.left=Math.max(12,Math.min(innerWidth-width-12,x>innerWidth*.6?x-width-24:x+24))+'px';d.style.top=(y-100)+'px';clampDetail();
+  if(!html){hideDetail();return;}clearTimeout(hoverTimer);hoverTimer=null;hoverKey=key;d.innerHTML=html;d.hidden=false;const x=obj.clientX??world.windowPointer?.x??innerWidth/2,y=obj.clientY??world.windowPointer?.y??innerHeight/2;d.style.width=(object?.type==='supplies'?344:location?280:Math.min(320,(innerHeight-180)*.708))+'px';const width=d.offsetWidth;d.style.left=Math.max(12,Math.min(innerWidth-width-12,x>innerWidth*.6?x-width-24:x+24))+'px';d.style.top=(y-100)+'px';clampDetail();
  }
  function render(){
   actions=new Map();root.querySelector('.living-shell').dataset.player=playerIndex();root.querySelector('.living-shell').dataset.season=drawing.season;world.render(drawing,playerIndex(),{selected,menu:false});
   $('turn-announcement').textContent=`Ход: ${player().name}, ${SEASONS[sharedSeason(game,sharedMeta)]}`;
+  $('player-stock').innerHTML=supplyStatus(player(),sharedMeta.transition?null:forecastNextSeason(game,game.activePlayerId,sharedMeta),true);
   hideDetail();renderHand();renderDecision();
  }
 
@@ -190,9 +192,8 @@ export function mountGame(root){
   const c=Card.fromName(name),playable=source&&isPlayable(name,source,index),visitable=played&&game.getVisitableDestinationCards().some(x=>same(x,played));
   const target=name===CardName.FOOL?game.players[1-playerIndex()]:player();
   const reason=source&&!playable?(game.pendingGameInputs.length?'Сначала завершите текущий эффект':sharedMeta.passed?.includes(game.activePlayerId)?'Вы закончили действия в этом сезоне':c.isUnique&&target.hasCardInCity(name)?'Этот уникальный объект уже есть в городе':!target.canAddToCity(name,true)?'В городе нет свободной ячейки':'Не хватает ресурсов для оплаты карты'):played&&c.maxWorkerSpots&&!visitable?(played.workers?.length?'Место для работника занято':player().numAvailableWorkers===0?'Нет свободного работника':'Это место сейчас недоступно для посещения'):'';
-  const notes={Shepherd:'Оплаченные ягоды получает соперник', 'General Store':'Обычное сооружение — можно построить несколько', 'Clock Tower':'Активация при смене сезона необязательна',Dungeon:'В колоде 2 экземпляра',Storehouse:'В колоде 3 экземпляра'};
-  const status=[reason?`<p class="card-lock-reason">${lockIcon}<span>${esc(reason)}</span></p>`:'',notes[name]?`<p class="card-game-note">В этой партии: ${esc(notes[name])}</p>`:'',played?.resources&&Object.values(played.resources).some(Boolean)?`<p>На карте: ${stock(played.resources)}</p>`:'',played&&!c.isCritter&&c.associatedCard?`<p>${played.usedForCritter?'Сооружение заселено':'Сооружение свободно для заселения'}</p>`:''].join('');
-  return `<div class="runtime-card" data-card-name="${esc(name)}"><div data-game-card-face="${esc(name)}" aria-busy="${!gameCardReady(name)}">${gameCardFace(name)}</div>${status?`<div class="card-runtime">${status}</div>`:''}</div>`;
+  const counters=played?.resources&&Object.values(played.resources).some(Boolean)?`<span class="card-counters" aria-label="Запас на карте">${stock(played.resources)}</span>`:'';
+  return `<div class="runtime-card${reason?' is-unavailable':playable?' is-playable':''}" data-card-name="${esc(name)}"><div data-game-card-face="${esc(name)}" aria-busy="${!gameCardReady(name)}">${gameCardFace(name)}</div>${reason?`<span class="card-locked" title="${esc(reason)}" aria-label="${esc(reason)}">${lockIcon}</span>`:''}${counters}</div>`;
  }
  function showPayment(name,source,index){
   try{const choices=getPaymentOptions(game,name,source,index);if(!choices.length){toast('Нет доступного способа оплаты');return;}
