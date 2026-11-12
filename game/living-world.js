@@ -1,8 +1,8 @@
-import {applyObjectSeason} from './seasonal-visuals.js?v=20261112-21';
+import {applyObjectSeason} from './seasonal-visuals.js?v=20261112-23';
 import * as T from '../vendor/three.module.js';
-import {createCardMiniature,animateCardMiniature} from './living-models.js?v=20261112-21';
-import {woodlandCottage,ancientTree,woodlandFigure} from './woodland-world.js?v=20261112-21';
-import {resourceIcon} from './everdell/art.js?v=20261112-21';
+import {createCardMiniature,animateCardMiniature} from './living-models.js?v=20261112-23';
+import {woodlandCottage,ancientTree,woodlandFigure} from './woodland-world.js?v=20261112-23';
+import {resourceIcon} from './everdell/art.js?v=20261112-23';
 
 const team=[0x719bb6,0xd7a073,0x97b485,0xb99ac7];
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -101,7 +101,7 @@ export function updateLivingLabels(view){
   const p=label.pos.clone();p.y=view.heightAt(p.x,p.z)+(label.pos.y??.15);p.project(view.camera);const x=(p.x*.5+.5)*w;let y=(-p.y*.5+.5)*h;
   const eventVisible=label.item?.type!=='event'||view.zoom>.83||view.hoveredLiving?.id===label.item.id;
   const visible=eventVisible&&p.z>-1&&p.z<1&&x>0&&x<w&&y>0&&y<h-12;
-  if(visible&&!label.livingZone){const ww=label.el.offsetWidth,hh=label.el.offsetHeight;for(let attempt=0;attempt<5&&placed.some(r=>Math.abs(r.x-x)<(r.w+ww)/2+3&&Math.abs(r.y-y)<(r.h+hh)/2+2);attempt++)y+=hh*.65+5;placed.push({x,y,w:ww,h:hh});}
+  if(visible&&!label.livingZone&&label.item?.type!=="market"){const ww=label.el.offsetWidth,hh=label.el.offsetHeight;for(let attempt=0;attempt<5&&placed.some(r=>Math.abs(r.x-x)<(r.w+ww)/2+3&&Math.abs(r.y-y)<(r.h+hh)/2+2);attempt++)y+=hh*.65+5;placed.push({x,y,w:ww,h:hh});}
   label.el.style.transform=`translate(${x}px,${y}px) translate(-50%,${label.livingZone?'-50%':'12px'})`;label.el.style.visibility=visible?'visible':'hidden';
   label.el.style.setProperty('--living-label-scale',String(clamp(view.zoom,.72,1)));
  }

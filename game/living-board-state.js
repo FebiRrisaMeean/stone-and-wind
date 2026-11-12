@@ -1,7 +1,7 @@
 // Presentation positions never change engine costs, turns, city capacity or card effects
 export const LIVING_CITIES=[{x:10,z:34,radius:8},{x:51,z:34,radius:8}];
 export const LIVING_TREE={x:30,z:8};
-export const MARKET_POSITIONS=Array.from({length:8},(_,i)=>({x:21+(i%4)*6,z:25.5+Math.floor(i/4)*6}));
+export const MARKET_POSITIONS=Array.from({length:8},(_,i)=>({x:19.4+(i%4)*7.5,z:25.5+Math.floor(i/4)*4.5}));
 export const BASIC_POSITIONS=[[21,13.5],[27,13.5],[33,13.5],[39,13.5],[21,19.3],[27,19.3],[33,19.3],[39,19.3]];
 export const FOREST_POSITIONS=[[14,14],[14,20],[46,17],[46,23]];
 export function inCity(owner,x,z){const c=LIVING_CITIES[owner];return !!c&&Number.isFinite(x)&&Number.isFinite(z)&&((x-c.x)/(c.radius-1))**2+((z-c.z)/6)**2<=1;}

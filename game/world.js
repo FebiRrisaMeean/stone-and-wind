@@ -1,10 +1,10 @@
-import {seasonVisuals,addSeasonGroundDetails} from './seasonal-visuals.js?v=20261112-21';
+import {seasonVisuals,addSeasonGroundDetails} from './seasonal-visuals.js?v=20261112-23';
 import * as T from '../vendor/three.module.js';
-import {renderLivingBoard,updateLivingLabels,animateLivingBoard,refreshLivingHover,renderLivingPlacementPreview} from './living-world.js?v=20261112-21';
-import {resourceIcon} from './everdell/art.js?v=20261112-21';
-import {FACTIONS,TROOPS,WORLD,BUILDINGS} from './data.js?v=20261112-21';
-import {count,visible,known,moveRange} from './movement.js?v=20261112-21';
-import {woodlandCottage,ancientTree,woodlandFigure,woodlandSource,woodlandLocation,addWoodlandTerrain,animateWoodland} from './woodland-world.js?v=20261112-21';
+import {renderLivingBoard,updateLivingLabels,animateLivingBoard,refreshLivingHover,renderLivingPlacementPreview} from './living-world.js?v=20261112-23';
+import {resourceIcon} from './everdell/art.js?v=20261112-23';
+import {FACTIONS,TROOPS,WORLD,BUILDINGS} from './data.js?v=20261112-23';
+import {count,visible,known,moveRange} from './movement.js?v=20261112-23';
+import {woodlandCottage,ancientTree,woodlandFigure,woodlandSource,woodlandLocation,addWoodlandTerrain,animateWoodland} from './woodland-world.js?v=20261112-23';
 
 const PALETTE={plain:0x7f9857,meadow:0x9eae69,forest:0x617d48,road:0xc7b589,rock:0x9da186,water:0x79b2a7,mist:0x506d59};
 const TEAM=[0x617baf,0x4f8c73,0x9b8058,0x977e9d];

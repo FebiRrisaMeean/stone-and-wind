@@ -1,4 +1,4 @@
-import {resourceIcon} from './everdell/art.js?v=20261112-21';
+import {resourceIcon} from './everdell/art.js?v=20261112-23';
 export const lockIcon='<svg class="lock-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10V7a5 5 0 0 1 10 0v3" fill="none" stroke="currentColor" stroke-width="2.4"/><rect x="4" y="10" width="16" height="12" rx="3" fill="currentColor"/><path d="M12 14v4" stroke="#f8edcf" stroke-width="2.3" stroke-linecap="round"/></svg>';
 export const workerIcon='<svg class="worker-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="6" r="4" fill="currentColor"/><path d="M5 22v-7a7 7 0 0 1 14 0v7z" fill="currentColor"/></svg>';
 const amount=(n,r)=>`<span class="zone-value">${resourceIcon(r)}<b>${n}</b></span>`;

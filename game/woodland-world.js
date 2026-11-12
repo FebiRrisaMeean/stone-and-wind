@@ -1,6 +1,6 @@
-import {seasonVisuals} from './seasonal-visuals.js?v=20261112-21';
+import {seasonVisuals} from './seasonal-visuals.js?v=20261112-23';
 import * as T from '../vendor/three.module.js';
-import {WORLD} from './data.js?v=20261112-21';
+import {WORLD} from './data.js?v=20261112-23';
 
 // All geometry is local to the miniature so world-space placement and picking stay unchanged
 const bark=0x765039,moss=0x587c43,cream=0xf2ddac,soil=0x77654b;
