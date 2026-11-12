@@ -57,6 +57,7 @@ function labelHover(view,label,pick){
  label.el.onpointerenter=send;label.el.onpointermove=send;label.el.onpointerleave=()=>{view.hoveredLiving=null;view.onHover?.(null);};
 }
 function objectLabel(view,item){
+ if(item.type==='city-area')return;
  if(!item.label&&!item.statusHtml&&item.type!=='supplies')return;
  const type=item.type,html=item.statusHtml??`<span class="living-object-name">${esc(item.label)}</span>${item.costHtml?`<span class="living-object-cost">${item.costHtml}</span>`:''}${item.locked?(item.lockHtml??'<span class="living-object-lock">🔒</span>'):''}`;
  const label=view.addLabel('living:'+item.id,item.x,item.z,html,`living-object-label living-${type}-label`,()=>view.onPick?.({type,id:item.id}),item.labelHeight??(type==='supplies'?.5:.15));
@@ -102,7 +103,7 @@ export function updateLivingLabels(view){
   const p=label.pos.clone();p.y=view.heightAt(p.x,p.z)+(label.pos.y??.15);p.project(view.camera);const x=(p.x*.5+.5)*w;let y=(-p.y*.5+.5)*h;
   const cardLabel=['market','city-card'].includes(label.item?.type),hovered=view.hoveredLiving?.id===label.item?.id||label.el.matches(':hover,:focus-visible');
   if(cardLabel)label.el.classList.toggle('is-hovered',hovered);
-  const cardVisible=!cardLabel||view.zoom>=.48||hovered;
+  const cardVisible=label.item?.type==='city-card'?hovered:!cardLabel||view.zoom>=.48||hovered;
   const eventVisible=label.item?.type!=='event'||view.zoom>.83||view.hoveredLiving?.id===label.item.id;
   const visible=cardVisible&&eventVisible&&p.z>-1&&p.z<1&&x>0&&x<w&&y>0&&y<h-12;
   const pixelsPerUnit=h*view.zoom/26,zone=label.livingZone,supply=label.item?.type==='supplies';

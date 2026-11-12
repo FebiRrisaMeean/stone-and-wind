@@ -28,28 +28,30 @@ function round(view,g,x,y,z,r,color,sx=1,sy=1,sz=1){
 function resourceModel(view,type){
  const g=new T.Group();g.userData.resourceType=type;
  if(type==='TWIG'){
-  view.beam(g,vec(-.20,.06,.09),vec(.21,.08,-.08),.047,0x8c5934);
-  view.beam(g,vec(.01,.07,0),vec(.09,.12,.16),.025,0xa97740);
-  const cut=view.cylinder(g,.21,.08,-.08,.036,.012,0xe1bc83,8);cut.rotation.z=Math.PI/2;
+  view.beam(g,vec(-.20,.07,.09),vec(.21,.09,-.08),.064,0x75412b);
+  view.beam(g,vec(.01,.08,0),vec(.09,.13,.16),.034,0x9a6138);
+  const cut=view.cylinder(g,.21,.09,-.08,.048,.016,0xf0c88c,10);cut.rotation.z=Math.PI/2;
  }else if(type==='RESIN'){
-  const amber=view.material(0xf0b846,{roughness:.35,metalness:.08});
-  const drop=view.mesh(g,new T.IcosahedronGeometry(.16,1),amber,0,.17,0);drop.scale.set(.85,1.25,.85);
+  const amber=view.material(0xec9727,{roughness:.28,metalness:.08});
+  const drop=view.mesh(g,new T.IcosahedronGeometry(.20,0),amber,0,.19,0);drop.scale.set(.9,1.05,.9);
   const tip=view.mesh(g,new T.ConeGeometry(.11,.17,7),amber,0,.35,0);tip.rotation.z=-.18;
   round(view,g,-.055,.24,.10,.033,0xffe79b,.6,1.2,.5);
  }else if(type==='PEBBLE'){
-  const rock=view.mesh(g,new T.IcosahedronGeometry(.18,1),0xa2aaa5,0,.13,0);rock.scale.set(1.12,.78,.85);rock.rotation.set(.15,.4,.18);
+  const rock=view.mesh(g,new T.SphereGeometry(.19,16,10),view.material(0x7f8194,{roughness:.4}),0,.13,0);rock.scale.set(1.22,.78,.86);rock.rotation.set(.15,.4,.18);
+  round(view,g,-.065,.23,.08,.055,0xc9c7d2,1.3,.3,.7);
  }else if(type==='BERRY'){
-  round(view,g,0,.15,0,.15,0x9e466f,1,.95,1);
+  round(view,g,0,.16,0,.17,view.material(0xa72983,{roughness:.3}),1,.95,1);
   view.beam(g,vec(0,.27,0),vec(.03,.34,.01),.018,0x6a653a);
   const leaf=round(view,g,.08,.29,.01,.085,0x70934b,1,.18,.5);leaf.rotation.z=.24;
-  round(view,g,-.055,.21,.105,.025,0xd688a3,.7,1,.3);
+  round(view,g,-.06,.23,.12,.038,0xf18bc7,.7,1,.3);
  }else if(type==='CARD'){
   const paper=view.box(g,0,.042,0,.27,.05,.37,0xf1dfb7);paper.rotation.y=-.08;
-  const back=view.box(g,0,.071,0,.235,.012,.335,0x36584a);back.rotation.y=-.08;
+  const back=view.box(g,0,.071,0,.235,.012,.335,0x254e3d);back.rotation.y=-.08;
   const leaf=round(view,g,0,.082,0,.077,0xb4a567,.7,.08,1.3);leaf.rotation.y=.48;
  }else if(type==='VP'){
   view.cylinder(g,0,.04,0,.15,.065,view.material(0xe7bf59,{roughness:.43,metalness:.3}),20);
   const rim=view.mesh(g,new T.TorusGeometry(.115,.009,4,20),0xffdfa0,0,.077,0);rim.rotation.x=-Math.PI/2;
+  const crest=view.mesh(g,new T.CircleGeometry(.045,5),0xffe7a0,0,.079,0);crest.rotation.x=-Math.PI/2;
  }else if(type==='ANY'){
   // A basket of different goods indicates a choice, not four guaranteed resource rewards
   view.cylinder(g,0,.09,0,.22,.18,0xa97a48,12,.25);
@@ -92,16 +94,18 @@ function addSeat(view,g,location,index,position){
 export function addProductionProps(view,group,location){
  const props=new T.Group();props.name='production-props';props.userData.productionProps=true;
  const specs=rewardSpecs(location).slice(0,3);
- const anchors=specs.length===1?[{x:-.78,z:.91}]:specs.length===2?[{x:-1.06,z:.72},{x:-.48,z:1.00}]:[{x:-1.07,z:.63},{x:-.55,z:.67},{x:-.83,z:1.13}];
+ const anchors=specs.length===1?[{x:-.76,z:.82}]:specs.length===2?[{x:-1.05,z:.69},{x:-.50,z:1.16}]:[{x:-1.20,z:.47},{x:-.92,z:1.04},{x:-.38,z:1.25}];
  for(let i=0;i<specs.length;i++){
   const spec=specs[i],pile=new T.Group(),count=spec.previewOnly?1:Math.max(1,Math.min(3,Math.floor(spec.amount)));
   pile.position.set(anchors[i].x,GROUND_Y,anchors[i].z);
   pile.userData.rewardDisplay={type:spec.type,amount:spec.amount??null,displayedCount:count,previewOnly:spec.previewOnly};
-  const scale=specs.length>1?.80:1;
+  // Large saturated silhouettes remain readable at overview distance, without a HUD plaque
+  const scale=(specs.length===1?2.25:specs.length===2?1.85:1.65)*(spec.type==='ANY'&&count>1?.74:1);
   for(let j=0;j<count;j++){
    const mini=resourceModel(view,spec.type);mini.scale.setScalar(scale);
-   if(spec.type==='CARD'||spec.type==='VP')mini.position.set((j-1)*.018,j*.07,(j-1)*.01);
-   else if(count>1){mini.position.set((j-(count-1)/2)*.23,0,(j%2)*.17-.06);mini.rotation.y=(j-1)*.35;}
+   if(spec.type==='CARD'||spec.type==='VP')mini.position.set((j-1)*.045,j*.09,(j-1)*.025);
+   else if(spec.type==='TWIG'&&count>1){mini.position.set(0,j*.07,(j-(count-1)/2)*.21);mini.rotation.y=(j-1)*.14;}
+   else if(count>1){mini.position.set((j-(count-1)/2)*(spec.type==='ANY'?.63:.35),0,(j%2)*.15-.06);mini.rotation.y=(j-1)*.22;}
    pile.add(mini);
   }
   props.add(pile);

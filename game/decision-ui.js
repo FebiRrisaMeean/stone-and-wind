@@ -4,7 +4,8 @@ export const RESOURCE_KEYS=['TWIG','RESIN','PEBBLE','BERRY'];
 const NAMES={TWIG:'Ветки',RESIN:'Смола',PEBBLE:'Камушки',BERRY:'Ягоды'};
 export const escapeHTML=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export const closeIcon='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
-export const decisionResources=(resources,size=24)=>RESOURCE_KEYS.filter(k=>resources?.[k]>0).map(k=>`<span class="decision-resource">${renderIcon(k.toLowerCase(),{size})}<b>${resources[k]}</b></span>`).join('');
+export const decisionValue=(key,value,size=24)=>`<span class="decision-resource">${renderIcon(key.toLowerCase(),{size})}<b>${value}</b></span>`;
+export const decisionResources=(resources,size=24)=>RESOURCE_KEYS.filter(k=>resources?.[k]>0).map(k=>decisionValue(k,resources[k],size)).join('');
 const amount=value=>Number.isFinite(value)?Math.max(0,Math.floor(value)):0;
 export function resourceChoiceModel(input,player,selected={}){
  const paying=input.inputType==='SELECT_PAYMENT_FOR_CARD',cost=paying?Card.fromName(input.card).baseCost:{},inventory=player.getResources();

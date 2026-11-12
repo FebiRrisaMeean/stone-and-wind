@@ -6,7 +6,9 @@ Hand cards fan out at the bottom. Eight market miniatures, two freely arranged c
 
 Hover an object or its fixed city foundation to inspect its card. Select a playable hand card or market object, then choose a free position in the appropriate city
 
-Free camera: drag, right drag to rotate, wheel to zoom, WASD and Q/E
+Four camera buttons frame your city, production, the market and the opponent’s city. Moving the pointer releases the preset without changing its current view
+
+Free camera: drag, screen edges, right drag to rotate, wheel to zoom, WASD and Q/E. Elastic boundaries keep the view on the drawn field
 
 Your supplies and next-season forecast stay at the top left. Hover the opponent’s supply crates to see their stock. Choose distinct worker species at setup
 
@@ -15,6 +17,8 @@ Seasons are shared: a player may pass, then the other may continue. Advance only
 Production clearings contain resource miniatures and physical worker seats. Hover for exact rewards, exchanges and remaining capacity. Locks explain unavailable actions on hover
 
 Snow, flowers and autumn foliage follow the season. Market residents wander, recruited residents walk into the city, and animal porters carry new buildings. Escape opens the game menu
+
+Choice dialogs share original resource and victory-point symbols. Use plus/minus counters to choose amounts; X, Cancel or Escape restores the complete state before the action
 
 Tabletop archive remains available at archive/tabletop-pages-12a/
 

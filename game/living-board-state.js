@@ -1,9 +1,12 @@
 // Presentation positions never change engine costs, turns, city capacity or card effects
 export const LIVING_CITIES=[{x:10,z:34,radius:8},{x:51,z:34,radius:8}];
 export const LIVING_TREE={x:30,z:8};
-export const MARKET_POSITIONS=Array.from({length:8},(_,i)=>({x:19.4+(i%4)*7.5,z:25.5+Math.floor(i/4)*4.5}));
+export const MARKET_POSITIONS=Array.from({length:8},(_,i)=>({x:21.5+(i%4)*6,z:25.3+Math.floor(i/4)*5}));
 export const BASIC_POSITIONS=[[21,13.5],[27,13.5],[33,13.5],[39,13.5],[21,19.3],[27,19.3],[33,19.3],[39,19.3]];
 export const FOREST_POSITIONS=[[14,14],[14,20],[46,17],[46,23]];
+// Shared clearings stay in the central corridor, outside both saved city areas
+export const LOCATION_FOOTPRINT_RADIUS=1.95;
+export const COMMON_POSITIONS={HAVEN:[22,36],JOURNEY_TWO:[26.25,36],JOURNEY_THREE:[30.5,36],JOURNEY_FOUR:[34.75,36],JOURNEY_FIVE:[39,36]};
 export function inCity(owner,x,z){const c=LIVING_CITIES[owner];return !!c&&Number.isFinite(x)&&Number.isFinite(z)&&((x-c.x)/(c.radius-1))**2+((z-c.z)/6)**2<=1;}
 export function cityCardEntries(player){const counts={};return player.getPlayedCards().map(played=>{const ordinal=counts[played.cardName]??0;counts[played.cardName]=ordinal+1;return{key:player.playerId+'|'+played.cardName+'|'+ordinal,played,cardName:played.cardName};});}
 export function freeCityPosition(owner,entries){const c=LIVING_CITIES[owner];for(let row=0;row<4;row++)for(let col=0;col<5;col++){const x=c.x+(col-2)*2.75,z=c.z+(row-1.5)*3;if(inCity(owner,x,z)&&entries.every(p=>Math.hypot(p.x-x,p.z-z)>2.15))return{x,z};}return{x:c.x,z:c.z};}

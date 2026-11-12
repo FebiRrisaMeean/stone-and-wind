@@ -1,4 +1,4 @@
-import {addProductionProps} from './production-props.js';
+import {addProductionProps} from './production-props.js?v=field19';
 import {seasonVisuals} from './seasonal-visuals.js?v=20261112-23';
 import * as T from '../vendor/three.module.js';
 import {WORLD} from './data.js?v=20261112-23';
