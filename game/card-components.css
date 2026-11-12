@@ -1,4 +1,4 @@
-@font-face{font-family:EverdellMikadan;src:url('./assets/card-components/mikadan.ttf') format('truetype');font-display:swap}
+@font-face{font-family:EverdellMikadan;src:url('./assets/card-components/mikadan-unicode.ttf') format('truetype');font-style:normal;font-weight:400;font-display:block}
 @font-face{font-family:EverdellUncials;src:url('./assets/card-components/uncials.ttf') format('truetype');font-display:swap}
 .ev-card{position:relative;flex:none;isolation:isolate;filter:drop-shadow(0 6px 9px #231b1740);color:#3b2617}
 .ev-card *{box-sizing:border-box}
@@ -19,11 +19,14 @@
 .ev-paper{position:absolute;z-index:1;left:16px;right:16px;top:254px;bottom:19px;padding:26px 18px 18px;background:radial-gradient(ellipse at 20% 10%,#f4e4af 0,transparent 48%),radial-gradient(ellipse at 85% 100%,#b5975d60,transparent 60%),#e7d49d;clip-path:polygon(3% 0,12% 1%,25% 0,43% 1%,56% 0,72% 1%,94% 0,99% 3%,98% 13%,99% 21%,98% 26%,99% 40%,98% 49%,99% 57%,98% 69%,100% 76%,98% 84%,99% 91%,97% 100%,83% 99%,67% 100%,50% 99%,29% 100%,17% 99%,2% 100%,0 95%,1% 85%,0 78%,1% 69%,0 59%,1% 51%,0 42%,1% 34%,0 25%,1% 18%,0 9%);box-shadow:inset 0 0 11px #8d6a3f55}
 .ev-paper:before{content:'';position:absolute;inset:0;background:url('./assets/card-components/paper-grain.svg');opacity:.2;mix-blend-mode:multiply;pointer-events:none}
 .ev-paper:after{content:'';position:absolute;left:13px;right:13px;bottom:8px;height:6px;border-bottom:1px solid #a68a58;border-top:1px solid #bca16d;transform:rotate(1deg);pointer-events:none;opacity:.65}
-.ev-type{position:absolute;top:4px;left:56px;right:6px;font:small-caps 8.4px/1.1 'Times New Roman',serif;text-align:center;white-space:nowrap}
-.ev-rules{position:relative;font:13px/1.11 'Times New Roman',serif;font-weight:500;text-align:center;letter-spacing:-.1px;color:#342012;overflow-wrap:normal}
+.ev-type{position:absolute;top:4px;left:56px;right:6px;font:small-caps 10px/1.05 EverdellMikadan,Georgia,serif;text-align:center;white-space:nowrap}
+.ev-rules{position:relative;font:400 13.2px/1.08 EverdellMikadan,Georgia,serif;text-align:center;letter-spacing:-.2px;color:#342012;overflow-wrap:normal}
+.ev-paper{padding-top:38px}
 .ev-paper.ev-dense{padding:20px 12px 25px}
-.ev-paper.ev-dense .ev-rules{font-size:12px;line-height:1.12}
-.ev-rules .original-icon{margin:-2px -1px 0;vertical-align:middle!important}
+.ev-paper.ev-dense .ev-rules{font-size:12.5px;line-height:1.08}
+.ev-paper.ev-with-flavor{padding-top:26px}
+.ev-flavor{position:absolute;bottom:17px;left:18px;right:18px;text-align:center;font:italic 9.4px/1.1 'Times New Roman',serif;color:#573b24}
+.ev-rules .original-icon{width:14px!important;height:14px!important;margin:0 .5px;vertical-align:-2px!important}
 .ev-rules strong{font-weight:700}
 .ev-title{position:absolute;z-index:3;left:67px;right:47px;top:227px;height:30px;display:flex;align-items:center;justify-content:center;padding:0 9px;background:repeating-linear-gradient(176deg,var(--ribbon,#2e647a) 0,var(--ribbon,#2e647a) 4px,var(--ribbon-light,#397c92) 6px,var(--ribbon,#2e647a) 9px);clip-path:polygon(4% 7%,93% 0,100% 9%,98% 88%,88% 96%,4% 100%,0 76%,3% 54%,0 27%);box-shadow:inset 0 2px #c6c18444,inset 0 -3px #102c3d44}
 .ev-title h2{margin:0;position:relative;color:#f7ebc8;font:400 18px/1 EverdellMikadan,Georgia,serif;text-align:center;letter-spacing:-.25px;text-shadow:0 1px 1px #172b31}
@@ -38,3 +41,8 @@
 .ev-door{display:block;width:29px;height:29px;border-radius:50%;border:3px solid #aa9d68;background:repeating-linear-gradient(90deg,#8f662a 0,#8f662a 4px,#3f2c17 5px);box-shadow:0 0 0 1px #6e5c36,inset 0 0 0 1px #302a1e;position:relative}
 .ev-door:after{content:'';width:3px;height:3px;position:absolute;right:3px;top:10px;border-radius:50%;background:#e8b946}
 .ev-guides .ev-face>*{outline:1px dashed #ec2b75!important;outline-offset:-1px}
+.ev-long-text .ev-paper{top:235px}
+.ev-long-text .ev-title{top:208px}
+.ev-long-text .ev-category{top:188px}
+.ev-long-text .ev-points{top:191px}
+.ev-long-text .ev-branches{transform:translateY(-19px)}

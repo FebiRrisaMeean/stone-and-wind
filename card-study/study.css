@@ -5,11 +5,14 @@
 .part-row{width:100%;display:flex;flex-direction:column;align-items:center;gap:8px;border-top:1px solid #dddcca;padding-top:12px}
 .part-row>span{font-size:11px;color:#737b65;align-self:flex-start}
 .part-demo{height:130px}
-.part-demo .ev-paper{width:254px;height:126px;flex:none;padding:26px 18px 18px}
+.part-demo .ev-paper{width:254px;height:126px;flex:none;padding:38px 18px 18px}
 .part-demo .ev-type{left:56px;right:6px}
-.part-demo .ev-rules{font-size:13px;line-height:1.11}
+.part-demo .ev-rules{font-size:13.2px;line-height:1.08}
 .part-demo>.ev-title{width:172px;height:30px}
 .reference-part{background-size:286px 399px;background-repeat:no-repeat;flex:none}
 .no-part-reference{font-size:12px;color:#78806f}
 .part .ev-paper:before{z-index:0}
 .part-demo .ev-paper.ev-dense{padding:20px 12px 25px}
+.part-demo .ev-paper.ev-with-flavor{padding-top:26px}
+.part-demo .ev-paper.ev-dense{height:145px}
+.part-rules:has(.ev-dense) .part-demo{height:149px}

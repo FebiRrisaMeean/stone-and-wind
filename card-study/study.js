@@ -1,9 +1,9 @@
 import {renderIcon,originalIconNames} from '../game/original-icons.js';
-import {cardComponent,costComponent,categoryComponent,titleComponent,pointsComponent,rulesComponent} from '../game/card-components.js';
+import {cardComponent,costComponent,categoryComponent,titleComponent,pointsComponent,rulesComponent} from '../game/card-components.js?v=type-2';
 const icon=(name,size=16)=>renderIcon(name,{size});
 const cards={
  court:{name:'Courthouse',title:'Суд',type:'GOVERNANCE',critter:false,unique:true,copies:2,points:2,cost:{TWIG:1,RESIN:1,PEBBLE:2},association:'Судья',rulesHTML:`Получайте либо 1${icon('twig')}, либо 1${icon('resin')},<br>либо 1${icon('pebble')} после того, как вы<br>сыграли сооружение`},
- judge:{name:'Judge',title:'Судья',type:'GOVERNANCE',critter:true,unique:true,copies:2,points:2,cost:{BERRY:3},association:'Суд',rulesHTML:`Разыгрывая существо или<br>сооружение, вы можете заменить<br>1${icon('any-resource')} на 1${icon('any-resource')} другого типа`},
+ judge:{name:'Judge',title:'Судья',type:'GOVERNANCE',critter:true,unique:true,copies:2,points:2,cost:{BERRY:3},association:'Суд',flavor:'«Выношу приговор — замена принимается»',rulesHTML:`Разыгрывая существо или<br>сооружение, вы можете заменить<br>1${icon('any-resource')} на 1${icon('any-resource')} другого типа`},
  tower:{name:'Clock Tower',title:'Башня',type:'GOVERNANCE',critter:false,unique:true,copies:3,points:0,cost:{TWIG:3,PEBBLE:1},association:'Историк',dense:true,rulesHTML:`При розыгрыше положите сюда 3${icon('point',14)}<br>Перед новым сезоном можно потратить 1${icon('point',14)} и повторить основную или лесную локацию со своим работником<br>Оставшиеся очки считаются в конце игры`}
 };
 let selected='court',size=28;
@@ -30,4 +30,10 @@ function renderIcons(){
 document.querySelectorAll('[data-card]').forEach(button=>button.addEventListener('click',()=>{selected=button.dataset.card;render()}));
 document.querySelectorAll('[data-size]').forEach(button=>button.addEventListener('click',()=>{size=Number(button.dataset.size);renderIcons()}));
 $('guides').addEventListener('change',render);
+// Verify the font actually loaded, rather than accepting a silent system fallback
+try {
+ const faces=await document.fonts.load('14px EverdellMikadan','Получайте Суд Судья Башня');
+ document.documentElement.dataset.cardFont=faces.length>0?'loaded':'fallback';
+ if(!faces.length)console.error('Everdell card font did not load');
+}catch(error){document.documentElement.dataset.cardFont='error';console.error(error)}
 render();renderIcons();
