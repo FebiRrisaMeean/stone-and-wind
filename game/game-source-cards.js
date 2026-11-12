@@ -1,4 +1,4 @@
-import {loadSourceCard,loadCardFonts,preloadCardAssets,sourceCardComponent} from './source-card-components.js?v=21';
+import {loadSourceCard,loadCardFonts,preloadCardAssets,sourceCardComponent} from './source-card-components.js?v=22';
 import {SOURCE_CARD_IDS} from './source-card-map.js';
 
 const ready=new Map(),pending=new Map();

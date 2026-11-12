@@ -4,7 +4,7 @@ import {cameraControls,cardPreviewPlacement} from './field-ui.js?v=field19c';
 import {renderIcon} from './original-icons.js';
 import {captureAction,bindAction,isActionForGame,restoreAction,recoverPendingAction} from './action-checkpoint.js';
 import {resourceChoiceModel,changeResourceChoice,resourceChoiceMarkup,decisionResources,decisionValue,closeIcon} from './decision-ui.js?v=field19';
-import {prepareGameCard,gameCardReady,gameCardFace} from './game-source-cards.js?v=21';
+import {prepareGameCard,gameCardReady,gameCardFace} from './game-source-cards.js?v=22';
 import {workerSeatPosition} from './production-props.js?v=field19';
 import {SOURCE_CARD_NAMES} from './source-card-map.js';
 import {createHandInteraction} from './hand-interaction.js';

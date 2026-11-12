@@ -53,3 +53,13 @@ Renderer — game/source-card-components.js
 - Проверка новых текстов требует проверки покрытия поднабора шрифта и новых переносов, этот импорт не выдаёт себя за универсальный редактор произвольных карт
 
 В игре source-card-map.js связывает 48 базовых типов с исходными лицевыми сторонами. Различия источника с действующим движком объясняются отдельными заметками в увеличенной карточке, исходные слои остаются без изменений
+
+## Stable illustration components
+
+Since pages-22 only the illustration layer is precomposed into transparent WebP, removing runtime dependence on nested page-sized raster SVG masks
+
+- 688x966 pixels, quality 96, exact alpha
+- No text, borders or icons included
+- Remaining SVG components and original fonts stay independent
+- Original JSON and image assets remain preserved
+- Reproducible builder: qa/visual-style-stage2/prepare-illustrations.mjs
