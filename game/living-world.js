@@ -77,6 +77,7 @@ export function renderLivingBoard(view,state){
  }
  for(const item of state.livingObjects??[]){
   const entity=view.syncEntity('living:'+item.id,`${item.type}:${item.cardName??''}:${item.owner??''}:${item.x}:${item.z}:${item.radius??''}`,()=>makeObject(view,item));entity.living=item;
+  if(item.type==='market'){let glow=entity.group.userData.affordance;if(!glow){glow=view.ring(.91,1.04,0x87cb78,.65);glow.position.y=.14;entity.group.add(glow);entity.group.userData.affordance=glow;}glow.visible=item.available===true;}
   applyObjectSeason(entity.group,state.season);objectLabel(view,item);
  }
  if(view.journeyBoard)view.journeyBoard.hidden=true;
@@ -99,10 +100,13 @@ export function updateLivingLabels(view){
  for(const label of labels){
   if(!label.living){label.el.style.visibility='hidden';continue;}
   const p=label.pos.clone();p.y=view.heightAt(p.x,p.z)+(label.pos.y??.15);p.project(view.camera);const x=(p.x*.5+.5)*w;let y=(-p.y*.5+.5)*h;
+  const cardLabel=['market','city-card'].includes(label.item?.type),hovered=view.hoveredLiving?.id===label.item?.id||label.el.matches(':hover,:focus-visible');
+  if(cardLabel)label.el.classList.toggle('is-hovered',hovered);
+  const cardVisible=!cardLabel||view.zoom>=.48||hovered;
   const eventVisible=label.item?.type!=='event'||view.zoom>.83||view.hoveredLiving?.id===label.item.id;
-  const visible=eventVisible&&p.z>-1&&p.z<1&&x>0&&x<w&&y>0&&y<h-12;
-  if(visible&&!label.livingZone&&label.item?.type!=="market"){const ww=label.el.offsetWidth,hh=label.el.offsetHeight;for(let attempt=0;attempt<5&&placed.some(r=>Math.abs(r.x-x)<(r.w+ww)/2+3&&Math.abs(r.y-y)<(r.h+hh)/2+2);attempt++)y+=hh*.65+5;placed.push({x,y,w:ww,h:hh});}
-  label.el.style.transform=`translate(${x}px,${y}px) translate(-50%,${label.livingZone?'-50%':'12px'})`;label.el.style.visibility=visible?'visible':'hidden';
+  const visible=cardVisible&&eventVisible&&p.z>-1&&p.z<1&&x>0&&x<w&&y>0&&y<h-12;
+  if(visible&&!label.livingZone&&!cardLabel){const ww=label.el.offsetWidth,hh=label.el.offsetHeight;for(let attempt=0;attempt<5&&placed.some(r=>Math.abs(r.x-x)<(r.w+ww)/2+3&&Math.abs(r.y-y)<(r.h+hh)/2+2);attempt++)y+=hh*.65+5;placed.push({x,y,w:ww,h:hh});}
+  label.el.style.transform=`translate(${x}px,${y}px) translate(-50%,${label.livingZone?'-50%':'12px'})${cardLabel?` scale(${clamp(view.zoom/.7,.78,1)})`:''}`;label.el.style.visibility=visible?'visible':'hidden';
   label.el.style.setProperty('--living-label-scale',String(clamp(view.zoom,.72,1)));
  }
 }

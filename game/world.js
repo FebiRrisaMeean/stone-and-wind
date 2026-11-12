@@ -1,6 +1,6 @@
 import {seasonVisuals,addSeasonGroundDetails} from './seasonal-visuals.js?v=20261112-23';
 import * as T from '../vendor/three.module.js';
-import {renderLivingBoard,updateLivingLabels,animateLivingBoard,refreshLivingHover,renderLivingPlacementPreview} from './living-world.js?v=20261112-23';
+import {renderLivingBoard,updateLivingLabels,animateLivingBoard,refreshLivingHover,renderLivingPlacementPreview} from './living-world.js?v=cards16';
 import {resourceIcon} from './everdell/art.js?v=20261112-23';
 import {FACTIONS,TROOPS,WORLD,BUILDINGS} from './data.js?v=20261112-23';
 import {count,visible,known,moveRange} from './movement.js?v=20261112-23';

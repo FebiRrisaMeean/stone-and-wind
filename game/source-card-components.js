@@ -55,8 +55,8 @@ export async function loadCardFonts(card) {
 }
 
 const imageCache=new Map()
-export async function preloadCardAssets(card){
- const paths=[...new Set([...card.defs.matchAll(/(?:xlink:)?href="(images\/[^"]+)"/g)].map(m=>new URL(m[1],base).href)),sourceReference(card.id)]
+export async function preloadCardAssets(card,{reference=true}={}){
+ const paths=[...new Set([...card.defs.matchAll(/(?:xlink:)?href="(images\/[^"]+)"/g)].map(m=>new URL(m[1],base).href)),...(reference?[sourceReference(card.id)]:[])]
  await Promise.all(paths.map(src=>{
   if(!imageCache.has(src))imageCache.set(src,new Promise((resolve,reject)=>{const image=new Image();image.onload=()=>image.decode().then(resolve,reject);image.onerror=()=>reject(new Error('Не загрузился графический слой'));image.src=src}))
   return imageCache.get(src)
