@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Учёный — три трактовки</title>
+  <link rel="icon" href="../favicon.svg">
+  <link rel="stylesheet" href="./study.css?v=1">
+</head>
+<body>
+  <header><a href="../world-study/?v=pages-22">← Все модели</a><h1>Учёный: три трактовки</h1></header>
+  <main>
+    <div class="controls" role="group" aria-label="Общий ракурс моделей">
+      <button data-view="reference" aria-pressed="true">Ракурс карточки</button>
+      <button data-view="front" aria-pressed="false">Спереди</button>
+      <button data-view="side" aria-pressed="false">Профиль</button>
+      <button data-view="back" aria-pressed="false">Сзади</button>
+      <span class="separator"></span>
+      <button id="rotate" aria-pressed="false">Вращение</button>
+      <button id="silhouette" aria-pressed="false">Силуэт</button>
+      <button id="animation" aria-pressed="true">Моргание</button>
+    </div>
+    <section class="comparison" aria-label="Источник и три объёмных этюда">
+      <article class="reference-panel">
+        <h2>Исходная иллюстрация</h2>
+        <div class="reference-image"><svg id="source-crop" viewBox="52 7 286 253" role="img" aria-label="Фрагмент исходной карточки: Учёный в зелёном шарфе рассматривает ягоду и держит писчее перо"><defs><clipPath id="source-boundary"><rect x="52" y="7" width="286" height="253"/></clipPath></defs><image clip-path="url(#source-boundary)" href="../game/assets/cards64/references/09.webp" width="344" height="483"/></svg></div>
+        <button id="source-toggle" aria-pressed="false">Карточка целиком</button>
+        <p>Стол и вещи на нём — окружение<br>Ноги и скрытая спина — реконструкция</p>
+      </article>
+      <article class="variant" data-variant="card">
+        <h2><span>A</span> По иллюстрации</h2>
+        <div class="viewport" id="view-card" tabindex="0" role="img" aria-label="Вариант A — по иллюстрации, потяните для вращения, колесо для масштаба"></div>
+        <p>Приоритет — характер рисунка: клиновидная голова, взгляд на ягоду и крупные пряди</p>
+      </article>
+      <article class="variant" data-variant="natural">
+        <h2><span>B</span> Естественная анатомия</h2>
+        <div class="viewport" id="view-natural" tabindex="0" role="img" aria-label="Вариант B — естественная анатомия, потяните для вращения, колесо для масштаба"></div>
+        <p>Допускаем более звериное строение: меньшую голову, длинную морду и низкую посадку</p>
+      </article>
+      <article class="variant" data-variant="miniature">
+        <h2><span>C</span> Игровая скульптура</h2>
+        <div class="viewport" id="view-miniature" tabindex="0" role="img" aria-label="Вариант C — игровая скульптура, потяните для вращения, колесо для масштаба"></div>
+        <p>Сокращаем мелкие детали: цельные плоскости и крупные пучки для чтения издалека</p>
+      </article>
+    </section>
+    <div id="load-error" role="alert" hidden></div>
+  </main>
+  <script type="module" src="./study.js?v=1"></script>
+</body>
+</html>
