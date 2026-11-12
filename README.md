@@ -1,6 +1,14 @@
 # Living Everdell prototype
 
-Two players, 48 card types and the base Everdell rules engine
+Play against a local bot using the ordinary two-player rules, 48 card types and shared seasons
+
+The human hand, stock and city perspective stay fixed during the bot’s turn. The bot uses its own hand and the public board, without seeing your hand or the deck order
+
+The bot resolves its own choices, payments and city placement. Escape pauses its turn while the game menu is open. Reloading resumes the saved party
+
+Bot saves use separate stone-wind-bot keys. Previous hotseat saves are preserved, but new hotseat games are no longer offered
+
+This mode runs entirely in the browser without a room server. Online play between two computers is a later stage
 
 Hand cards fan out at the bottom. Eight market miniatures, two freely arranged cities and worker locations surround the ancient tree
 
@@ -18,7 +26,7 @@ Production clearings contain resource miniatures and physical worker seats. Hove
 
 Snow, flowers and autumn foliage follow the season. Market residents wander, recruited residents walk into the city, and animal porters carry new buildings. Escape opens the game menu
 
-Choice dialogs share original resource and victory-point symbols. Use plus/minus counters to choose amounts; X, Cancel or Escape restores the complete state before the action
+Choice dialogs share original resource and victory-point symbols. Use plus/minus counters to choose amounts; X, Cancel or Escape restores the complete state before your initiated action. Mandatory rewards triggered after the opponent ends the shared season must be resolved
 
 Tabletop archive remains available at archive/tabletop-pages-12a/
 

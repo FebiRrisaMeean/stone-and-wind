@@ -372,3 +372,8 @@
 .choice-dialog .choice-item:focus-within{outline:2px solid #a7b879;outline-offset:2px}
 .choice-dialog .choice-item input:focus-visible{outline:0}
 .living-shell .world-label.living-city-card-label:hover,.living-shell .world-label.living-city-card-label:focus-visible,.living-shell .world-label.living-city-card-label.is-hovered{color:#fff3d8!important}
+
+.bot-status{position:absolute;top:20px;left:max(400px,calc(50% - 90px));z-index:114;max-width:calc(100vw - 490px);padding:9px 13px;border:1px solid #c7bd8a80;border-radius:8px;background:#273f32f2;color:#fff3d8;font:600 13px/1.4 system-ui,sans-serif;box-shadow:0 3px 10px #14271b30;pointer-events:auto}
+.bot-status[hidden]{display:none}
+.bot-status button{margin-left:8px;border:1px solid #c7bd8a;border-radius:5px;background:#4c6a40;color:#fff3d8;padding:4px 9px;font:inherit;cursor:pointer}
+.bot-status button:focus-visible{outline:2px solid #fff3d8;outline-offset:2px}
