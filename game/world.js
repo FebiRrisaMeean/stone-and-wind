@@ -1,9 +1,10 @@
+import {seasonVisuals,addSeasonGroundDetails} from './seasonal-visuals.js?v=20261112-21';
 import * as T from '../vendor/three.module.js';
-import {renderLivingBoard,updateLivingLabels,animateLivingBoard,refreshLivingHover,renderLivingPlacementPreview} from './living-world.js?v=20261111-20';
-import {resourceIcon} from './everdell/art.js?v=20261111-19';
-import {FACTIONS,TROOPS,WORLD,BUILDINGS} from './data.js?v=20261111-14';
-import {count,visible,known,moveRange} from './movement.js?v=20261111-14';
-import {woodlandCottage,ancientTree,woodlandFigure,woodlandSource,woodlandLocation,addWoodlandTerrain,animateWoodland} from './woodland-world.js?v=20261111-19';
+import {renderLivingBoard,updateLivingLabels,animateLivingBoard,refreshLivingHover,renderLivingPlacementPreview} from './living-world.js?v=20261112-21';
+import {resourceIcon} from './everdell/art.js?v=20261112-21';
+import {FACTIONS,TROOPS,WORLD,BUILDINGS} from './data.js?v=20261112-21';
+import {count,visible,known,moveRange} from './movement.js?v=20261112-21';
+import {woodlandCottage,ancientTree,woodlandFigure,woodlandSource,woodlandLocation,addWoodlandTerrain,animateWoodland} from './woodland-world.js?v=20261112-21';
 
 const PALETTE={plain:0x7f9857,meadow:0x9eae69,forest:0x617d48,road:0xc7b589,rock:0x9da186,water:0x79b2a7,mist:0x506d59};
 const TEAM=[0x617baf,0x4f8c73,0x9b8058,0x977e9d];
@@ -167,26 +168,27 @@ export class WorldView{
  }
  resetScene(){this.gameSeed=null;}
  get busyAnimating(){return[...this.entities.values()].some(e=>e.moving);}
+ getArrivalState(id){const e=this.entities.get('living:'+id);if(!e)return null;const a=e.arrival;return a?{key:a.key,progress:a.progress,style:a.style,done:a.done,position:{x:e.group.position.x+(e.group.userData.miniature?.position.x??0),z:e.group.position.z+(e.group.userData.miniature?.position.z??0)}}:null;}
  getCameraState(){return{target:{x:this.target.x,z:this.target.z},yaw:this.yaw,pitch:this.pitch,zoom:this.zoom};}
  updateCamera(dt){const smooth=1-Math.exp(-dt*10);this.target.lerp(this.desiredTarget,smooth);this.yaw+=shortest(this.yaw,this.desiredYaw)*smooth;this.pitch+=(this.desiredPitch-this.pitch)*smooth;this.zoom+=(this.desiredZoom-this.zoom)*smooth;
   const distance=42;this.camera.position.set(this.target.x+Math.sin(this.yaw)*Math.cos(this.pitch)*distance,Math.sin(this.pitch)*distance,this.target.z+Math.cos(this.yaw)*Math.cos(this.pitch)*distance);this.camera.lookAt(this.target);const h=13/this.zoom,w=h*(this.container.clientWidth/Math.max(this.container.clientHeight,1));this.camera.left=-w;this.camera.right=w;this.camera.top=h;this.camera.bottom=-h;this.camera.updateProjectionMatrix();
   this.sun.target.position.copy(this.target);this.sun.position.copy(this.target).add(new T.Vector3(-18,35,20));if(this.t-(this.lastCameraNotify??0)>.1){this.onCameraChange?.(this.getCameraState());this.lastCameraNotify=this.t;}}
  rebuildTerrain(s,p,menu){
-  this.clear(this.terrain);this.clear(this.detail);const w=WORLD.width,h=WORLD.height,margin=24,nx=w+margin*2,nz=h+margin*2,verts=[],colors=[],indices=[],fog=new T.Color(PALETTE.mist);
+  this.clear(this.terrain);this.clear(this.detail);const palette=s.livingBoard?seasonVisuals(s.season):PALETTE;this.scene.background.setHex(palette.mist);this.scene.fog.color.setHex(palette.mist);const w=WORLD.width,h=WORLD.height,margin=24,nx=w+margin*2,nz=h+margin*2,verts=[],colors=[],indices=[],fog=new T.Color(palette.mist);
   const tile=(x,z)=>x>=0&&z>=0&&x<w&&z<h?s.tiles[z*w+x]:null;
   // The mist continues well beyond the playable boundary: no board edge or rectangular cutout
   for(let iz=0;iz<=nz;iz++)for(let ix=0;ix<=nx;ix++){
    const x=ix-margin,z=iz-margin,px=x-.5,pz=z-.5,c=new T.Color(0);let coverage=0,totalWeight=0,knownWeight=0;
-   for(let dz=-2;dz<=1;dz++)for(let dx=-2;dx<=1;dx++){const t=tile(x+dx,z+dz),weight=1/(1+(dx+.5)**2+(dz+.5)**2),seen=!!t&&(menu||known(s,p,t));totalWeight+=weight;if(!seen)continue;coverage+=weight;knownWeight+=weight;const col=new T.Color(PALETTE[t.type]??PALETTE.plain).multiplyScalar((.97+noise(t.x,t.z)*.045)*weight);c.add(col);}
+   for(let dz=-2;dz<=1;dz++)for(let dx=-2;dx<=1;dx++){const t=tile(x+dx,z+dz),weight=1/(1+(dx+.5)**2+(dz+.5)**2),seen=!!t&&(menu||known(s,p,t));totalWeight+=weight;if(!seen)continue;coverage+=weight;knownWeight+=weight;const col=new T.Color(palette[t.type]??palette.plain).multiplyScalar((.97+noise(t.x,t.z)*.045)*weight);c.add(col);}
    coverage/=totalWeight;const fade=clamp((coverage-.03)/.91,0,1),alpha=fade*fade*(3-2*fade);if(knownWeight)c.multiplyScalar(1/knownWeight);else c.copy(fog);c.lerp(fog,1-alpha);const y=this.heightAt(px,pz)*alpha+.04*(1-alpha);verts.push(px,y,pz);colors.push(c.r,c.g,c.b);
    if(ix<nx&&iz<nz){const a=iz*(nx+1)+ix,b=a+1,d=(iz+1)*(nx+1)+ix,c1=d+1;if((ix+iz)%2)indices.push(a,d,b,b,d,c1);else indices.push(a,d,c1,a,c1,b);}
   }
   const geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(verts,3));geo.setAttribute('color',new T.Float32BufferAttribute(colors,3));geo.setIndex(indices);geo.computeVertexNormals();const terrain=new T.Mesh(geo,new T.MeshStandardMaterial({vertexColors:true,roughness:1,flatShading:false}));terrain.receiveShadow=true;this.terrain.add(terrain);
-  const backdrop=this.mesh(this.terrain,new T.PlaneGeometry(500,500),this.material(PALETTE.mist),(w-1)/2,-.4,(h-1)/2);backdrop.rotation.x=-Math.PI/2;backdrop.castShadow=false;
+  const backdrop=this.mesh(this.terrain,new T.PlaneGeometry(500,500),this.material(palette.mist),(w-1)/2,-.4,(h-1)/2);backdrop.rotation.x=-Math.PI/2;backdrop.castShadow=false;
   // River highlights are continuous, translucent ribbons rather than tiled water blocks
   const waterPositions=[],waterColors=[];for(const t of s.tiles){if(t.type!=='water'||(!menu&&!known(s,p,t)))continue;const x=t.x,z=t.z,sh=.51;for(const v of [[x-sh,z-sh],[x+sh,z-sh],[x+sh,z+sh],[x-sh,z-sh],[x+sh,z+sh],[x-sh,z+sh]]){waterPositions.push(v[0],-.005,v[1]);const n=noise(v[0],v[1]);waterColors.push(.34+n*.05,.59+n*.07,.58+n*.08);}}
   if(waterPositions.length){const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(waterPositions,3));g.setAttribute('color',new T.Float32BufferAttribute(waterColors,3));g.computeVertexNormals();this.waterMaterial=new T.MeshStandardMaterial({vertexColors:true,transparent:true,opacity:.82,roughness:.25,metalness:.08,side:T.DoubleSide});const water=new T.Mesh(g,this.waterMaterial);this.terrain.add(water);}
-  addWoodlandTerrain(this,s,p,menu,known);
+  addWoodlandTerrain(this,s,p,menu,known);if(s.livingBoard)addSeasonGroundDetails(this,s);
   this.staticBuilds=(this.staticBuilds??0)+1;
  }
  instances(group,geometry,material,items,transform){if(!items.length){geometry.dispose();material.dispose();return;}const mesh=new T.InstancedMesh(geometry,material,items.length),dummy=new T.Object3D();for(let i=0;i<items.length;i++){const v=transform(items[i]);dummy.position.set(...v.position);dummy.rotation.set(...(v.rotation??[0,0,0]));dummy.scale.set(...(v.scale??[1,1,1]));dummy.updateMatrix();mesh.setMatrixAt(i,dummy.matrix);}mesh.castShadow=true;mesh.receiveShadow=true;group.add(mesh);}
@@ -276,10 +278,10 @@ export class WorldView{
  battleEffect(b){const pos=b.target??b.position??(Number.isFinite(b.x)?b:WORLD.center);const ring=this.ring(.25,.43,b.win?0xe6c078:0xd09876,.85);ring.position.set(pos.x,this.heightAt(pos.x,pos.z)+.15,pos.z);this.effectLayer.add(ring);this.effects.push({mesh:ring,start:this.t,duration:1,type:'battle'});for(let i=0;i<8;i++){const p=this.sphere(this.effectLayer,pos.x,.45,pos.z,.045,i%2?0xe6c68a:0xb2b69c);this.effects.push({mesh:p,start:this.t,duration:.7,type:'spark',angle:i/8*Math.PI*2});}}
  render(s,p,{selected=null,menu=false,build=null}={}){
   const placement=s.mode==='placement',roundChanged=placement&&this.state&&this.state.round!==s.round,enteringGame=this.menu&&!menu,newWorld=this.gameSeed!==s.seed,changedPlayer=this.lastViewer!==p;this.state=s;this.p=p;this.menu=menu;this.selected=selected;this.build=build;
-  if(newWorld){for(const entity of this.entities.values())this.disposeObject(entity.group);this.entities.clear();this.labelLayer.innerHTML='';this.labelMap=new Map();this.staticKey='';this.lastBattleKey=null;this.gameSeed=s.seed;this.cancelFollow();this.setHoveredUnit(null);}
+  if(newWorld){this.completedLivingArrivals=new Set();for(const entity of this.entities.values())this.disposeObject(entity.group);this.entities.clear();this.labelLayer.innerHTML='';this.labelMap=new Map();this.staticKey='';this.lastBattleKey=null;this.gameSeed=s.seed;this.cancelFollow();this.setHoveredUnit(null);}
   if((newWorld||enteringGame||changedPlayer&&!placement)&&!s.livingBoard){this.resetCamera();if(newWorld){this.target.copy(this.desiredTarget);this.zoom=this.desiredZoom;this.yaw=this.desiredYaw;this.pitch=this.desiredPitch;}this.lastViewer=p;}
   if(s.livingBoard)this.lastViewer=p;
-  const explored=menu?'all':s.players[p].explored.reduce((a,b,i)=>b?(a+i*13+1)%2147483647:a,0),staticKey=`${s.seed}:${p}:${menu}:${explored}:${s.buildings.length}:${placement?s.locations?.map(l=>l.id).join(','):''}`;if(this.staticKey!==staticKey){this.rebuildTerrain(s,p,menu);this.staticKey=staticKey;}
+  const explored=menu?'all':s.players[p].explored.reduce((a,b,i)=>b?(a+i*13+1)%2147483647:a,0),staticKey=`${s.seed}:${s.livingBoard?s.season:''}:${s.livingBoard?'all':p}:${menu}:${explored}:${s.buildings.length}:${placement?s.locations?.map(l=>l.id).join(','):''}`;if(this.staticKey!==staticKey){this.rebuildTerrain(s,p,menu);this.staticKey=staticKey;}
   for(const entity of this.entities.values())entity.seen=false;for(const label of this.labelMap?.values()??[])label.seen=false;
   if(s.livingBoard&&!menu)renderLivingBoard(this,s);else if(placement&&!menu)this.renderPlacementLocations(s);
   for(const m of s.sources){if(!menu&&!known(s,p,m))continue;this.syncEntity('source:'+m.id,`${m.owner}:${m.workers?.length}`,()=>this.source(m));if(!menu)this.addLabel('source:'+m.id,m.x,m.z,`<span class="source-symbol">${{gold:'◈',wood:'♣',stone:'◆'}[m.resource]}</span><span class="source-label-name">${{gold:'Золотая жила',wood:'Лесная делянка',stone:'Каменоломня'}[m.resource]}</span><span>${m.workers?.length??0}/${m.slots}</span>`,m.owner===p?'owned':'',()=>this.onPick({type:'source',id:m.id}),.98);}

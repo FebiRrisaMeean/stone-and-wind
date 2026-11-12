@@ -153,10 +153,12 @@ function makeBuilding(view,name){const g=new T.Group(),p=primitives(view,g);g.us
 export function createCardMiniature(view,cardName,owner=0){
  if(!CARD_MODEL_DEFINITIONS[cardName])throw new Error('Unknown base-game card miniature: '+cardName);
  const group=critters[cardName]?makeCritter(view,cardName,owner):makeBuilding(view,cardName);
+ if(!group.userData.isCritter){const pole=view.cylinder(group,-.72,.63,.48,.025,.95,0x765139,7);const lamp=view.mesh(group,new T.SphereGeometry(.095,8,6),view.material(0xffd28a,{emissive:0xffa64a,emissiveIntensity:.38}),-.72,.96,.48);lamp.userData.buildingLamp={phase:cardName.length*.8};const sign=view.box(group,-.60,.76,.48,.20,.17,.035,0xcbaa68);sign.userData.buildingSign={z:sign.rotation.z,phase:cardName.length};}
  group.userData.cardName=cardName;group.userData.modelKey=cardName;group.userData.modelVersion=1;return group;
 }
 
 export function animateCardMiniature(group,time,dt=0){
+ group.traverse(o=>{if(o.userData.buildingLamp)o.material.emissiveIntensity=.34+Math.sin(time*1.7+o.userData.buildingLamp.phase)*.18;if(o.userData.buildingSign)o.rotation.z=o.userData.buildingSign.z+Math.sin(time*1.3+o.userData.buildingSign.phase)*.10;});
  const moving=group.userData.walking===true||group.userData.moving===true;
  for(const motion of group.userData.motions??[]){const {obj,base,rotation}=motion,phase=time+(motion.phase??0);
   if(motion.type==='breath'){obj.position.y=base.y+Math.sin(phase*2.5)*.012;obj.rotation.z=rotation.z+Math.sin(phase*.8)*.018;}

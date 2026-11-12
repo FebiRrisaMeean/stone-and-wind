@@ -1,7 +1,8 @@
+import {applyObjectSeason} from './seasonal-visuals.js?v=20261112-21';
 import * as T from '../vendor/three.module.js';
-import {createCardMiniature,animateCardMiniature} from './living-models.js?v=20261111-20';
-import {woodlandCottage,ancientTree} from './woodland-world.js?v=20261111-20';
-import {resourceIcon} from './everdell/art.js?v=20261111-19';
+import {createCardMiniature,animateCardMiniature} from './living-models.js?v=20261112-21';
+import {woodlandCottage,ancientTree,woodlandFigure} from './woodland-world.js?v=20261112-21';
+import {resourceIcon} from './everdell/art.js?v=20261112-21';
 
 const team=[0x719bb6,0xd7a073,0x97b485,0xb99ac7];
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -56,26 +57,27 @@ function labelHover(view,label,pick){
  label.el.onpointerenter=send;label.el.onpointermove=send;label.el.onpointerleave=()=>{view.hoveredLiving=null;view.onHover?.(null);};
 }
 function objectLabel(view,item){
- if(!item.label)return;
- const type=item.type,html=`<span class="living-object-name">${esc(item.label)}</span>${item.costHtml?`<span class="living-object-cost">${item.costHtml}</span>`:''}`;
+ if(!item.label&&!item.statusHtml)return;
+ const type=item.type,html=item.statusHtml??`<span class="living-object-name">${esc(item.label)}</span>${item.costHtml?`<span class="living-object-cost">${item.costHtml}</span>`:''}${item.locked?(item.lockHtml??'<span class="living-object-lock">🔒</span>'):''}`;
  const label=view.addLabel('living:'+item.id,item.x,item.z,html,`living-object-label living-${type}-label`,()=>view.onPick?.({type,id:item.id}),item.labelHeight??.15);
- label.living=true;label.item=item;label.hoverOnly=false;label.el.dataset.livingId=item.id;label.el.setAttribute('aria-label',item.ariaLabel??item.label);label.el.removeAttribute('title');label.el.dataset.available=String(item.available!==false);labelHover(view,label,{type,id:item.id});
+ label.living=true;label.item=item;label.hoverOnly=false;label.el.dataset.livingId=item.id;label.el.setAttribute('aria-label',item.ariaLabel??item.label);label.el.removeAttribute('title');label.el.dataset.available=String(item.available!==false);label.el.dataset.locked=String(item.locked===true);labelHover(view,label,{type,id:item.id});
  return label;
 }
 export function renderLivingBoard(view,state){
  const tree=state.livingTree??{x:30,z:13};
  view.syncEntity('living-tree',`${tree.x}:${tree.z}`,()=>{const g=ancientTree(view,{...tree,id:'living-elder',kind:'point'});g.scale.setScalar(1.35);view.tagged(g,{type:'tree',id:'living-tree'});return g;});
+ const elder=view.entities.get('living-tree');if(elder)applyObjectSeason(elder.group,state.season);
  for(const location of state.locations??[]){
   view.syncEntity('location:'+location.id,`${location.x}:${location.z}:${location.workers?.join(',')}`,()=>view.placementLocation(location));
-  const gains=location.rewardIcons??{};let reward=Object.entries(gains).filter(([,n])=>n>0).map(([r,n])=>`<span><b>${n}</b>${resourceIcon(r)}</span>`).join('');
-  if(!reward&&location.actualName?.includes('JOURNEY')){const n=location.actualName==='JOURNEY_TWO'?2:location.actualName==='JOURNEY_THREE'?3:location.actualName==='JOURNEY_FOUR'?4:5;reward=`<span>${n}${resourceIcon('CARD')} → ${n}${resourceIcon('VP')}</span>`;}
-  const html=`<span class="living-object-name">${esc(location.name)}</span>${reward?`<span class="living-object-cost">${reward}</span>`:''}`;
-  const label=view.addLabel('location:'+location.id,location.x,location.z,html,'living-object-label living-location-label',()=>view.onPick?.({type:'location',id:location.id}),.15);
-  label.living=true;label.item=location;label.hoverOnly=false;label.el.removeAttribute('title');label.el.setAttribute('aria-label',location.name);label.el.dataset.available=String(location.available!==false);labelHover(view,label,{type:'location',id:location.id});
+  const fallback=Object.entries(location.rewardIcons??{}).filter(([,n])=>n>0).map(([r,n])=>`<span class="zone-reward"><b>${n}</b>${resourceIcon(r)}</span>`).join('');
+  const label=view.addLabel('location:'+location.id,location.x,location.z+(location.badgeOffsetZ??.91),location.badgeHtml??fallback,'living-object-label living-location-label living-zone-badge',()=>view.onPick?.({type:'location',id:location.id}),.20);
+  label.living=true;label.livingZone=true;label.item=location;label.hoverOnly=false;label.el.removeAttribute('title');label.el.setAttribute('aria-label',location.ariaLabel??location.name);label.el.dataset.available=String(location.available!==false);label.el.dataset.locked=String(location.locked===true);labelHover(view,label,{type:'location',id:location.id});
+  const entity=view.entities.get('location:'+location.id);if(entity)applyObjectSeason(entity.group,state.season);
+
  }
  for(const item of state.livingObjects??[]){
   const entity=view.syncEntity('living:'+item.id,`${item.type}:${item.cardName??''}:${item.owner??''}:${item.x}:${item.z}:${item.radius??''}`,()=>makeObject(view,item));entity.living=item;
-  objectLabel(view,item);
+  applyObjectSeason(entity.group,state.season);objectLabel(view,item);
  }
  if(view.journeyBoard)view.journeyBoard.hidden=true;
  renderLivingPlacementPreview(view,state.placementPreview??null);
@@ -99,8 +101,8 @@ export function updateLivingLabels(view){
   const p=label.pos.clone();p.y=view.heightAt(p.x,p.z)+(label.pos.y??.15);p.project(view.camera);const x=(p.x*.5+.5)*w;let y=(-p.y*.5+.5)*h;
   const eventVisible=label.item?.type!=='event'||view.zoom>.83||view.hoveredLiving?.id===label.item.id;
   const visible=eventVisible&&p.z>-1&&p.z<1&&x>0&&x<w&&y>0&&y<h-12;
-  if(visible){const ww=label.el.offsetWidth,hh=label.el.offsetHeight;for(let attempt=0;attempt<5&&placed.some(r=>Math.abs(r.x-x)<(r.w+ww)/2+3&&Math.abs(r.y-y)<(r.h+hh)/2+2);attempt++)y+=hh*.65+5;placed.push({x,y,w:ww,h:hh});}
-  label.el.style.transform=`translate(${x}px,${y}px) translate(-50%,12px)`;label.el.style.visibility=visible?'visible':'hidden';
+  if(visible&&!label.livingZone){const ww=label.el.offsetWidth,hh=label.el.offsetHeight;for(let attempt=0;attempt<5&&placed.some(r=>Math.abs(r.x-x)<(r.w+ww)/2+3&&Math.abs(r.y-y)<(r.h+hh)/2+2);attempt++)y+=hh*.65+5;placed.push({x,y,w:ww,h:hh});}
+  label.el.style.transform=`translate(${x}px,${y}px) translate(-50%,${label.livingZone?'-50%':'12px'})`;label.el.style.visibility=visible?'visible':'hidden';
   label.el.style.setProperty('--living-label-scale',String(clamp(view.zoom,.72,1)));
  }
 }
@@ -116,20 +118,42 @@ function idleWalk(view,entity,home,center,radius,dt,seed){
  position.y=view.heightAt(position.x,position.z)+Math.sin(view.t*3+hash(seed)*6.28)*.015;
  return walk.walking;
 }
+function beginArrival(view,entity,item){
+ const data=item.arrival;if(entity.arrival&&!entity.arrival.done&&(!data?.key||data.key===entity.arrival.key))return entity.arrival;if(!data?.key||!data.from)return null;view.completedLivingArrivals??=new Set();if(view.completedLivingArrivals.has(data.key))return null;
+ if(entity.arrival?.key===data.key)return entity.arrival;
+ const distance=Math.hypot(data.from.x-item.x,data.from.z-item.z),a={key:data.key,style:data.style??(item.critter?'walk':'carry'),from:{...data.from},elapsed:0,duration:clamp(distance*.24,2.0,7.5),progress:0,done:false};
+ if(a.style==='carry'){
+  const rig=new T.Group();view.box(rig,0,.53,0,2.05,.10,1.65,0x9c784b);for(const x of [-.85,.85])for(const z of [-.65,.65]){const porter=woodlandFigure(view,'worker',item.owner??0,x+z,data.species??0);porter.scale.setScalar(.70);porter.position.set(x,0,z);rig.add(porter);}entity.group.add(rig);a.porters=rig;
+ }
+ entity.arrival=a;return a;
+}
+function animateArrival(view,entity,item,mini,dt){
+ const a=beginArrival(view,entity,item);if(!a||a.done)return false;a.elapsed+=dt;a.progress=clamp(a.elapsed/a.duration,0,1);
+ const t=a.progress,s=t*t*(3-2*t),x=a.from.x+(item.x-a.from.x)*s,z=a.from.z+(item.z-a.from.z)*s,offsetX=x-item.x,offsetZ=z-item.z;
+ mini.position.set(offsetX,view.heightAt(x,z)-entity.group.position.y+(a.style==='carry'?.62:.12)+Math.sin(view.t*9)*(a.style==='carry'?.025:.012),offsetZ);
+ mini.rotation.y=Math.atan2(-(item.x-a.from.x),-(item.z-a.from.z));mini.userData.walking=true;
+ if(a.porters){a.porters.position.set(offsetX,view.heightAt(x,z)-entity.group.position.y,offsetZ);a.porters.rotation.y=mini.rotation.y;a.porters.traverse(o=>{if(o.userData.limb)o.rotation.x=Math.sin(view.t*10+o.userData.limb.phase)*o.userData.limb.amplitude;});}
+ if(t>=1){a.done=true;view.completedLivingArrivals.add(a.key);mini.position.set(0,.12,0);mini.userData.walking=false;if(a.porters)view.disposeObject(a.porters);a.porters=null;entity.miniActor=null;return false;}return true;
+}
+
 export function animateLivingBoard(view,dt){
  const state=view.state;
  for(const entity of view.entities.values()){
   if(entity.living?.cardName){
    const item=entity.living,mini=entity.group.userData.miniature;
-   if(mini){animateCardMiniature(mini,view.t,dt);if(item.type==='city-card'&&item.critter){
-    const center=item.roamCenter??(state.livingObjects??[]).find(o=>o.type==='city-area'&&o.owner===item.owner)??item;
-    const proxy=entity.miniActor??={group:new T.Group(),livingWalk:null};
-    if(!proxy.livingWalk)proxy.group.position.set(item.x,view.heightAt(item.x,item.z),item.z);
-    const moving=idleWalk(view,proxy,item,center,item.roamRadius??Math.max(2,(center.radius??6)-1),dt,item.id);
-    mini.position.set(proxy.group.position.x-item.x,proxy.group.position.y-entity.group.position.y+.12,proxy.group.position.z-item.z);mini.rotation.y=proxy.group.rotation.y;
-    mini.traverse(o=>{if(o.userData.limb)o.rotation.x=Math.sin(view.t*(moving?9:2)+o.userData.limb.phase)*(moving?.32:.025);});
-   }}
-  }
+   if(mini){
+    const arriving=animateArrival(view,entity,item,mini,dt);
+    if(!arriving&&item.critter&&(item.type==='city-card'||item.type==='market')){
+     const market=item.type==='market',center=market?{x:item.x,z:item.z}:item.roamCenter??(state.livingObjects??[]).find(o=>o.type==='city-area'&&o.owner===item.owner)??item;
+     const proxy=entity.miniActor??={group:new T.Group(),livingWalk:null};
+     if(!proxy.livingWalk)proxy.group.position.set(item.x,view.heightAt(item.x,item.z),item.z);
+     const moving=idleWalk(view,proxy,item,center,market?.34:item.roamRadius??Math.max(2,(center.radius??6)-1),dt,item.id);
+     mini.position.set(proxy.group.position.x-item.x,proxy.group.position.y-entity.group.position.y+.12,proxy.group.position.z-item.z);mini.rotation.y=proxy.group.rotation.y;mini.userData.walking=moving;
+    }
+    animateCardMiniature(mini,view.t,dt);
+   }
+  }else if(entity.living?.type==='city-area')entity.group.traverse(o=>{if(o.material?.emissive&&o.material.emissive.getHex()){o.material.emissiveIntensity=.48+Math.sin(view.t*1.7+o.id)*.16;}});
+
   if(entity.unit&&!entity.moving){
    const u=entity.unit;if(u.locationId){entity.livingWalk=null;continue;}
    const center=u.roamCenter??(state.livingObjects??[]).find(o=>o.type==='city-area'&&o.owner===u.owner)??u.home??u,home=u.home??u;

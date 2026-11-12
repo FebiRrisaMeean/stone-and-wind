@@ -1,9 +1,9 @@
 // Presentation positions never change engine costs, turns, city capacity or card effects
 export const LIVING_CITIES=[{x:10,z:34,radius:8},{x:51,z:34,radius:8}];
-export const LIVING_TREE={x:30,z:12};
-export const MARKET_POSITIONS=Array.from({length:8},(_,i)=>({x:23+(i%4)*5,z:24+Math.floor(i/4)*5}));
-export const BASIC_POSITIONS=[[18,8],[23,6],[28,5],[33,5],[38,7],[42,11],[41,16],[37,20]];
-export const FOREST_POSITIONS=[[17,16],[17,22],[43,22],[45,17]];
+export const LIVING_TREE={x:30,z:8};
+export const MARKET_POSITIONS=Array.from({length:8},(_,i)=>({x:21+(i%4)*6,z:25.5+Math.floor(i/4)*6}));
+export const BASIC_POSITIONS=[[21,13.5],[27,13.5],[33,13.5],[39,13.5],[21,19.3],[27,19.3],[33,19.3],[39,19.3]];
+export const FOREST_POSITIONS=[[14,14],[14,20],[46,17],[46,23]];
 export function inCity(owner,x,z){const c=LIVING_CITIES[owner];return !!c&&Number.isFinite(x)&&Number.isFinite(z)&&((x-c.x)/(c.radius-1))**2+((z-c.z)/6)**2<=1;}
 export function cityCardEntries(player){const counts={};return player.getPlayedCards().map(played=>{const ordinal=counts[played.cardName]??0;counts[played.cardName]=ordinal+1;return{key:player.playerId+'|'+played.cardName+'|'+ordinal,played,cardName:played.cardName};});}
 export function freeCityPosition(owner,entries){const c=LIVING_CITIES[owner];for(let row=0;row<4;row++)for(let col=0;col<5;col++){const x=c.x+(col-2)*2.75,z=c.z+(row-1.5)*3;if(inCity(owner,x,z)&&entries.every(p=>Math.hypot(p.x-x,p.z-z)>2.15))return{x,z};}return{x:c.x,z:c.z};}
