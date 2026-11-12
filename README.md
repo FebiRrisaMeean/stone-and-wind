@@ -14,6 +14,10 @@ Hand cards fan out at the bottom. Eight market miniatures, two freely arranged c
 
 Hover an object or its fixed city foundation to inspect its card. Select a playable hand card or market object, then choose a free position in the appropriate city
 
+Starting placement frames the destination city. Right-click during placement cancels the complete action, including payment and choices. Paired Husband and Wife share one logical city space and appear beside each other, even when the city is full
+
+The separate world-study/ gallery compares six animated 3D samples with their source cards: Architect, Bard, Doctor, Crane, Resin Refinery and Clock Tower. These samples establish a visual direction; they have not yet replaced the main board models
+
 Four camera buttons frame your city, production, the market and the opponent’s city. Moving the pointer releases the preset without changing its current view
 
 Free camera: drag, screen edges, right drag to rotate, wheel to zoom, WASD and Q/E. Elastic boundaries keep the view on the drawn field

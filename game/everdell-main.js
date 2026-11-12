@@ -4,13 +4,13 @@ import {cameraControls,cardPreviewPlacement} from './field-ui.js?v=field19c';
 import {renderIcon} from './original-icons.js';
 import {captureAction,bindAction,isActionForGame,restoreAction,recoverPendingAction} from './action-checkpoint.js';
 import {resourceChoiceModel,changeResourceChoice,resourceChoiceMarkup,decisionResources,decisionValue,closeIcon} from './decision-ui.js?v=field19';
-import {prepareGameCard,gameCardReady,gameCardFace} from './game-source-cards.js';
+import {prepareGameCard,gameCardReady,gameCardFace} from './game-source-cards.js?v=21';
 import {workerSeatPosition} from './production-props.js?v=field19';
 import {SOURCE_CARD_NAMES} from './source-card-map.js';
 import {createHandInteraction} from './hand-interaction.js';
 import {createSharedSeasonState,normalizeSharedGame,stepSharedGame,requestSharedSeason,sharedSeason,canActShared,forecastNextSeason} from './shared-seasons.js?v=20261112-23';
 import {zoneBadge,zoneDetail,supplyStatus,lockIcon,SPECIES} from './living-ui.js?v=resources17';
-import {LIVING_CITIES,LIVING_TREE,MARKET_POSITIONS,BASIC_POSITIONS,FOREST_POSITIONS,COMMON_POSITIONS,inCity,cityCardEntries,validCityPosition,reconcileCityLayout,freeCityPosition} from './living-board-state.js?v=field19';
+import {LIVING_CITIES,LIVING_TREE,MARKET_POSITIONS,BASIC_POSITIONS,FOREST_POSITIONS,COMMON_POSITIONS,inCity,cityCardEntries,queuedCityPlacements,validCityPosition,reconcileCityLayout,freeCityPosition} from './living-board-state.js?v=feedback21';
 import {cardArt,portraitStyle,placeArt,resourceIcon,cardTypeIcon} from './everdell/art.js?v=20261112-23';
 import {createGame,stepGame,serializeGame,restoreGame,getPaymentOptions as enginePaymentOptions,getScores,Card,Location,Event,CardName,LocationOccupancy,GameInputType,Season,CardType,PlayerStatus} from './everdell/engine.js?v=20261112-23';
 import {CARD_NAMES,CARD_TEXT,LOCATION_NAMES,LOCATION_TEXT,EVENT_NAMES,EVENT_TEXT,SEASONS,CARD_TYPES,RESOURCE_NAMES,translateText} from './everdell/locale.js?v=20261112-23';
@@ -46,6 +46,7 @@ export function mountGame(root){
  if(!actionCheckpoint&&game.pendingGameInputs.length)actionCheckpoint=recoverPendingAction({game,meta:sharedMeta,layout:cityLayout,selected,arrivals:arrivalMap});
  let savedSession=null;try{savedSession=JSON.parse(localStorage.getItem(SESSION_SAVE)||'null');}catch{}
  const session=createBotSession(game,savedSession);
+ let placementContextCancel=false;
  let teamDraft=teams.slice(),disposed=false,tooltipExclusion=null,detailOrigin=null,botTimer=null,botError=false,botThinking=false;
  const requestedCards=new Set(),paymentAvailability=new Map();
  const baseMap=createMovementWorld({seed:4811}),names=['Данила','Еремей','Ефим','Тихон','Иван','Терентий','Мирон','Савва','Матвей','Яков','Игнат','Пётр','Борис','Глеб','Назар','Лукьян','Прохор','Роман','Семён','Фёдор','Кузьма','Андрей','Степан','Елисей'];
@@ -121,7 +122,7 @@ export function mountGame(root){
    view.locations.push({id:'ever:'+n,name:n.includes('JOURNEY')?ln(n).replace('Путешествие','Путь'):ln(n),x:pos[0],z:pos[1],capacity,owner:null,workers:[],reward,cost:{},description:LOCATION_TEXT[n]??fmt(loc.description??loc.shortName),kind:n.includes('TWIG')||n.includes('RESIN')?'wood':n.includes('STONE')||n.includes('PEBBLE')?'stone':n==='HAVEN'?'house':'food',effectText:'',actualName:n,rewardIcons:{...gain},locationType:loc.type,available:availableLocations.has(n),season:player().currentSeason});
   }
   const layoutResult=reconcileCityLayout(game,cityLayout,stagedPosition);cityLayout=layoutResult.positions;
-  if(old)for(const entry of layoutResult.added){const matched=stagedPosition?.used&&stagedPosition.cardName===entry.cardName&&stagedPosition.owner===entry.owner;arrivalMap.set(entry.key,{key:game.gameStateId+':'+entry.key,from:matched&&stagedPosition.arrivalFrom?stagedPosition.arrivalFrom:{x:LIVING_CITIES[entry.owner].x,z:27.4},style:Card.fromName(entry.cardName).isCritter?'walk':'carry',species:teams[entry.owner]});}
+  if(old)for(const entry of layoutResult.added){const matched=stagedPosition&&stagedPosition.cardName===entry.cardName&&stagedPosition.owner===entry.owner;arrivalMap.set(entry.key,{key:game.gameStateId+':'+entry.key,from:matched&&stagedPosition.arrivalFrom?stagedPosition.arrivalFrom:{x:LIVING_CITIES[entry.owner].x,z:27.4},style:Card.fromName(entry.cardName).isCritter?'walk':'carry',species:teams[entry.owner]});}
   const objects=view.livingObjects;
   game.players.slice(0,2).forEach((q,owner)=>{
    const center=LIVING_CITIES[owner];
@@ -175,7 +176,14 @@ export function mountGame(root){
  }
  function step(input,actorId=session.humanPlayerId){
   if(actorId===session.humanPlayerId)startAction();
-  try{const previousKeys=new Set(Object.keys(cityLayout));({game,meta:sharedMeta}=applySessionCommand(game,sharedMeta,session,actorId,{kind:'step',input,expectedStateId:game.gameStateId}));payment=null;pendingIndex=0;promptChoice=[];promptResources={};cityPlayer=null;project();for(const q of game.players.slice(0,2))for(const entry of cityCardEntries(q)){if(actorId===session.humanPlayerId&&!previousKeys.has(entry.key)&&!(stagedPosition?.used&&stagedPosition.cardName===entry.cardName&&cityLayout[entry.key]?.owner===stagedPosition.owner))placementQueue.push({...entry,owner:game.players.indexOf(q)});}stagedPosition=null;selectAvailable();render();nextQueuedPlacement();settleAction();save();world.cancelFollow();if(game.isGameOver())toast('Партия завершена');return true;}
+  try{const previousKeys=new Set(Object.keys(cityLayout));({game,meta:sharedMeta}=applySessionCommand(game,sharedMeta,session,actorId,{kind:'step',input,expectedStateId:game.gameStateId}));payment=null;pendingIndex=0;promptChoice=[];promptResources={};cityPlayer=null;project();
+   if(actorId===session.humanPlayerId)placementQueue.push(...queuedCityPlacements(game,previousKeys,stagedPosition));
+   const pairedAddition=actorId===session.humanPlayerId?cityCardEntries(player()).find(entry=>!previousKeys.has(entry.key)&&entry.pairedWith):null;
+   const stagedAdded=stagedPosition&&game.players.slice(0,2).some((q,owner)=>owner===stagedPosition.owner&&cityCardEntries(q).some(entry=>!previousKeys.has(entry.key)&&entry.cardName===stagedPosition.cardName));
+   if(stagedPosition?.used||stagedAdded||!game.pendingGameInputs.length)stagedPosition=null;
+   selectAvailable();render();nextQueuedPlacement();settleAction();save();world.cancelFollow();
+   if(pairedAddition){focusCamera('own',true);toast(cn(pairedAddition.cardName)+' поселяется в общей ячейке');}
+   if(game.isGameOver())toast('Партия завершена');return true;}
   catch(e){const error=$('decision-error');if(error)error.textContent=tr(String(e.message).split('\n')[0]);else toast(String(e.message).split('\n')[0]);settleAction();return false;}
  }
  function pick(obj){
@@ -202,9 +210,16 @@ export function mountGame(root){
  function beginPlacement(name,source,index){
   if(game.pendingGameInputs.length||menu||payment||placementQueue.length)return;if(!humanTurn()){toast('Ожидаем соперника');return;}
   if(!getPaymentOptions(game,name,source,index).length){toast('Недостаточно ресурсов или нет места в городе');return;}
-  startAction();placement={name,source,index,owner:name===CardName.FOOL?1-playerIndex():playerIndex(),arrivalFrom:source==='MEADOW'?{...MARKET_POSITIONS[index]}:{x:LIVING_CITIES[playerIndex()].x,z:27.4}};hideDetail();$('placement-caption').textContent=cn(name)+' · выберите место в городе '+game.players[placement.owner].name;$('placement-caption').hidden=false;renderHand();
+  startAction();const owner=name===CardName.FOOL?1-playerIndex():playerIndex(),arrivalFrom=source==='MEADOW'?{...MARKET_POSITIONS[index]}:{x:LIVING_CITIES[playerIndex()].x,z:27.4};
+  focusCamera(owner===playerIndex()?'own':'opponent',true);
+  const partner=name===CardName.WIFE?CardName.HUSBAND:name===CardName.HUSBAND?CardName.WIFE:null;
+  if(partner&&player().getPlayedCards().some(card=>card.cardName===partner&&!card.pairId)){
+   // Decide Pair first: a full city can accept this resident without a free slot
+   stagedPosition={owner,cardName:name,arrivalFrom};showPayment(name,source,index);return;
+  }
+  placement={name,source,index,owner,arrivalFrom};$('placement-caption').textContent=cn(name)+' · выберите место в городе '+game.players[owner].name;$('placement-caption').hidden=false;renderHand();
  }
- function nextQueuedPlacement(){if(placement||payment||game.pendingGameInputs.length||!placementQueue.length)return;const e=placementQueue.shift();if(!cityLayout[e.key]){nextQueuedPlacement();return;}placement={name:e.cardName,owner:e.owner,existingKey:e.key};$('placement-caption').textContent=cn(e.cardName)+' · выберите место в городе '+game.players[e.owner].name;$('placement-caption').hidden=false;renderHand();}
+ function nextQueuedPlacement(){if(placement||payment||game.pendingGameInputs.length||!placementQueue.length)return;const e=placementQueue.shift();if(!cityLayout[e.key]){nextQueuedPlacement();return;}placement={name:e.cardName,owner:e.owner,existingKey:e.key};focusCamera(e.owner===playerIndex()?'own':'opponent',true);$('placement-caption').textContent=cn(e.cardName)+' · выберите место в городе '+game.players[e.owner].name;$('placement-caption').hidden=false;renderHand();}
  function isPlayable(name,source,index){
   if(!humanTurn()||game.pendingGameInputs.length)return false;
   const key=source+':'+index+':'+name;
@@ -370,7 +385,10 @@ export function mountGame(root){
   if(/^[1-6]$/.test(e.key)&&!world.inputPaused){const u=drawing.units.filter(u=>u.owner===playerIndex()&&!u.locationId)[Number(e.key)-1];if(u){selected=u.id;render();}}
  }
 
+ function placementPointerDown(e){if(e.button!==2||!placement)return;e.preventDefault();e.stopPropagation();placementContextCancel=true;cancelAction();}
+ function placementContextMenu(e){if(!placement&&!placementContextCancel)return;e.preventDefault();e.stopPropagation();if(placement)cancelAction();placementContextCancel=false;}
+ root.addEventListener('pointerdown',placementPointerDown,true);root.addEventListener('contextmenu',placementContextMenu,true);
  root.addEventListener('click',click);root.addEventListener('input',change);window.addEventListener('keydown',key);
  project();selectAvailable();save();render();focusCamera('production',true);for(const name of game.meadowCards)requestCard(name);
- return()=>{disposed=true;stopBot();handInteraction.dispose();clearTimeout(toastTimer);clearTimeout(hoverTimer);root.removeEventListener('click',click);root.removeEventListener('input',change);window.removeEventListener('keydown',key);world.dispose();};
+ return()=>{disposed=true;stopBot();handInteraction.dispose();clearTimeout(toastTimer);clearTimeout(hoverTimer);root.removeEventListener('pointerdown',placementPointerDown,true);root.removeEventListener('contextmenu',placementContextMenu,true);root.removeEventListener('click',click);root.removeEventListener('input',change);window.removeEventListener('keydown',key);world.dispose();};
 }

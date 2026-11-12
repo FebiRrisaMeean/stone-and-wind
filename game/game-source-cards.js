@@ -1,4 +1,4 @@
-import {loadSourceCard,loadCardFonts,preloadCardAssets,sourceCardComponent} from './source-card-components.js';
+import {loadSourceCard,loadCardFonts,preloadCardAssets,sourceCardComponent} from './source-card-components.js?v=21';
 import {SOURCE_CARD_IDS} from './source-card-map.js';
 
 const ready=new Map(),pending=new Map();
@@ -6,8 +6,8 @@ let stylesheet;
 function fontsReady(){
  if(!stylesheet)stylesheet=new Promise((resolve,reject)=>{
   const link=document.createElement('link');link.rel='stylesheet';link.href=new URL('./assets/cards64/fonts/fonts.css',import.meta.url).href;
-  link.onload=resolve;link.onerror=()=>reject(new Error('Не удалось загрузить шрифты карт'));document.head.appendChild(link);
- });
+  link.onload=resolve;link.onerror=()=>{link.remove();reject(new Error('Не удалось загрузить шрифты карт'));};document.head.appendChild(link);
+ }).catch(error=>{stylesheet=undefined;throw error;});
  return stylesheet;
 }
 export function prepareGameCard(name){

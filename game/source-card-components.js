@@ -21,7 +21,7 @@ export async function loadDeck() {
  return response.json()
 }
 export async function loadSourceCard(id) {
- if(!cache.has(id))cache.set(id,fetch(new URL(`cards/${id}.json`,base)).then(r=>{if(!r.ok)throw new Error(`Карта ${id}: ${r.status}`);return r.json()}))
+ if(!cache.has(id))cache.set(id,fetch(new URL(`cards/${id}.json`,base)).then(r=>{if(!r.ok)throw new Error(`Карта ${id}: ${r.status}`);return r.json()}).catch(error=>{cache.delete(id);throw error}))
  return cache.get(id)
 }
 export const sourceReference = id => new URL(`references/${id}.webp`,base).href
@@ -58,7 +58,7 @@ const imageCache=new Map()
 export async function preloadCardAssets(card,{reference=true}={}){
  const paths=[...new Set([...card.defs.matchAll(/(?:xlink:)?href="(images\/[^"]+)"/g)].map(m=>new URL(m[1],base).href)),...(reference?[sourceReference(card.id)]:[])]
  await Promise.all(paths.map(src=>{
-  if(!imageCache.has(src))imageCache.set(src,new Promise((resolve,reject)=>{const image=new Image();image.onload=()=>image.decode().then(resolve,reject);image.onerror=()=>reject(new Error('Не загрузился графический слой'));image.src=src}))
+  if(!imageCache.has(src))imageCache.set(src,new Promise((resolve,reject)=>{const image=new Image();image.onload=()=>image.decode().then(resolve,reject);image.onerror=()=>reject(new Error('Не загрузился графический слой: '+new URL(src).pathname.split('/').pop()));image.src=src}).catch(error=>{imageCache.delete(src);throw error}))
   return imageCache.get(src)
  }))
  return paths.length

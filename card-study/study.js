@@ -1,4 +1,4 @@
-import {componentGroups,loadDeck,loadSourceCard,sourceReference,sourceCardComponent,loadCardFonts,preloadCardAssets} from '../game/source-card-components.js?v=deck-1'
+import {componentGroups,loadDeck,loadSourceCard,sourceReference,sourceCardComponent,loadCardFonts,preloadCardAssets} from '../game/source-card-components.js?v=21'
 const $=id=>document.getElementById(id)
 let deck,selected,width=344,part='title',filter='all',card,revision=0
 const hidden=new Set()
