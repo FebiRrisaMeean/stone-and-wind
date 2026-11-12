@@ -1,0 +1,5246 @@
+{
+  "source": "Everdell-64-cards.pdf",
+  "sha256": "8aaf56cbba5696b2ab9f0f248ca38261e9d030acda32699d5fdb3981b3ef86cb",
+  "pages": 4,
+  "assets": {
+    "4d460784803082ae621c.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 274,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "635250ccf570047b3063.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 248,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "bdabcb2b2a090ae92bf4.webp": {
+      "size": [
+        130,
+        150
+      ],
+      "bytes": 316,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "3b07093a72451d0e8497.webp": {
+      "size": [
+        1085,
+        1478
+      ],
+      "bytes": 3724,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "9828e1c3c69dc31e4bed.webp": {
+      "size": [
+        71,
+        71
+      ],
+      "bytes": 178,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "4b72ebe9f0bb08992b68.webp": {
+      "size": [
+        82,
+        82
+      ],
+      "bytes": 184,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "9ac3e68de849b74b8dbb.webp": {
+      "size": [
+        67,
+        69
+      ],
+      "bytes": 164,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "6b41d2a314c7997f98bd.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 268,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "41519e83005ab7586d24.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 254,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "578e84420507fe0b7f19.webp": {
+      "size": [
+        130,
+        150
+      ],
+      "bytes": 316,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "22e8fa3dd8805367dbf9.webp": {
+      "size": [
+        752,
+        1024
+      ],
+      "bytes": 2682,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "73bbef1717abaf05369b.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 520,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "1c4b6a5e2e1acc2830cc.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 584,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "361998e287a59be5605b.webp": {
+      "size": [
+        77,
+        64
+      ],
+      "bytes": 172,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "97b12e9c55ef7de56100.webp": {
+      "size": [
+        300,
+        155
+      ],
+      "bytes": 308,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "634bc4ff9e67596f7e7e.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 246,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "e7bf88a01cf3a00b7e45.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 238,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "472c6263e9cb86b5280d.webp": {
+      "size": [
+        130,
+        150
+      ],
+      "bytes": 316,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "62f19186c67fe6fea987.webp": {
+      "size": [
+        57,
+        69
+      ],
+      "bytes": 144,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "9f5e1415e3f19e3c1936.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 266,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "1d8ee9a603d27b197044.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 248,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "d663fb58be12ea243796.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 516,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "1a17db6be2be7aaf6fed.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 582,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "e00b8fa4ef4a840b6d38.webp": {
+      "size": [
+        250,
+        167
+      ],
+      "bytes": 380,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "485e80c170a42d3d3811.webp": {
+      "size": [
+        252,
+        176
+      ],
+      "bytes": 412,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "5f94d1b39845d17d3260.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 258,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "bda8ef96adbeec52d6f3.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 238,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "c967e8cce86ab4591fe1.webp": {
+      "size": [
+        130,
+        150
+      ],
+      "bytes": 316,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "f619d4d3ed8b9cb4af06.webp": {
+      "size": [
+        78,
+        77
+      ],
+      "bytes": 198,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "71e94a1f9000c3aefb2d.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 264,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "84b1f0bc9105bc80cba4.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 254,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "29fd5f3b5bcf75ce15b8.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 514,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "a00987e8cd4e5fa4f19c.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 580,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "079ce179ebf5600a5f8e.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 262,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "d91fcae393436577cabe.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 246,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "1f618bcebb545c13f417.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 258,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "5e5a52f0acb612764ea8.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 250,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "c6e6cdab9eba9c6f27bb.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 514,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "03939b3dbbaceefc2ace.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 580,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "0f5c945f9fdf3abf9d15.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 250,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "ce0e00e39a3ad9fb3d23.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 242,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "e19c2febe2fd4cfd6726.webp": {
+      "size": [
+        63,
+        62
+      ],
+      "bytes": 142,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "4e78e6a808a4b3cb106a.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 264,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "bbb5aa82c0c7d304893c.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 256,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "c695828f0404a4f3fc85.webp": {
+      "size": [
+        130,
+        150
+      ],
+      "bytes": 322,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "28152cc50e29b4f588eb.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 514,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "6e064107c88654eea49a.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 580,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "8a0b8353e3629a0df272.webp": {
+      "size": [
+        210,
+        89
+      ],
+      "bytes": 250,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "7066ef3b8ee2b51b94fe.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 258,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "2e909bc8f531b3594402.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 242,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "4f590de796332003910d.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 266,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "a1131d6c28962369861d.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 248,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "293817d3805d869cdc1e.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 262,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "db37155e45456e6c7f9a.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 248,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "b52b46da565a547b556b.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 252,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "53c8608b77289b99e4c9.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 236,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "b0c7d1c17065537c50bc.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 262,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "756654ca32e724090fda.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 248,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "8e6d65c6953431cd961b.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 264,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "544e6de021377e15916a.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 252,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "d52f2723f5b7a712b204.webp": {
+      "size": [
+        228,
+        316
+      ],
+      "bytes": 91408,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "23f877bc514bf53b383e.webp": {
+      "size": [
+        1023,
+        1024
+      ],
+      "bytes": 161032,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        1023,
+        1024
+      ],
+      "displaySize": [
+        1023,
+        1024
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "b6bbcb83281ac5537363.webp": {
+      "size": [
+        130,
+        150
+      ],
+      "bytes": 16878,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "8ce0d81919226a9bde63.webp": {
+      "size": [
+        1085,
+        1478
+      ],
+      "bytes": 383368,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "9ca93aa33027a6cb9d20.webp": {
+      "size": [
+        71,
+        71
+      ],
+      "bytes": 5226,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "5154b47c3fa759c2159f.webp": {
+      "size": [
+        82,
+        82
+      ],
+      "bytes": 4232,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "2052ac81b11f1664053f.webp": {
+      "size": [
+        67,
+        69
+      ],
+      "bytes": 2498,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "361f68386e281397bd0a.webp": {
+      "size": [
+        705,
+        960
+      ],
+      "bytes": 127314,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        705,
+        960
+      ],
+      "displaySize": [
+        705,
+        960
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "f654eb92bedcb7c577e6.webp": {
+      "size": [
+        130,
+        150
+      ],
+      "bytes": 17938,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "36adaff75936d8827c3d.webp": {
+      "size": [
+        752,
+        1024
+      ],
+      "bytes": 187646,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "38ec1bfab9591d5204d5.webp": {
+      "size": [
+        600,
+        600
+      ],
+      "bytes": 295866,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "6c0399aa01970a18f877.webp": {
+      "size": [
+        77,
+        64
+      ],
+      "bytes": 6814,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "0d624e02cffd0525af45.webp": {
+      "size": [
+        300,
+        155
+      ],
+      "bytes": 19802,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "53347687df983a72210d.webp": {
+      "size": [
+        228,
+        316
+      ],
+      "bytes": 92784,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "fdcdd043d1d227d222b8.webp": {
+      "size": [
+        960,
+        960
+      ],
+      "bytes": 126066,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        960,
+        960
+      ],
+      "displaySize": [
+        960,
+        960
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "e114044ec770b25cd387.webp": {
+      "size": [
+        130,
+        150
+      ],
+      "bytes": 16126,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "badd80f0f6c6d0c85112.webp": {
+      "size": [
+        57,
+        69
+      ],
+      "bytes": 3258,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "658d21a25c23c8cf0240.webp": {
+      "size": [
+        1424,
+        2074
+      ],
+      "bytes": 310274,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        1424,
+        2074
+      ],
+      "displaySize": [
+        989,
+        1440
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "b362ca2384c86ac7d72a.webp": {
+      "size": [
+        500,
+        500
+      ],
+      "bytes": 234778,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "76d8eb630f0367c36821.webp": {
+      "size": [
+        250,
+        167
+      ],
+      "bytes": 25748,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "9b0b59ba69f38bfa90bf.webp": {
+      "size": [
+        252,
+        176
+      ],
+      "bytes": 23732,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "b1804595b8322d7aa7f6.webp": {
+      "size": [
+        228,
+        316
+      ],
+      "bytes": 91476,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "6ec783133bb3cdacc073.webp": {
+      "size": [
+        523,
+        629
+      ],
+      "bytes": 87386,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        523,
+        629
+      ],
+      "displaySize": [
+        523,
+        629
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "0a1784c46137cf5fe614.webp": {
+      "size": [
+        130,
+        150
+      ],
+      "bytes": 17322,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "375f4cc7621e6efde250.webp": {
+      "size": [
+        78,
+        77
+      ],
+      "bytes": 2884,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "520ff24798dfd266f03e.webp": {
+      "size": [
+        2445,
+        3330
+      ],
+      "bytes": 233440,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        2445,
+        3330
+      ],
+      "displaySize": [
+        1057,
+        1440
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "59e655ed1f7cd64cd06d.webp": {
+      "size": [
+        120,
+        120
+      ],
+      "bytes": 20000,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "c3f1f99557c8a96b3ced.webp": {
+      "size": [
+        228,
+        316
+      ],
+      "bytes": 88534,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "be9542c88c4d08012b59.webp": {
+      "size": [
+        704,
+        960
+      ],
+      "bytes": 126188,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        704,
+        960
+      ],
+      "displaySize": [
+        704,
+        960
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "105745caf579feed8216.webp": {
+      "size": [
+        228,
+        316
+      ],
+      "bytes": 85580,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "49d6525550b0642c8a1f.webp": {
+      "size": [
+        705,
+        960
+      ],
+      "bytes": 118772,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        705,
+        960
+      ],
+      "displaySize": [
+        705,
+        960
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "3c61a147bf83dc3843c3.webp": {
+      "size": [
+        400,
+        400
+      ],
+      "bytes": 147226,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "a57a58126aaa3aa59931.webp": {
+      "size": [
+        960,
+        1300
+      ],
+      "bytes": 152510,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        960,
+        1300
+      ],
+      "displaySize": [
+        960,
+        1300
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "44470d9d4d54539c6b28.webp": {
+      "size": [
+        63,
+        62
+      ],
+      "bytes": 3374,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "fc0baca42af6c6ec3c0d.webp": {
+      "size": [
+        306,
+        414
+      ],
+      "bytes": 49528,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        306,
+        414
+      ],
+      "displaySize": [
+        306,
+        414
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "a6194da5e0319e94d217.webp": {
+      "size": [
+        1023,
+        1024
+      ],
+      "bytes": 178344,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        1023,
+        1024
+      ],
+      "displaySize": [
+        1023,
+        1024
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "adb4d193a3a548e976eb.webp": {
+      "size": [
+        130,
+        150
+      ],
+      "bytes": 17500,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "e406ac474f76d49f3dc5.webp": {
+      "size": [
+        650,
+        650
+      ],
+      "bytes": 306312,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "38740dd1cd9d04797660.webp": {
+      "size": [
+        210,
+        89
+      ],
+      "bytes": 13936,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "f97214809cae5c7d7431.webp": {
+      "size": [
+        1424,
+        2074
+      ],
+      "bytes": 258744,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        1424,
+        2074
+      ],
+      "displaySize": [
+        989,
+        1440
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "c93d7ff5c3e88e260e07.webp": {
+      "size": [
+        705,
+        960
+      ],
+      "bytes": 118492,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        705,
+        960
+      ],
+      "displaySize": [
+        705,
+        960
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "efd99f1b28f34acd3859.webp": {
+      "size": [
+        1424,
+        2074
+      ],
+      "bytes": 274614,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        1424,
+        2074
+      ],
+      "displaySize": [
+        989,
+        1440
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "2d2ad93f79cc67276bf0.webp": {
+      "size": [
+        1454,
+        2074
+      ],
+      "bytes": 273798,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        1454,
+        2074
+      ],
+      "displaySize": [
+        1010,
+        1440
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "bf6e64b1d209f9c1e9f0.webp": {
+      "size": [
+        1424,
+        2074
+      ],
+      "bytes": 334474,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        1424,
+        2074
+      ],
+      "displaySize": [
+        989,
+        1440
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "6e28b4482b51541861be.webp": {
+      "size": [
+        228,
+        316
+      ],
+      "bytes": 87606,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "1f9beb6680f978a479e0.webp": {
+      "size": [
+        704,
+        960
+      ],
+      "bytes": 109882,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        704,
+        960
+      ],
+      "displaySize": [
+        704,
+        960
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "fa6382d819141426873f.webp": {
+      "size": [
+        228,
+        316
+      ],
+      "bytes": 88634,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "e47747c0cbaa9aa02bbe.webp": {
+      "size": [
+        1080,
+        1082
+      ],
+      "bytes": 169220,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        1080,
+        1082
+      ],
+      "displaySize": [
+        1080,
+        1082
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "3f794f9b8eea7bff5461.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 266,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "dd2da4ef9d14a181e559.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 254,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "fe9f756262e1237ca8d0.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 518,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "4da92e0d6b0c7421e0e3.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 582,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "56aedfaea4e1e645138f.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 270,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "2ed5109f139bcf2f6ee1.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 254,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "75e1009dea4c36b4f414.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 256,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "cb1e2963655987b054a6.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 242,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "1ee0f2c8dab6df757951.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 270,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "233261ca3498b2f0cba7.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 250,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "2f578c7f25998ce80871.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 518,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "164a5c59bdc3c376f885.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 582,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "0c75b969ac2236bda7e1.webp": {
+      "size": [
+        114,
+        141
+      ],
+      "bytes": 242,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "a185e264c7ed1ea913f9.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 266,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "2170e0c48a333bf1ec5b.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 256,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "abde030a395367bbac7c.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 268,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "1a998b4687c7e8b97cd4.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 250,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "02f081d74bf89d18b122.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 264,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "af59f3df6cce7b2d2162.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 252,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "12e5215028d1194e4989.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 248,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "e1fcf8aa85bdcbd00547.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 238,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "42d5e08cc8c518e50374.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 258,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "3a4d7c90b30b506a837f.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 242,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "d961b9d61d07d7145b6f.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 254,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "3353dba04db8c079cdb4.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 240,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "674278e4237709ea25db.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 266,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "1d27dfda14a91aa77613.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 250,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "d7886649907ad69ae698.webp": {
+      "size": [
+        616,
+        109
+      ],
+      "bytes": 670,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "e6488d928896d5a0eef6.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 268,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "80c1b65f7fabfed77154.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 256,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "2362e121b3619be94c19.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 262,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "0b304174b7e586ed9f1e.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 254,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "429f3e27d0fa3f283dbe.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 520,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "23a12b5e1dd448405613.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 586,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "595475ef57040466414e.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 254,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "8c3248d71bc4773c4209.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 240,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "49fbd3d764afb7d4756e.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 264,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "156e04d1af0fdf6eeac5.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 250,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "0229e8458ae4dce0fd67.webp": {
+      "size": [
+        750,
+        1040
+      ],
+      "bytes": 187438,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        750,
+        1040
+      ],
+      "displaySize": [
+        750,
+        1040
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "dab1966035dbef990afb.webp": {
+      "size": [
+        300,
+        300
+      ],
+      "bytes": 83334,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "865b27bd9d5179ff456a.webp": {
+      "size": [
+        228,
+        316
+      ],
+      "bytes": 86032,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "8cca72e11b3470e3d646.webp": {
+      "size": [
+        1500,
+        1700
+      ],
+      "bytes": 513406,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        1500,
+        1700
+      ],
+      "displaySize": [
+        1271,
+        1440
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "2e349abf9cd47253e417.webp": {
+      "size": [
+        752,
+        1024
+      ],
+      "bytes": 187498,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        752,
+        1024
+      ],
+      "displaySize": [
+        752,
+        1024
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "e4d6d3947339e7cfe480.webp": {
+      "size": [
+        752,
+        1024
+      ],
+      "bytes": 243696,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        752,
+        1024
+      ],
+      "displaySize": [
+        752,
+        1024
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "939225e1b02968b02fae.webp": {
+      "size": [
+        563,
+        623
+      ],
+      "bytes": 92022,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        563,
+        623
+      ],
+      "displaySize": [
+        563,
+        623
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "cc47a5befb1bbe0a43f7.webp": {
+      "size": [
+        460,
+        461
+      ],
+      "bytes": 212020,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "a67d95779fbfa74d1ae3.webp": {
+      "size": [
+        114,
+        141
+      ],
+      "bytes": 9584,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "7f44fad1517ebd3ca319.webp": {
+      "size": [
+        502,
+        699
+      ],
+      "bytes": 96934,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        502,
+        699
+      ],
+      "displaySize": [
+        502,
+        699
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "b2b7433e8ca4948f1d72.webp": {
+      "size": [
+        502,
+        699
+      ],
+      "bytes": 112464,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        502,
+        699
+      ],
+      "displaySize": [
+        502,
+        699
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "04c9a694d79bee1a447c.webp": {
+      "size": [
+        228,
+        316
+      ],
+      "bytes": 94444,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "6762d2c6a1bdfeb95dda.webp": {
+      "size": [
+        705,
+        960
+      ],
+      "bytes": 166070,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        705,
+        960
+      ],
+      "displaySize": [
+        705,
+        960
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "fe33857d81f984e420a9.webp": {
+      "size": [
+        705,
+        960
+      ],
+      "bytes": 180242,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        705,
+        960
+      ],
+      "displaySize": [
+        705,
+        960
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "748fb92d2fa35a2766c4.webp": {
+      "size": [
+        400,
+        400
+      ],
+      "bytes": 178672,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "d296eb21788a6723916c.webp": {
+      "size": [
+        706,
+        960
+      ],
+      "bytes": 111972,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        706,
+        960
+      ],
+      "displaySize": [
+        706,
+        960
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "286b225ad9189fcd74d0.webp": {
+      "size": [
+        235,
+        330
+      ],
+      "bytes": 59134,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "0a2083f19e7ed7043ccd.webp": {
+      "size": [
+        1080,
+        1333
+      ],
+      "bytes": 142020,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        1080,
+        1333
+      ],
+      "displaySize": [
+        1080,
+        1333
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "f0988af7cfe83eb57cd1.webp": {
+      "size": [
+        500,
+        500
+      ],
+      "bytes": 232938,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "3ea54cf78f7559884644.webp": {
+      "size": [
+        1080,
+        1469
+      ],
+      "bytes": 358750,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        1080,
+        1469
+      ],
+      "displaySize": [
+        1059,
+        1440
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "055717a3161f196bc93f.webp": {
+      "size": [
+        705,
+        960
+      ],
+      "bytes": 162204,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        705,
+        960
+      ],
+      "displaySize": [
+        705,
+        960
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "1502cffc3a4b101bd13c.webp": {
+      "size": [
+        1080,
+        1469
+      ],
+      "bytes": 387856,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        1080,
+        1469
+      ],
+      "displaySize": [
+        1059,
+        1440
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "b4b5a41ae408a55535f7.webp": {
+      "size": [
+        616,
+        109
+      ],
+      "bytes": 47486,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "5ee85f1b8560702e786b.webp": {
+      "size": [
+        705,
+        960
+      ],
+      "bytes": 119688,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        705,
+        960
+      ],
+      "displaySize": [
+        705,
+        960
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "4da61b83bcce7c47fdb3.webp": {
+      "size": [
+        247,
+        336
+      ],
+      "bytes": 84070,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "ee90c5973a06997394fd.webp": {
+      "size": [
+        1500,
+        2200
+      ],
+      "bytes": 322466,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        1500,
+        2200
+      ],
+      "displaySize": [
+        982,
+        1440
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "40ec7b881dca2c8f5fa8.webp": {
+      "size": [
+        400,
+        400
+      ],
+      "bytes": 149566,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "1b55e031cf88c3db6482.webp": {
+      "size": [
+        1080,
+        1469
+      ],
+      "bytes": 333818,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        1080,
+        1469
+      ],
+      "displaySize": [
+        1059,
+        1440
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "2e239036ed0897016ca3.webp": {
+      "size": [
+        705,
+        960
+      ],
+      "bytes": 144468,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        705,
+        960
+      ],
+      "displaySize": [
+        705,
+        960
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "cea2c0055765fcdb0154.webp": {
+      "size": [
+        1080,
+        1469
+      ],
+      "bytes": 390238,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        1080,
+        1469
+      ],
+      "displaySize": [
+        1059,
+        1440
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "b3f8110cdac007c92d99.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 258,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "955c59d7075d48265dac.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 246,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "a1e1f501f376a8c742a6.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 270,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "3ffdb428961eeaa1f653.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 256,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "72e399fdca1b04916f3a.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 256,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "234e20999995f7e5b67a.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 240,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "a6a9de0d7ac3205f1ffd.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 264,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "afd43312dbf5466740ed.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 252,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "6c478632bdd18e023592.webp": {
+      "size": [
+        200,
+        100
+      ],
+      "bytes": 260,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "ba46ccae1f9d0277ab2e.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 266,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "59528e1ab5c4ec66d543.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 254,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "1edd6823895d22f1b9ed.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 270,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "ba20d550d468d4d834a9.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 246,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "311cb248d6d01908a254.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 262,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "928b15b75f7ea7682f44.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 246,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "2253d701e60c3b4d56a9.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 254,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "99c843b602fb1a283c0e.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 244,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "82899936e8ef7264edb8.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 262,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "ceda98ca79568410d9e5.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 246,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "6d26f07bcc7b58750f0a.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 270,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "67ad27fb8061f021b6d2.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 258,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "abc768c0ed8bbb8cbaed.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 268,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "bcb34eda98046bda6c22.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 254,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "f9b95c0bb9c4fc7f4543.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 258,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "ec8c7ca5a3f0073b9e3b.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 242,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "41527df3c1440b312a8d.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 514,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "aa1e469504cf777a8b32.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 580,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "14a59feae1d272c8161c.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 274,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "9b1bbc7ee67b2580659e.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 258,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "3cc18491f37e54aca0dc.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 252,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "32928f4332d03c4830d4.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 240,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "6e2798aa9b2bc2c00534.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 266,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "0a6a858d0b9efa74823d.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 248,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "5ea6711902f0ad7d2f64.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 248,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "8d2483c695f87497b24f.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 244,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "12beb6045dd055d736e3.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 516,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "2eb4c4a8378b5a038af2.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 580,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "fd439a29a5f40a09ee47.webp": {
+      "size": [
+        238,
+        330
+      ],
+      "bytes": 80008,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "ec7f7b764cabe058fe4a.webp": {
+      "size": [
+        2401,
+        2893
+      ],
+      "bytes": 171066,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        2401,
+        2893
+      ],
+      "displaySize": [
+        1195,
+        1440
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "5b9f7061717388114e7e.webp": {
+      "size": [
+        710,
+        960
+      ],
+      "bytes": 165580,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        710,
+        960
+      ],
+      "displaySize": [
+        710,
+        960
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "0bb32139c1c8fe75741a.webp": {
+      "size": [
+        121,
+        121
+      ],
+      "bytes": 18028,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "aa130763aeb8e004a8f6.webp": {
+      "size": [
+        1080,
+        1469
+      ],
+      "bytes": 302328,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        1080,
+        1469
+      ],
+      "displaySize": [
+        1059,
+        1440
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "10381aac215b5785378f.webp": {
+      "size": [
+        752,
+        1024
+      ],
+      "bytes": 119888,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        752,
+        1024
+      ],
+      "displaySize": [
+        752,
+        1024
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "913c09886ffef7df87ab.webp": {
+      "size": [
+        1080,
+        1469
+      ],
+      "bytes": 369254,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        1080,
+        1469
+      ],
+      "displaySize": [
+        1059,
+        1440
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "b28521fba7f681925870.webp": {
+      "size": [
+        564,
+        564
+      ],
+      "bytes": 84118,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        564,
+        564
+      ],
+      "displaySize": [
+        564,
+        564
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "c563e01d09bcb9e2f4e8.webp": {
+      "size": [
+        200,
+        100
+      ],
+      "bytes": 12202,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "94115d586b6f2f8e7661.webp": {
+      "size": [
+        705,
+        960
+      ],
+      "bytes": 141730,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        705,
+        960
+      ],
+      "displaySize": [
+        705,
+        960
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "a1cd84aa7002336fb1d8.webp": {
+      "size": [
+        228,
+        316
+      ],
+      "bytes": 90264,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "dfab8fbdd82ca62ce2da.webp": {
+      "size": [
+        960,
+        960
+      ],
+      "bytes": 183216,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        960,
+        960
+      ],
+      "displaySize": [
+        960,
+        960
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "43fa23a9108a3bef19fd.webp": {
+      "size": [
+        228,
+        316
+      ],
+      "bytes": 84854,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "522b516363095e326c45.webp": {
+      "size": [
+        640,
+        757
+      ],
+      "bytes": 85842,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        640,
+        757
+      ],
+      "displaySize": [
+        640,
+        757
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "47f64133e5f376739718.webp": {
+      "size": [
+        231,
+        322
+      ],
+      "bytes": 75758,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "ddce761cb30141a1a8bc.webp": {
+      "size": [
+        1500,
+        2100
+      ],
+      "bytes": 292044,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        1500,
+        2100
+      ],
+      "displaySize": [
+        1029,
+        1440
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "c9043a4c49f8de4b6267.webp": {
+      "size": [
+        400,
+        400
+      ],
+      "bytes": 131410,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "16c9975d2714a2d6a307.webp": {
+      "size": [
+        1454,
+        2074
+      ],
+      "bytes": 207210,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        1454,
+        2074
+      ],
+      "displaySize": [
+        1010,
+        1440
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "2752fa2a7bf221ac7074.webp": {
+      "size": [
+        1424,
+        2074
+      ],
+      "bytes": 280552,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        1424,
+        2074
+      ],
+      "displaySize": [
+        989,
+        1440
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "73122c49125a4a62a7ae.webp": {
+      "size": [
+        564,
+        629
+      ],
+      "bytes": 86366,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        564,
+        629
+      ],
+      "displaySize": [
+        564,
+        629
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "4e703d03ad216d61f9bb.webp": {
+      "size": [
+        258,
+        358
+      ],
+      "bytes": 83642,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "1ce9bf6f88d1ac8f1e92.webp": {
+      "size": [
+        1081,
+        1470
+      ],
+      "bytes": 201124,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        1081,
+        1470
+      ],
+      "displaySize": [
+        1059,
+        1440
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "96ceac1b9da2f156a605.webp": {
+      "size": [
+        130,
+        130
+      ],
+      "bytes": 18482,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "51c75f36e366898af186.webp": {
+      "size": [
+        228,
+        316
+      ],
+      "bytes": 84058,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "46f39c12f572dabd5136.webp": {
+      "size": [
+        232,
+        326
+      ],
+      "bytes": 80412,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "9046081b6f620c5e7fa2.webp": {
+      "size": [
+        1500,
+        2100
+      ],
+      "bytes": 319566,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        1500,
+        2100
+      ],
+      "displaySize": [
+        1029,
+        1440
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "17e10033b89e9880353e.webp": {
+      "size": [
+        130,
+        130
+      ],
+      "bytes": 20294,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "edb22ac8a73adf9f5d2b.webp": {
+      "size": [
+        235,
+        328
+      ],
+      "bytes": 60206,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "93f62c53c79f0565d8b4.webp": {
+      "size": [
+        1500,
+        2200
+      ],
+      "bytes": 292260,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        1500,
+        2200
+      ],
+      "displaySize": [
+        982,
+        1440
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "80bcec2b9d233e84adb1.webp": {
+      "size": [
+        231,
+        331
+      ],
+      "bytes": 59680,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "321377bf0804f371fac8.webp": {
+      "size": [
+        1500,
+        2100
+      ],
+      "bytes": 335094,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        1500,
+        2100
+      ],
+      "displaySize": [
+        1029,
+        1440
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "260fec941ba77a02dfb4.webp": {
+      "size": [
+        100,
+        101
+      ],
+      "bytes": 12486,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "6bf60a74b7dae54bc41f.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 272,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "eec20ef534c44435b858.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 256,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "dfb7ce2601de1261b24b.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 268,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "11e1955d31c7e708beb4.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 258,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "d5f453a3b546011ca5d4.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 262,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "6d9dfe8217735fc8b2b3.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 246,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "223af8ba993337075419.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 264,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "261adf1ce507a3d1e521.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 242,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "261386dc0c63e3650141.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 520,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "854db8583554819c2119.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 582,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "328c4812853cf54ee1c5.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 258,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "b1c347308629c1cffe7e.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 240,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "a012baaaacab61bc4de5.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 516,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "6919153c3f8a93c433fc.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 584,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "f54a35bd958a0a540c88.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 266,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "6dac7eca837ecc67003a.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 248,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "6629728f343b8a0d2d0d.webp": {
+      "size": [
+        1085,
+        1478
+      ],
+      "bytes": 3534,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "0b6639ba0fe49a5d4175.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 254,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "0868191c65d691949e52.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 246,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "242088c3783b57344052.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 268,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "9cfe070cf44de2c1d39f.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 252,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "39c06cab64865421d1da.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 260,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "a501741b62b7ca5d252e.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 244,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "ab1c520d40ff840572a8.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 258,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "8c9ec941217eb4819904.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 240,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "18d5b3a61c7cf9a40f16.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 244,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "3198c75303b95db7a465.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 242,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "bb8a1fb1a9d0b1fd2316.webp": {
+      "size": [
+        752,
+        1022
+      ],
+      "bytes": 2628,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "372040633ac68ebf835a.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 272,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "9e38d77aca9de06f70de.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 252,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "ed5129a2fdcdb4a7a9a7.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 250,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "54778263acba4338c537.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 238,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "b2eb35679ef04d57a6ac.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 260,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "2e852ab20cf4c267ef68.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 246,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "1ccedb41474f1bf8b903.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 518,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "73c7bd82c07192f67da3.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 580,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "cdd70b3e7798ed210cae.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 264,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "14c585a4f78bcd29f500.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 246,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "eeb4fb920d3f0f3d9225.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 516,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "dedb35969cb1051089e9.webp": {
+      "size": [
+        766,
+        1044
+      ],
+      "bytes": 582,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "60468b082fc59b3e5bf3.webp": {
+      "size": [
+        1140,
+        1529
+      ],
+      "bytes": 254704,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        1140,
+        1529
+      ],
+      "displaySize": [
+        1074,
+        1440
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "87b698636b5b3ca93f42.webp": {
+      "size": [
+        1092,
+        1491
+      ],
+      "bytes": 214938,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        1092,
+        1491
+      ],
+      "displaySize": [
+        1055,
+        1440
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "de30a5d59a9942afa3a8.webp": {
+      "size": [
+        527,
+        527
+      ],
+      "bytes": 242174,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "37158e0617c973cdd002.webp": {
+      "size": [
+        246,
+        355
+      ],
+      "bytes": 70902,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "0f493d12b5ef1ce1c190.webp": {
+      "size": [
+        1500,
+        2100
+      ],
+      "bytes": 347966,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        1500,
+        2100
+      ],
+      "displaySize": [
+        1029,
+        1440
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "ba9de1b88a404f3da0c8.webp": {
+      "size": [
+        251,
+        360
+      ],
+      "bytes": 62046,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "728cc203599c599aa547.webp": {
+      "size": [
+        1500,
+        2100
+      ],
+      "bytes": 363140,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        1500,
+        2100
+      ],
+      "displaySize": [
+        1029,
+        1440
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "b3174a047cc5eef3427d.webp": {
+      "size": [
+        146,
+        148
+      ],
+      "bytes": 22660,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "2d6e94ff9e5519e1653d.webp": {
+      "size": [
+        705,
+        960
+      ],
+      "bytes": 116210,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        705,
+        960
+      ],
+      "displaySize": [
+        705,
+        960
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "256d32b9992034e5949e.webp": {
+      "size": [
+        249,
+        358
+      ],
+      "bytes": 76464,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "3b7f6d8eb29b9fd65db6.webp": {
+      "size": [
+        501,
+        503
+      ],
+      "bytes": 223226,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "e5bebc041112f0d91dde.webp": {
+      "size": [
+        653,
+        886
+      ],
+      "bytes": 136810,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        653,
+        886
+      ],
+      "displaySize": [
+        653,
+        886
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "6befe25338aab54415ea.webp": {
+      "size": [
+        1085,
+        1478
+      ],
+      "bytes": 526318,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "b7119ea755ce069ba62d.webp": {
+      "size": [
+        243,
+        351
+      ],
+      "bytes": 57324,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "fd73fddc887c677c8d7a.webp": {
+      "size": [
+        1500,
+        2150
+      ],
+      "bytes": 231068,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        1500,
+        2150
+      ],
+      "displaySize": [
+        1005,
+        1440
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "ec8b6dfe0377148cddc4.webp": {
+      "size": [
+        246,
+        357
+      ],
+      "bytes": 94460,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "644d7bad35b958b56553.webp": {
+      "size": [
+        1080,
+        1333
+      ],
+      "bytes": 217840,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        1080,
+        1333
+      ],
+      "displaySize": [
+        1080,
+        1333
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "0e6bd0a18acd85e116a6.webp": {
+      "size": [
+        239,
+        351
+      ],
+      "bytes": 75908,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "c74f202cfb14eb1b3102.webp": {
+      "size": [
+        1500,
+        2150
+      ],
+      "bytes": 230270,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        1500,
+        2150
+      ],
+      "displaySize": [
+        1005,
+        1440
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "8952ee0d2c923a0b5d38.webp": {
+      "size": [
+        246,
+        350
+      ],
+      "bytes": 77368,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "904577cf665e92599a6c.webp": {
+      "size": [
+        1500,
+        2200
+      ],
+      "bytes": 233086,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        1500,
+        2200
+      ],
+      "displaySize": [
+        982,
+        1440
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "498198c6ecd00a8ef04b.webp": {
+      "size": [
+        250,
+        348
+      ],
+      "bytes": 81458,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "1d683a6044fb1cef17a3.webp": {
+      "size": [
+        1500,
+        2100
+      ],
+      "bytes": 263766,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        1500,
+        2100
+      ],
+      "displaySize": [
+        1029,
+        1440
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "8ac135b68e8723f2b067.webp": {
+      "size": [
+        752,
+        1022
+      ],
+      "bytes": 237730,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "c08e7d71023cbba8714a.webp": {
+      "size": [
+        653,
+        886
+      ],
+      "bytes": 138698,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        653,
+        886
+      ],
+      "displaySize": [
+        653,
+        886
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "0bbf43f4632ccb610932.webp": {
+      "size": [
+        263,
+        369
+      ],
+      "bytes": 76426,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "4ca7e9b7490e38f46dac.webp": {
+      "size": [
+        1550,
+        2100
+      ],
+      "bytes": 274298,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        1550,
+        2100
+      ],
+      "displaySize": [
+        1063,
+        1440
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "f204815b78bc351e9ba6.webp": {
+      "size": [
+        264,
+        362
+      ],
+      "bytes": 78810,
+      "source": "embedded PDF image",
+      "lossless": true
+    },
+    "4a69dd36e3d4d535786d.webp": {
+      "size": [
+        1550,
+        2100
+      ],
+      "bytes": 269390,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        1550,
+        2100
+      ],
+      "displaySize": [
+        1063,
+        1440
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    },
+    "417550f808fb022bc3b1.webp": {
+      "size": [
+        774,
+        1024
+      ],
+      "bytes": 165678,
+      "source": "embedded PDF image",
+      "lossless": false,
+      "sourceSize": [
+        774,
+        1024
+      ],
+      "displaySize": [
+        774,
+        1024
+      ],
+      "encoding": "WebP quality 96, illustration only, native source retained in QA"
+    }
+  },
+  "cards": [
+    {
+      "id": "01",
+      "title": "Архитектор",
+      "page": 1,
+      "cell": 1,
+      "kind": "unique",
+      "critter": true,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        9.76,
+        9.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "cost": 2,
+        "rules": 29,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "copies": 1,
+        "footer": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "02",
+      "title": "Кран",
+      "page": 1,
+      "cell": 2,
+      "kind": "unique",
+      "critter": false,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        201.26,
+        9.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "footer": 19,
+        "rules": 53,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "cost": 2,
+        "copies": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "03",
+      "title": "Бард",
+      "page": 1,
+      "cell": 3,
+      "kind": "unique",
+      "critter": true,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        392.76,
+        9.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "cost": 2,
+        "rules": 24,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "copies": 1,
+        "footer": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "04",
+      "title": "Театр",
+      "page": 1,
+      "cell": 4,
+      "kind": "unique",
+      "critter": false,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        584.26,
+        9.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "footer": 3,
+        "rules": 26,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "cost": 6,
+        "copies": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "05",
+      "title": "Квакша",
+      "page": 1,
+      "cell": 5,
+      "kind": "common",
+      "critter": true,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        9.76,
+        270.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "cost": 2,
+        "rules": 18,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "copies": 1,
+        "footer": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "06",
+      "title": "Лесовоз",
+      "page": 1,
+      "cell": 6,
+      "kind": "common",
+      "critter": false,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        201.26,
+        270.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "footer": 4,
+        "rules": 4,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "cost": 4,
+        "copies": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "07",
+      "title": "Дворник",
+      "page": 1,
+      "cell": 7,
+      "kind": "common",
+      "critter": true,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        392.76,
+        270.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "cost": 2,
+        "rules": 15,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "copies": 1,
+        "footer": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "08",
+      "title": "Смолокурня",
+      "page": 1,
+      "cell": 8,
+      "kind": "common",
+      "critter": false,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        584.26,
+        270.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "footer": 4,
+        "rules": 3,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "cost": 4,
+        "copies": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "09",
+      "title": "Ученый",
+      "page": 1,
+      "cell": 9,
+      "kind": "unique",
+      "critter": true,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        9.76,
+        531.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "cost": 2,
+        "rules": 35,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "copies": 1,
+        "footer": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "10",
+      "title": "Университет",
+      "page": 1,
+      "cell": 10,
+      "kind": "unique",
+      "critter": false,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        201.26,
+        531.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "footer": 24,
+        "rules": 49,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "cost": 4,
+        "copies": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "11",
+      "title": "Паяц",
+      "page": 1,
+      "cell": 11,
+      "kind": "unique",
+      "critter": true,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        392.76,
+        531.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "cost": 2,
+        "rules": 19,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "copies": 1,
+        "footer": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "12",
+      "title": "Балаган",
+      "page": 1,
+      "cell": 12,
+      "kind": "unique",
+      "critter": false,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        584.26,
+        531.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "footer": 2,
+        "rules": 4,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "cost": 6,
+        "copies": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "13",
+      "title": "Летописец",
+      "page": 1,
+      "cell": 13,
+      "kind": "unique",
+      "critter": true,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        9.76,
+        792.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "cost": 4,
+        "rules": 19,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "copies": 1,
+        "footer": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "14",
+      "title": "Башенные часы",
+      "page": 1,
+      "cell": 14,
+      "kind": "unique",
+      "critter": false,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        201.26,
+        792.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "footer": 3,
+        "rules": 63,
+        "points": 3,
+        "title": 3,
+        "type": 3,
+        "cost": 4,
+        "copies": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "15",
+      "title": "Хозяин",
+      "page": 1,
+      "cell": 15,
+      "kind": "common",
+      "critter": true,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        392.76,
+        792.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "cost": 2,
+        "rules": 52,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "copies": 1,
+        "footer": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "16",
+      "title": "Хозяйка",
+      "page": 1,
+      "cell": 16,
+      "kind": "common",
+      "critter": true,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        584.26,
+        792.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "cost": 2,
+        "rules": 47,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "copies": 1,
+        "footer": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "17",
+      "title": "Древо жизни",
+      "page": 2,
+      "cell": 1,
+      "kind": "unique",
+      "critter": false,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        9.76,
+        9.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "footer": 4,
+        "rules": 51,
+        "points": 3,
+        "title": 3,
+        "type": 3,
+        "cost": 6,
+        "copies": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "18",
+      "title": "Ферма",
+      "page": 2,
+      "cell": 2,
+      "kind": "common",
+      "critter": false,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        201.26,
+        9.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "footer": 3,
+        "rules": 3,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "cost": 4,
+        "copies": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "19",
+      "title": "Трактирщик",
+      "page": 2,
+      "cell": 3,
+      "kind": "unique",
+      "critter": true,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        392.76,
+        9.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "cost": 2,
+        "rules": 51,
+        "footer": 16,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "copies": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "20",
+      "title": "Трактир",
+      "page": 2,
+      "cell": 4,
+      "kind": "common",
+      "critter": false,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        584.26,
+        9.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 3,
+        "frame": 1,
+        "footer": 8,
+        "rules": 40,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "cost": 4,
+        "copies": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "21",
+      "title": "Судья",
+      "page": 2,
+      "cell": 5,
+      "kind": "unique",
+      "critter": true,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        9.76,
+        270.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "cost": 4,
+        "rules": 32,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "copies": 1,
+        "footer": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "22",
+      "title": "Зал суда",
+      "page": 2,
+      "cell": 6,
+      "kind": "unique",
+      "critter": false,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        201.26,
+        270.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "footer": 3,
+        "rules": 39,
+        "points": 3,
+        "title": 3,
+        "type": 3,
+        "cost": 6,
+        "copies": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "23",
+      "title": "Король",
+      "page": 2,
+      "cell": 7,
+      "kind": "unique",
+      "critter": true,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        392.76,
+        270.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "cost": 2,
+        "rules": 41,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "copies": 1,
+        "footer": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "24",
+      "title": "Замок",
+      "page": 2,
+      "cell": 8,
+      "kind": "unique",
+      "critter": false,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        584.26,
+        270.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "footer": 4,
+        "rules": 26,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "cost": 6,
+        "copies": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "25",
+      "title": "Крот-Шахтер",
+      "page": 2,
+      "cell": 9,
+      "kind": "common",
+      "critter": true,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        9.76,
+        531.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "cost": 2,
+        "rules": 21,
+        "points": 3,
+        "title": 3,
+        "type": 3,
+        "copies": 1,
+        "footer": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "26",
+      "title": "Шахта",
+      "page": 2,
+      "cell": 10,
+      "kind": "common",
+      "critter": false,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        201.26,
+        531.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "footer": 6,
+        "rules": 3,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "cost": 6,
+        "copies": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "27",
+      "title": "Монах",
+      "page": 2,
+      "cell": 11,
+      "kind": "unique",
+      "critter": true,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        392.76,
+        531.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "cost": 2,
+        "rules": 33,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "copies": 1,
+        "footer": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "28",
+      "title": "Монастырь",
+      "page": 2,
+      "cell": 12,
+      "kind": "unique",
+      "critter": false,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        584.26,
+        531.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "footer": 3,
+        "rules": 41,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "cost": 6,
+        "copies": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "29",
+      "title": "Коробейник",
+      "page": 2,
+      "cell": 13,
+      "kind": "common",
+      "critter": true,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        9.76,
+        792.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "cost": 2,
+        "rules": 20,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "copies": 1,
+        "footer": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "30",
+      "title": "Руины",
+      "page": 2,
+      "cell": 14,
+      "kind": "common",
+      "critter": false,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        201.26,
+        792.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "footer": 4,
+        "rules": 36,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "copies": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "31",
+      "title": "Почтальон",
+      "page": 2,
+      "cell": 15,
+      "kind": "common",
+      "critter": true,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        392.76,
+        792.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "cost": 2,
+        "rules": 41,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "copies": 1,
+        "footer": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "32",
+      "title": "Почта",
+      "page": 2,
+      "cell": 16,
+      "kind": "common",
+      "critter": false,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        584.26,
+        792.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 3,
+        "frame": 1,
+        "footer": 7,
+        "rules": 48,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "cost": 4,
+        "copies": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "33",
+      "title": "Королева",
+      "page": 3,
+      "cell": 1,
+      "kind": "unique",
+      "critter": true,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        9.76,
+        9.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "cost": 2,
+        "rules": 35,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "copies": 1,
+        "footer": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "34",
+      "title": "Дворец",
+      "page": 3,
+      "cell": 2,
+      "kind": "unique",
+      "critter": false,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        201.26,
+        9.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "footer": 4,
+        "rules": 36,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "cost": 6,
+        "copies": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "35",
+      "title": "Следопыт",
+      "page": 3,
+      "cell": 3,
+      "kind": "unique",
+      "critter": true,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        392.76,
+        9.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "cost": 2,
+        "rules": 30,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "copies": 1,
+        "footer": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "36",
+      "title": "Подземелье",
+      "page": 3,
+      "cell": 4,
+      "kind": "unique",
+      "critter": false,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        584.26,
+        9.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "footer": 18,
+        "rules": 61,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "cost": 4,
+        "copies": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "37",
+      "title": "Пастырь",
+      "page": 3,
+      "cell": 5,
+      "kind": "unique",
+      "critter": true,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        9.76,
+        270.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "cost": 2,
+        "rules": 28,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "copies": 1,
+        "footer": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "38",
+      "title": "Часовня",
+      "page": 3,
+      "cell": 6,
+      "kind": "unique",
+      "critter": false,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        201.26,
+        270.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "footer": 3,
+        "rules": 29,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "cost": 6,
+        "copies": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "39",
+      "title": "Лавочник",
+      "page": 3,
+      "cell": 7,
+      "kind": "unique",
+      "critter": true,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        392.76,
+        270.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "cost": 2,
+        "rules": 35,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "copies": 1,
+        "footer": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "40",
+      "title": "Лавка",
+      "page": 3,
+      "cell": 8,
+      "kind": "unique",
+      "critter": false,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        584.26,
+        270.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "footer": 4,
+        "rules": 33,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "cost": 4,
+        "copies": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "41",
+      "title": "Учитель",
+      "page": 3,
+      "cell": 9,
+      "kind": "common",
+      "critter": true,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        9.76,
+        531.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "cost": 2,
+        "rules": 20,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "copies": 1,
+        "footer": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "42",
+      "title": "Школа",
+      "page": 3,
+      "cell": 10,
+      "kind": "unique",
+      "critter": false,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        201.26,
+        531.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "footer": 3,
+        "rules": 26,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "cost": 4,
+        "copies": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "43",
+      "title": "Могильщик",
+      "page": 3,
+      "cell": 11,
+      "kind": "unique",
+      "critter": true,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        392.76,
+        531.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "cost": 2,
+        "rules": 39,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "copies": 1,
+        "footer": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "44",
+      "title": "Кладбище",
+      "page": 3,
+      "cell": 12,
+      "kind": "unique",
+      "critter": false,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        584.26,
+        531.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "footer": 4,
+        "rules": 57,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "cost": 2,
+        "copies": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "45",
+      "title": "Странник",
+      "page": 3,
+      "cell": 13,
+      "kind": "common",
+      "critter": true,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        9.76,
+        792.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "cost": 2,
+        "rules": 16,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "copies": 1,
+        "footer": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "46",
+      "title": "Вышка",
+      "page": 3,
+      "cell": 14,
+      "kind": "unique",
+      "critter": false,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        201.26,
+        792.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "footer": 4,
+        "rules": 25,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "cost": 6,
+        "copies": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "47",
+      "title": "Резчик",
+      "page": 3,
+      "cell": 15,
+      "kind": "common",
+      "critter": true,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        392.76,
+        792.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "cost": 2,
+        "rules": 22,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "copies": 1,
+        "footer": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "48",
+      "title": "Склад",
+      "page": 3,
+      "cell": 16,
+      "kind": "common",
+      "critter": false,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        584.26,
+        792.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "footer": 19,
+        "rules": 42,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "cost": 6,
+        "copies": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "49",
+      "title": "Чемпион",
+      "page": 4,
+      "cell": 1,
+      "kind": "common",
+      "critter": true,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        9.76,
+        9.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "cost": 2,
+        "rules": 35,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "copies": 1,
+        "footer": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "50",
+      "title": "Стадион",
+      "page": 4,
+      "cell": 2,
+      "kind": "common",
+      "critter": false,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        201.26,
+        9.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 3,
+        "frame": 1,
+        "footer": 8,
+        "rules": 42,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "cost": 6,
+        "copies": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "51",
+      "title": "Жонглёр",
+      "page": 4,
+      "cell": 3,
+      "kind": "common",
+      "critter": true,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        392.76,
+        9.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "cost": 2,
+        "rules": 53,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "copies": 1,
+        "footer": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "52",
+      "title": "Карнавал",
+      "page": 4,
+      "cell": 4,
+      "kind": "unique",
+      "critter": false,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        584.26,
+        9.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "footer": 4,
+        "rules": 36,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "cost": 4,
+        "copies": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "53",
+      "title": "Глашатай",
+      "page": 4,
+      "cell": 5,
+      "kind": "unique",
+      "critter": true,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        9.76,
+        270.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "cost": 2,
+        "rules": 19,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "copies": 1,
+        "footer": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "54",
+      "title": "Пресса",
+      "page": 4,
+      "cell": 6,
+      "kind": "unique",
+      "critter": false,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        201.26,
+        270.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "footer": 4,
+        "rules": 43,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "cost": 4,
+        "copies": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "55",
+      "title": "Сириус Ураган",
+      "page": 4,
+      "cell": 7,
+      "kind": "legendary",
+      "critter": true,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        392.76,
+        270.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 1,
+        "frame": 1,
+        "cost": 2,
+        "rules": 29,
+        "points": 3,
+        "title": 3,
+        "type": 3,
+        "footer": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "56",
+      "title": "Всевидящий",
+      "page": 4,
+      "cell": 8,
+      "kind": "legendary",
+      "critter": true,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        584.26,
+        270.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 1,
+        "frame": 1,
+        "cost": 2,
+        "rules": 26,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "footer": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "57",
+      "title": "Принцесса Эмилия",
+      "page": 4,
+      "cell": 9,
+      "kind": "legendary",
+      "critter": true,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        9.76,
+        531.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 1,
+        "frame": 1,
+        "cost": 2,
+        "rules": 15,
+        "points": 3,
+        "title": 3,
+        "type": 3,
+        "footer": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "58",
+      "title": "Поэт",
+      "page": 4,
+      "cell": 10,
+      "kind": "legendary",
+      "critter": true,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        201.26,
+        531.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 1,
+        "frame": 1,
+        "cost": 2,
+        "rules": 38,
+        "points": 3,
+        "title": 1,
+        "type": 3,
+        "footer": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "59",
+      "title": "Финн Хвостоносец",
+      "page": 4,
+      "cell": 11,
+      "kind": "legendary",
+      "critter": true,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        392.76,
+        531.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 1,
+        "frame": 1,
+        "cost": 2,
+        "rules": 41,
+        "points": 3,
+        "title": 3,
+        "type": 3,
+        "footer": 1,
+        "border": 2
+      }
+    },
+    {
+      "id": "60",
+      "title": "Небесный мост",
+      "page": 4,
+      "cell": 12,
+      "kind": "legendary",
+      "critter": false,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        584.26,
+        531.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 1,
+        "frame": 1,
+        "footer": 5,
+        "rules": 40,
+        "points": 3,
+        "title": 3,
+        "type": 3,
+        "cost": 2,
+        "border": 2
+      }
+    },
+    {
+      "id": "61",
+      "title": "Рынок МакГрегора",
+      "page": 4,
+      "cell": 13,
+      "kind": "legendary",
+      "critter": false,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        9.76,
+        792.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 1,
+        "frame": 1,
+        "footer": 4,
+        "rules": 4,
+        "points": 3,
+        "title": 3,
+        "type": 3,
+        "cost": 6,
+        "border": 2
+      }
+    },
+    {
+      "id": "62",
+      "title": "Опера Олеандра",
+      "page": 4,
+      "cell": 14,
+      "kind": "legendary",
+      "critter": false,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        201.26,
+        792.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 1,
+        "frame": 1,
+        "footer": 4,
+        "rules": 26,
+        "points": 3,
+        "title": 3,
+        "type": 3,
+        "cost": 6,
+        "border": 2
+      }
+    },
+    {
+      "id": "63",
+      "title": "Серебрянный Родник",
+      "page": 4,
+      "cell": 15,
+      "kind": "legendary",
+      "critter": false,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        392.76,
+        792.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 1,
+        "frame": 1,
+        "footer": 5,
+        "rules": 30,
+        "points": 3,
+        "title": 3,
+        "type": 3,
+        "cost": 2,
+        "border": 2
+      }
+    },
+    {
+      "id": "64",
+      "title": "Зеленый Желудь",
+      "page": 4,
+      "cell": 16,
+      "kind": "legendary",
+      "critter": false,
+      "width": 171.97,
+      "height": 241.344,
+      "origin": [
+        584.26,
+        792.832
+      ],
+      "parts": {
+        "illustration": 1,
+        "ribbon": 2,
+        "category": 2,
+        "frame": 1,
+        "footer": 11,
+        "rules": 35,
+        "points": 3,
+        "title": 3,
+        "type": 3,
+        "cost": 4,
+        "border": 2
+      }
+    }
+  ]
+}
