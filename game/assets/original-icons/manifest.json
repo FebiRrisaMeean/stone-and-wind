@@ -1,0 +1,372 @@
+{
+  "source": "/Users/y.kuzmin/Downloads/jeverdell-bazovoe-izdanie-rules.pdf",
+  "source_sha256": "f35f11b01e1ecc041f6b43a91c50fdeec17def0b55e5d2c9e1558dcedb84b487",
+  "method": "Original embedded image isolated without soft mask; Poppler PDF CMYK-to-RGB at native dimensions, original pypdf soft-mask alpha reattached without modification; no crop, redraw, upscale or background removal",
+  "format": "PNG RGBA",
+  "assets": [
+    {
+      "name": "berry",
+      "label": "Ягода",
+      "file": "berry.png",
+      "page": 5,
+      "pdf_image_name": "X33.jp2",
+      "width": 47,
+      "height": 46,
+      "alpha": true,
+      "alpha_bbox": [
+        4,
+        5,
+        44,
+        41
+      ],
+      "source_pdf_color_space": "/DeviceCMYK",
+      "source_pdf_filters": [
+        "/FlateDecode",
+        "/DCTDecode"
+      ],
+      "source_embedded_bytes_sha256": "c330163795beaae598b0ebdef6394565adc6eed5f75d63b47c3b86d95afb0882",
+      "rgba_sha256": "3a6005b18ba2debf775b166a8cd627bb9050fa7932f0e34e5acb2fe962450c35",
+      "png_sha256": "46636a05b7e6bf98750b975589bd4b2d0f0341937461532422cd7fa154bcf848",
+      "png_roundtrip_equal": true,
+      "source_alpha_equal": true
+    },
+    {
+      "name": "twig",
+      "label": "Ветка",
+      "file": "twig.png",
+      "page": 5,
+      "pdf_image_name": "X34.jp2",
+      "width": 58,
+      "height": 57,
+      "alpha": true,
+      "alpha_bbox": [
+        8,
+        8,
+        52,
+        50
+      ],
+      "source_pdf_color_space": "/DeviceCMYK",
+      "source_pdf_filters": [
+        "/FlateDecode",
+        "/DCTDecode"
+      ],
+      "source_embedded_bytes_sha256": "6dba459a178f7b1e5f0d471780c9eb8a083eea6449fd045c583486238d9d4182",
+      "rgba_sha256": "d06a2d23be929b45450a12c54e114a243bf08f12a78c5ca9f152c99519ec37ec",
+      "png_sha256": "6c263097cd43efae1e89e7e0d09800a0f53111b03943f147ca39a794068f3d2d",
+      "png_roundtrip_equal": true,
+      "source_alpha_equal": true
+    },
+    {
+      "name": "resin",
+      "label": "Смола",
+      "file": "resin.png",
+      "page": 5,
+      "pdf_image_name": "X35.jp2",
+      "width": 61,
+      "height": 61,
+      "alpha": true,
+      "alpha_bbox": [
+        8,
+        9,
+        53,
+        53
+      ],
+      "source_pdf_color_space": "/DeviceCMYK",
+      "source_pdf_filters": [
+        "/FlateDecode",
+        "/DCTDecode"
+      ],
+      "source_embedded_bytes_sha256": "0ce2a6d2b4e04da4b10eecb736f04b21d2cc0d4759516ed230156dd655677d8f",
+      "rgba_sha256": "81dd7dbe68e45e2144a50caebae9d8868f91fcee82109f90496bdf534daffae8",
+      "png_sha256": "0e26f7f7a36978c4c17e0f4ea1a943d80284cd56e47e68992bd5a30fd5847f8f",
+      "png_roundtrip_equal": true,
+      "source_alpha_equal": true
+    },
+    {
+      "name": "pebble",
+      "label": "Камушек",
+      "file": "pebble.png",
+      "page": 5,
+      "pdf_image_name": "X36.jp2",
+      "width": 50,
+      "height": 52,
+      "alpha": true,
+      "alpha_bbox": [
+        5,
+        6,
+        48,
+        47
+      ],
+      "source_pdf_color_space": "/DeviceCMYK",
+      "source_pdf_filters": [
+        "/FlateDecode",
+        "/DCTDecode"
+      ],
+      "source_embedded_bytes_sha256": "32a0b3d26edb8f866d43227f58da8f12f0240a679bcb05e3f6d5f1ef837dd0dc",
+      "rgba_sha256": "921ef62913e3eae8e3a0f8542ff6050dad7cc92573122101ae0800721291b1ce",
+      "png_sha256": "95e9980d733a45d8a367a816a82d6eaf5b11075f13b8cb01786cdf14c8238936",
+      "png_roundtrip_equal": true,
+      "source_alpha_equal": true
+    },
+    {
+      "name": "card",
+      "label": "Карта",
+      "file": "card.png",
+      "page": 5,
+      "pdf_image_name": "X37.jp2",
+      "width": 42,
+      "height": 51,
+      "alpha": true,
+      "alpha_bbox": [
+        0,
+        0,
+        42,
+        51
+      ],
+      "source_pdf_color_space": "/DeviceCMYK",
+      "source_pdf_filters": [
+        "/FlateDecode",
+        "/DCTDecode"
+      ],
+      "source_embedded_bytes_sha256": "164e3242e9ab78f310a249a0a3d0c605bb522c4472a7f1bdffc65667e2f7d588",
+      "rgba_sha256": "91f8f9925b1f8e8b4fbd41034af8e600b3cdbe585d6726b01181d95f269bdad3",
+      "png_sha256": "d5656556f10fd128aa26e7470b3692bb89bd5eee1ab23508b72f69750742c94e",
+      "png_roundtrip_equal": true,
+      "source_alpha_equal": true
+    },
+    {
+      "name": "point",
+      "label": "Победные очки",
+      "file": "point.png",
+      "page": 5,
+      "pdf_image_name": "X38.jp2",
+      "width": 53,
+      "height": 53,
+      "alpha": true,
+      "alpha_bbox": [
+        1,
+        2,
+        53,
+        53
+      ],
+      "source_pdf_color_space": "/DeviceCMYK",
+      "source_pdf_filters": [
+        "/FlateDecode",
+        "/DCTDecode"
+      ],
+      "source_embedded_bytes_sha256": "a23f7619db55770cdaeb64ace80a9d4cfba48584c12a04d791011247ae16aa7f",
+      "rgba_sha256": "8acaef1cb185f73fd1fb390dfa1369107e6e55e624edc4dbdf4a90a0a53d0994",
+      "png_sha256": "03f8b85d1529366dea8ba855e5dad1b6322357410d4461e89c5fe90cfc8a4fc6",
+      "png_roundtrip_equal": true,
+      "source_alpha_equal": true
+    },
+    {
+      "name": "point-one",
+      "label": "Одно победное очко",
+      "file": "point-one.png",
+      "page": 5,
+      "pdf_image_name": "X39.jp2",
+      "width": 67,
+      "height": 62,
+      "alpha": true,
+      "alpha_bbox": [
+        8,
+        6,
+        58,
+        55
+      ],
+      "source_pdf_color_space": "/DeviceCMYK",
+      "source_pdf_filters": [
+        "/FlateDecode",
+        "/DCTDecode"
+      ],
+      "source_embedded_bytes_sha256": "44347962cf7b9d740396732a6b9be4259c4e15179d86cda63a9567adcfab59d1",
+      "rgba_sha256": "127c9edc90f5db924824a41622adb4d3822d1574703356139a8f9c20ff93c7f5",
+      "png_sha256": "f2d6a7525a17c582a3406b2d9d0e027faefeb4af4ef45ffbe1e75ff5fd8863f1",
+      "png_roundtrip_equal": true,
+      "source_alpha_equal": true
+    },
+    {
+      "name": "any-resource",
+      "label": "Любой ресурс",
+      "file": "any-resource.png",
+      "page": 5,
+      "pdf_image_name": "X40.jp2",
+      "width": 57,
+      "height": 48,
+      "alpha": true,
+      "alpha_bbox": [
+        0,
+        0,
+        57,
+        48
+      ],
+      "source_pdf_color_space": "/DeviceCMYK",
+      "source_pdf_filters": [
+        "/FlateDecode",
+        "/DCTDecode"
+      ],
+      "source_embedded_bytes_sha256": "37da3345121e987a676fc3e61cd7db44e45eac417f994da0a567b51053de435f",
+      "rgba_sha256": "95a3e793e53649d1e475bfe9feaea7798ee6cb5a834613950ab1e2262276ce18",
+      "png_sha256": "07ea857f0dfa7c17613ec785a6d3b65c6c2b9dc226439a5e2fd52913ba4d9687",
+      "png_roundtrip_equal": true,
+      "source_alpha_equal": true
+    },
+    {
+      "name": "worker",
+      "label": "Место работника",
+      "file": "worker.png",
+      "page": 8,
+      "pdf_image_name": "X60.jp2",
+      "width": 59,
+      "height": 35,
+      "alpha": true,
+      "alpha_bbox": [
+        0,
+        0,
+        59,
+        35
+      ],
+      "source_pdf_color_space": "/DeviceCMYK",
+      "source_pdf_filters": [
+        "/FlateDecode",
+        "/DCTDecode"
+      ],
+      "source_embedded_bytes_sha256": "b9e04ec4f2257f1f29777c51d0c67e7046ecb2bbce1cfce50bed3daff21f64f6",
+      "rgba_sha256": "78552bb36e2c62fc2a7cb992ed27dc777d48d3ee35be9481c292a052440e1baa",
+      "png_sha256": "29bc1c3ec6fc415ee435709c2c716d59caaf1a791f223471410c7ec6e62d7ac4",
+      "png_roundtrip_equal": true,
+      "source_alpha_equal": true
+    },
+    {
+      "name": "traveler",
+      "label": "Странствия",
+      "file": "traveler.png",
+      "page": 11,
+      "pdf_image_name": "X116.jp2",
+      "width": 88,
+      "height": 101,
+      "alpha": true,
+      "alpha_bbox": [
+        0,
+        0,
+        88,
+        101
+      ],
+      "source_pdf_color_space": "/DeviceCMYK",
+      "source_pdf_filters": [
+        "/FlateDecode",
+        "/DCTDecode"
+      ],
+      "source_embedded_bytes_sha256": "09f72576598c0270f42f721edb2ca59e14df8add0c22ef6ab957fa780fe3096a",
+      "rgba_sha256": "629e724b1071e6a49380e49f10ea2cb5daf0d9c4b7b81f8248a2438ef822c3c5",
+      "png_sha256": "ee0ff7b39c60e77d0d25fb922b80e9cd829d1de27fe3ecd7cf6a419c47f2763b",
+      "png_roundtrip_equal": true,
+      "source_alpha_equal": true
+    },
+    {
+      "name": "production",
+      "label": "Урожай",
+      "file": "production.png",
+      "page": 11,
+      "pdf_image_name": "X117.jp2",
+      "width": 88,
+      "height": 101,
+      "alpha": true,
+      "alpha_bbox": [
+        0,
+        0,
+        88,
+        101
+      ],
+      "source_pdf_color_space": "/DeviceCMYK",
+      "source_pdf_filters": [
+        "/FlateDecode",
+        "/DCTDecode"
+      ],
+      "source_embedded_bytes_sha256": "9eb3eeda4738dda14dd4c2746aca63ee92dfff4c63aec8160647d83ed042035f",
+      "rgba_sha256": "3cd8f4493cb78cb863141bd4bdd66cbd3a3317e8dbebb6c5dec0ce248002f1eb",
+      "png_sha256": "1c129d98993aa34ef188067c73f3029fdc07ec5389f1eb1ecccbcd5f91308ee4",
+      "png_roundtrip_equal": true,
+      "source_alpha_equal": true
+    },
+    {
+      "name": "destination",
+      "label": "Локация",
+      "file": "destination.png",
+      "page": 11,
+      "pdf_image_name": "X118.jp2",
+      "width": 88,
+      "height": 101,
+      "alpha": true,
+      "alpha_bbox": [
+        0,
+        0,
+        88,
+        101
+      ],
+      "source_pdf_color_space": "/DeviceCMYK",
+      "source_pdf_filters": [
+        "/FlateDecode",
+        "/DCTDecode"
+      ],
+      "source_embedded_bytes_sha256": "3f1ec4ad55fa8f82e2f7feee108f532c18899a75a1e5346f7c436bf60af459f5",
+      "rgba_sha256": "56725ce0dcb54c291d790834b6af97e0a4cf271d351fee57cabef90a246e8ee3",
+      "png_sha256": "8c40ff0b7f1702e268a4ca096b242e4baf72addf00c4aa607e00c9444263746f",
+      "png_roundtrip_equal": true,
+      "source_alpha_equal": true
+    },
+    {
+      "name": "governance",
+      "label": "Управление",
+      "file": "governance.png",
+      "page": 11,
+      "pdf_image_name": "X119.jp2",
+      "width": 88,
+      "height": 101,
+      "alpha": true,
+      "alpha_bbox": [
+        0,
+        0,
+        88,
+        101
+      ],
+      "source_pdf_color_space": "/DeviceCMYK",
+      "source_pdf_filters": [
+        "/FlateDecode",
+        "/DCTDecode"
+      ],
+      "source_embedded_bytes_sha256": "0594869a3024b4ae51d4afeb3567325b12a33fc8910df1fb9e75430d3bce9f3f",
+      "rgba_sha256": "7ad97629677206d98b68da0f280becef208415bff18891685022638d028befaf",
+      "png_sha256": "a13909ee5428f6526296c1ec29324d5c296bc1c86f839e0816a3142931f58790",
+      "png_roundtrip_equal": true,
+      "source_alpha_equal": true
+    },
+    {
+      "name": "prosperity",
+      "label": "Процветание",
+      "file": "prosperity.png",
+      "page": 11,
+      "pdf_image_name": "X120.jp2",
+      "width": 88,
+      "height": 101,
+      "alpha": true,
+      "alpha_bbox": [
+        0,
+        0,
+        88,
+        101
+      ],
+      "source_pdf_color_space": "/DeviceCMYK",
+      "source_pdf_filters": [
+        "/FlateDecode",
+        "/DCTDecode"
+      ],
+      "source_embedded_bytes_sha256": "4fa29cf8d3a74b093068ef25070f95d838e9c3a936c4a4a3e2e3fb957acbbf34",
+      "rgba_sha256": "d9a5aecc330e8e792e80d62bd259c24237cbbc32e8938165b215674a2d60645c",
+      "png_sha256": "b23d283ab927b5cefd5540af57ab16445719394a9c2d982017778f0903736c2d",
+      "png_roundtrip_equal": true,
+      "source_alpha_equal": true
+    }
+  ]
+}

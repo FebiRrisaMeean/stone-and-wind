@@ -1,0 +1,40 @@
+@font-face{font-family:EverdellMikadan;src:url('./assets/card-components/mikadan.ttf') format('truetype');font-display:swap}
+@font-face{font-family:EverdellUncials;src:url('./assets/card-components/uncials.ttf') format('truetype');font-display:swap}
+.ev-card{position:relative;flex:none;isolation:isolate;filter:drop-shadow(0 6px 9px #231b1740);color:#3b2617}
+.ev-card *{box-sizing:border-box}
+.ev-face{position:absolute;inset:0 auto auto 0;width:286px;height:399px;transform:scale(var(--card-scale,1));transform-origin:top left;overflow:hidden;border-radius:12px;background:#201b16;box-shadow:inset 0 0 0 1px #604533}
+.ev-illustration{position:absolute;inset:0 0 104px;overflow:hidden;background:#6b7148}
+.ev-illustration .card-art{position:absolute;inset:0;overflow:hidden}
+.ev-illustration .art-paint{position:absolute;inset:0;background-image:var(--atlas);background-size:600% 400%;background-position:var(--art-x) var(--art-y)}
+.ev-illustration:after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,#18231345,transparent 45%),linear-gradient(0deg,#191610,transparent 24%);pointer-events:none}
+.ev-branches{position:absolute;inset:0;width:286px;height:399px;z-index:2;pointer-events:none}
+.ev-cost-position{position:absolute;left:12px;top:18px;z-index:4}
+.ev-cost{display:flex;flex-direction:column;align-items:flex-start;gap:0}
+.ev-cost-plank{display:flex;align-items:center;justify-content:flex-end;gap:0;min-width:56px;height:31px;padding:1px 5px 2px 8px;background:repeating-linear-gradient(176deg,#4c2e28 0,#593931 3px,#2c201e 4px,#4c302a 6px);clip-path:polygon(5% 7%,87% 0,99% 18%,93% 36%,100% 75%,83% 89%,6% 100%,0 64%,4% 49%,0 20%);filter:drop-shadow(0 2px 1px #160d15);color:#fff7df}
+.ev-cost-plank:nth-child(2){transform:rotate(-4deg);margin-top:-1px}
+.ev-cost-plank:nth-child(3){transform:rotate(2deg);margin-top:-1px}
+.ev-cost-plank b{font:italic 700 24px/1 'Times New Roman',serif;min-width:14px;text-align:center;text-shadow:0 1px 1px #000}
+.ev-free-building{position:absolute;left:14px;top:9px;z-index:3;max-width:115px;min-width:82px;padding:5px 16px 5px 9px;background:#40241f;color:#dbbd83;clip-path:polygon(0 0,88% 0,100% 50%,88% 100%,0 100%);font:small-caps 10px/1.1 'Times New Roman',serif;text-align:center}
+.ev-critter .ev-cost-position{top:124px}
+.ev-paper{position:absolute;z-index:1;left:16px;right:16px;top:254px;bottom:19px;padding:26px 18px 18px;background:radial-gradient(ellipse at 20% 10%,#f4e4af 0,transparent 48%),radial-gradient(ellipse at 85% 100%,#b5975d60,transparent 60%),#e7d49d;clip-path:polygon(3% 0,12% 1%,25% 0,43% 1%,56% 0,72% 1%,94% 0,99% 3%,98% 13%,99% 21%,98% 26%,99% 40%,98% 49%,99% 57%,98% 69%,100% 76%,98% 84%,99% 91%,97% 100%,83% 99%,67% 100%,50% 99%,29% 100%,17% 99%,2% 100%,0 95%,1% 85%,0 78%,1% 69%,0 59%,1% 51%,0 42%,1% 34%,0 25%,1% 18%,0 9%);box-shadow:inset 0 0 11px #8d6a3f55}
+.ev-paper:before{content:'';position:absolute;inset:0;background:url('./assets/card-components/paper-grain.svg');opacity:.2;mix-blend-mode:multiply;pointer-events:none}
+.ev-paper:after{content:'';position:absolute;left:13px;right:13px;bottom:8px;height:6px;border-bottom:1px solid #a68a58;border-top:1px solid #bca16d;transform:rotate(1deg);pointer-events:none;opacity:.65}
+.ev-type{position:absolute;top:4px;left:56px;right:6px;font:small-caps 8.4px/1.1 'Times New Roman',serif;text-align:center;white-space:nowrap}
+.ev-rules{position:relative;font:13px/1.11 'Times New Roman',serif;font-weight:500;text-align:center;letter-spacing:-.1px;color:#342012;overflow-wrap:normal}
+.ev-paper.ev-dense{padding:20px 12px 25px}
+.ev-paper.ev-dense .ev-rules{font-size:12px;line-height:1.12}
+.ev-rules .original-icon{margin:-2px -1px 0;vertical-align:middle!important}
+.ev-rules strong{font-weight:700}
+.ev-title{position:absolute;z-index:3;left:67px;right:47px;top:227px;height:30px;display:flex;align-items:center;justify-content:center;padding:0 9px;background:repeating-linear-gradient(176deg,var(--ribbon,#2e647a) 0,var(--ribbon,#2e647a) 4px,var(--ribbon-light,#397c92) 6px,var(--ribbon,#2e647a) 9px);clip-path:polygon(4% 7%,93% 0,100% 9%,98% 88%,88% 96%,4% 100%,0 76%,3% 54%,0 27%);box-shadow:inset 0 2px #c6c18444,inset 0 -3px #102c3d44}
+.ev-title h2{margin:0;position:relative;color:#f7ebc8;font:400 18px/1 EverdellMikadan,Georgia,serif;text-align:center;letter-spacing:-.25px;text-shadow:0 1px 1px #172b31}
+.ev-production{--ribbon:#4c6e2a;--ribbon-light:#5e8135}.ev-traveler{--ribbon:#967345;--ribbon-light:#ac8c59}.ev-destination{--ribbon:#913c3c;--ribbon-light:#ac4b4c}.ev-prosperity{--ribbon:#6f477e;--ribbon-light:#82538c}
+.ev-category{position:absolute;left:20px;top:207px;z-index:4;width:45px;height:49px;filter:drop-shadow(0 1px 1px #181f21)}
+.ev-copies{position:absolute;left:10px;right:5px;bottom:1px;display:flex;justify-content:center;gap:3px}
+.ev-copies i{display:block;width:3px;height:3px;border-radius:50%;background:#dfd8b4;box-shadow:0 .4px 1px #0c1012}
+.ev-points{position:absolute;z-index:4;right:11px;top:210px;width:61px;height:61px;filter:drop-shadow(0 3px 2px #251b1a77)}
+.ev-points b{position:absolute;inset:0;display:flex;justify-content:center;align-items:center;color:#33230e;font:400 38px/1 EverdellUncials,'Times New Roman',serif;text-shadow:0 1px #ad7932;transform:rotate(-4deg)}
+.ev-association{position:absolute;right:4px;bottom:1px;height:23px;display:flex;align-items:center;gap:3px;z-index:2}
+.ev-association>span:first-child{background:#653a24;color:#ecdbab;padding:3px 12px 3px 18px;font:small-caps 9px 'Times New Roman',serif;clip-path:polygon(12% 0,90% 0,100% 50%,90% 100%,0 100%,4% 60%,0 25%)}
+.ev-door{display:block;width:29px;height:29px;border-radius:50%;border:3px solid #aa9d68;background:repeating-linear-gradient(90deg,#8f662a 0,#8f662a 4px,#3f2c17 5px);box-shadow:0 0 0 1px #6e5c36,inset 0 0 0 1px #302a1e;position:relative}
+.ev-door:after{content:'';width:3px;height:3px;position:absolute;right:3px;top:10px;border-radius:50%;background:#e8b946}
+.ev-guides .ev-face>*{outline:1px dashed #ec2b75!important;outline-offset:-1px}
