@@ -16,7 +16,7 @@ Hover an object or its fixed city foundation to inspect its card. Select a playa
 
 Starting placement frames the destination city. Right-click during placement cancels the complete action, including payment and choices. Paired Husband and Wife share one logical city space and appear beside each other, even when the city is full
 
-The character-library/ gallery compares all 24 local animated critters with their card illustrations. These meshes also appear in the market and cities, with independent movement and shared geometry. The three approved Crane, Resin Refinery and Clock Tower models are now on the board, batched without changing their shapes
+The character-library/ gallery compares all 24 local animated critters with their card illustrations. These meshes also appear in the market and cities, with independent movement and shared geometry. All 24 constructions now follow their source cards, using connected timber, bark and masonry forms with restrained animation. The three approved Crane, Resin Refinery and Clock Tower shapes are preserved. The building-library/ gallery compares each model with its source card
 
 The separate world-study/ gallery preserves six animated 3D samples with their source cards: Architect, Bard, Doctor, Crane, Resin Refinery and Clock Tower. Earlier samples remain available as a historical visual reference
 

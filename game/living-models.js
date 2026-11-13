@@ -1,6 +1,7 @@
 import * as T from '../vendor/three.module.js';
 import {LOCAL_CHARACTER_RECIPES} from './local-sculpt/recipes.js';
-import {createGameSculpt,animateGameSculpt,hasLocalBuilding} from './local-sculpt/game-models.js';
+import {ARCHITECTURE_PROFILES} from './architecture-models.js?v=pages24';
+import {createGameSculpt,animateGameSculpt,hasLocalBuilding} from './local-sculpt/game-models.js?v=pages24';
 
 // Every base-game card has its own silhouette and profession props
 // Models are local to the supplied group so their logical city cell never moves
@@ -36,7 +37,7 @@ const critters={
 const buildings={
  Castle:'twin-turrets',Cemetary:'graveyard',Chapel:'bell-spire','Clock Tower':'clock',Courthouse:'columns',Crane:'lifting-crane',Dungeon:'barred-rock',Evertree:'living-tree',Fairgrounds:'fair-tent',Farm:'farm-crops','General Store':'awning-shop',Inn:'inn-balcony',Lookout:'watch-platform',Mine:'mine-carts',Monastery:'cloister',Palace:'palace', 'Post Office':'post-bags','Resin Refinery':'copper-still',Ruins:'ruined-arch',School:'school-bell',Storehouse:'warehouse',Theatre:'curtain-stage','Twig Barge':'loaded-barge',University:'observatory'};
 export const CARD_MODEL_NAMES=Object.freeze([...Object.keys(critters),...Object.keys(buildings)].sort());
-export const CARD_MODEL_DEFINITIONS=Object.freeze(Object.fromEntries(CARD_MODEL_NAMES.map(name=>[name,Object.freeze(critters[name]?{kind:'critter',...(LOCAL_CHARACTER_RECIPES[name]??{family:'spiny-scholar',prop:'berry-and-quill'}),species:LOCAL_CHARACTER_RECIPES[name]?.family??'spiny-scholar'}:{kind:'building',silhouette:buildings[name]})])));
+export const CARD_MODEL_DEFINITIONS=Object.freeze(Object.fromEntries(CARD_MODEL_NAMES.map(name=>[name,Object.freeze(critters[name]?{kind:'critter',...(LOCAL_CHARACTER_RECIPES[name]??{family:'spiny-scholar',prop:'berry-and-quill'}),species:LOCAL_CHARACTER_RECIPES[name]?.family??'spiny-scholar'}:{kind:'building',silhouette:ARCHITECTURE_PROFILES[name],sourceBacked:true})])));
 
 function primitives(view,g){
  const sphere=(x,y,z,r,color,sx=1,sy=1,sz=1)=>{const m=view.mesh(g,new T.SphereGeometry(r,12,8),color,x,y,z);m.scale.set(sx,sy,sz);return m;};

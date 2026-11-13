@@ -1,6 +1,6 @@
 import {applyObjectSeason} from './seasonal-visuals.js?v=resources17';
 import * as T from '../vendor/three.module.js';
-import {createCardMiniature,animateCardMiniature} from './living-models.js?v=pages23-local';
+import {createCardMiniature,animateCardMiniature} from './living-models.js?v=pages24-architecture';
 import {woodlandCottage,ancientTree,woodlandFigure} from './woodland-world.js?v=resources17';
 import {resourceIcon} from './everdell/art.js?v=20261112-23';
 

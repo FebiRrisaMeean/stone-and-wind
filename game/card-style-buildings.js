@@ -3,13 +3,13 @@ import {T,P,random,material,mesh,ell,box,cyl,rod,curve,torus,group,motion,leaf} 
 // Source-backed architecture: the silhouettes are built from connected load-bearing parts
 // The small backs and hidden joints are restrained reconstructions of the card artwork
 const TAU=Math.PI*2
-function skin(parent,name,positions,indices,color,kind='bark',colors){
+export function skin(parent,name,positions,indices,color,kind='bark',colors){
  const geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(positions,3));geo.setIndex(indices)
  const uv=[];for(let i=0;i<positions.length;i+=3)uv.push(positions[i]*1.6,positions[i+1]*1.6+positions[i+2]*.3)
  geo.setAttribute('uv',new T.Float32BufferAttribute(uv,2));if(colors)geo.setAttribute('color',new T.Float32BufferAttribute(colors,3));geo.computeVertexNormals()
  const obj=mesh(parent,geo,color,0,0,0,kind,colors?{vertexColors:true}:{});obj.name=name;return obj
 }
-function branch(parent,name,points,radii,color='#625039',seed=1,segments=44,sides=12){
+export function branch(parent,name,points,radii,color='#625039',seed=1,segments=44,sides=12){
  const spline=new T.CatmullRomCurve3(points.map(p=>new T.Vector3(...p))),frames=spline.computeFrenetFrames(segments,false),pos=[],idx=[],rng=random(seed)
  const ridges=Array.from({length:sides},()=>.90+rng()*.20)
  for(let j=0;j<=segments;j++){
@@ -19,23 +19,23 @@ function branch(parent,name,points,radii,color='#625039',seed=1,segments=44,side
  for(const [j,rev]of [[0,true],[segments,false]]){const p=spline.getPoint(j/segments),c=pos.length/3;pos.push(p.x,p.y,p.z);for(let i=0;i<sides;i++){const a=j*sides+i,b=j*sides+(i+1)%sides;idx.push(c,...(rev?[b,a]:[a,b]))}}
  return skin(parent,name,pos,idx,color)
 }
-function timber(parent,name,a,b,w,d,color='#74573c',seed=1){
+export function timber(parent,name,a,b,w,d,color='#74573c',seed=1){
  const len=new T.Vector3(...a).distanceTo(new T.Vector3(...b)),rng=random(seed),v=[],idx=[]
  for(const y of [-len/2,len/2])for(const [x,z]of [[-1,-1],[1,-1],[1,1],[-1,1]])v.push(x*w*(.46+rng()*.08),y+(rng()-.5)*.015,z*d*(.46+rng()*.08))
  idx.push(0,1,2,0,2,3,4,6,5,4,7,6,0,5,1,0,4,5,1,6,2,1,5,6,2,7,3,2,6,7,3,4,0,3,7,4)
  const obj=skin(parent,name,v,idx,color);const hard=obj.geometry.toNonIndexed();obj.geometry.dispose();hard.computeVertexNormals();obj.geometry=hard;obj.position.fromArray(a).add(new T.Vector3(...b)).multiplyScalar(.5);obj.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),new T.Vector3(...b).sub(new T.Vector3(...a)).normalize());return obj
 }
-function rock(parent,x,y,z,sx,sy,sz,color,seed=1){
+export function rock(parent,x,y,z,sx,sy,sz,color,seed=1){
  const geo=new T.IcosahedronGeometry(1,1),rng=random(seed),p=geo.attributes.position
  for(let i=0;i<p.count;i++){const x=p.getX(i),y=p.getY(i),z=p.getZ(i),r=1+.10*Math.sin(x*11+y*7+z*9+seed);p.setXYZ(i,x*r,y*r,z*r)}geo.computeVertexNormals()
  const obj=mesh(parent,geo,color,x,y,z,'stone');obj.scale.set(sx,sy,sz);obj.rotation.set(rng()*.6,rng()*TAU,rng()*.4);return obj
 }
-function nail(parent,x,y,z,r=.009){const n=cyl(parent,x,y,z,r,.008,'#413d31',r,7);n.rotation.x=Math.PI/2;return n}
-function grain(parent,a,b,seed=1,count=3){
+export function nail(parent,x,y,z,r=.009){const n=cyl(parent,x,y,z,r,.008,'#413d31',r,7);n.rotation.x=Math.PI/2;return n}
+export function grain(parent,a,b,seed=1,count=3){
  const rng=random(seed)
  for(let j=0;j<count;j++){const off=(j-(count-1)/2)*.017;curve(parent,[[a[0]+off,a[1],a[2]],[T.MathUtils.lerp(a[0],b[0],.45)+off+(rng()-.5)*.01,T.MathUtils.lerp(a[1],b[1],.45),T.MathUtils.lerp(a[2],b[2],.45)],[b[0]+off,b[1],b[2]]],.0027,j%2?'#aa8a61':'#463e2c','bark')}
 }
-function plankedRoof(parent,cx,y,cz,rx,rz,rise,seed=1){
+export function plankedRoof(parent,cx,y,cz,rx,rz,rise,seed=1){
  const rng=random(seed)
  // A shallow, patched hip roof, with rough ends rather than a cone or cottage gable
  for(let side=0;side<4;side++)for(let i=0;i<7;i++){
@@ -107,7 +107,7 @@ export function crane(root){
  for(const x of [.02,.54])for(const y of [.83,1.38])nail(cabin,x,y,-.252)
 }
 
-function bracket(parent,x,y,z,rx,depth,seed=1,amber=true){
+export function bracket(parent,x,y,z,rx,depth,seed=1,amber=true){
  const rng=random(seed),pos=[],idx=[],colors=[],sides=42,bands=8
  // Fan shape grows from its narrow attachment at the trunk, with a scalloped thick lip
  for(let ring=0;ring<=bands;ring++)for(let i=0;i<=sides;i++){

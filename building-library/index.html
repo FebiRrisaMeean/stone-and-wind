@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Здания Эверделла — библиотека сооружений</title>
+  <link rel="stylesheet" href="./study.css">
+</head>
+<body>
+  <header><a href="../">← В игру</a><h1>Здания Эверделла</h1><label for="character">Здание</label><select id="character" aria-label="Здание"></select></header>
+  <main>
+    <div class="controls" role="group" aria-label="Ракурс и отображение">
+      <div class="control-group" aria-label="Ракурс">
+        <button data-view="reference" aria-pressed="true">Как на эталоне</button>
+        <button data-view="front" aria-pressed="false">Спереди</button>
+        <button data-view="side" aria-pressed="false">Сбоку</button>
+        <button data-view="back" aria-pressed="false">Сзади</button>
+      </div>
+      <div class="control-group" aria-label="Режим">
+        <button id="rotate" aria-pressed="false">Вращение</button>
+        <button id="clay" aria-pressed="false">Без цвета</button>
+        <button id="animation" aria-pressed="true">Анимация</button>
+        <button id="game-scale" aria-pressed="false">Игровой размер</button>
+        <button id="crowd" aria-pressed="false">Все 24</button>
+      </div>
+    </div>
+    <section class="comparison" aria-label="Сравнение эталона и объёмной модели">
+      <article class="reference-panel">
+        <div class="panel-heading"><h2>Эталон здания</h2><span>Изображение</span></div>
+        <div class="reference-image"><img id="reference" src="../game/assets/cards64/references/02.webp" alt="Изображение здания на исходной карточке"></div>
+        <p id="reference-status">Исходная карточка</p>
+      </article>
+      <article class="model-panel">
+        <div class="panel-heading"><h2 id="model-title">3D-модель</h2><span id="mode-label">Студийный вид</span></div>
+        <div id="viewport" tabindex="0" role="img" aria-label="Модель здания, перетаскивание вращает камеру, колесо меняет масштаб, стрелки влево и вправо меняют ракурс">
+          <div id="status" role="status">Загружаем модель…</div>
+          <div class="metrics" aria-label="Производительность"><span id="triangles">— треугольников</span><span id="draw-calls">— вызовов</span><span id="fps">— FPS</span></div>
+        </div>
+        <p>Перетаскивание — ракурс · Колесо — масштаб · ← → — поворот</p>
+      </article>
+    </section>
+  </main>
+  <script type="module" src="./study.js"></script>
+</body>
+</html>

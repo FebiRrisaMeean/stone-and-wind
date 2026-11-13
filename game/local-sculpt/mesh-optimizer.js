@@ -34,3 +34,37 @@ export function batchStaticChildren(root,protectedObjects=new Set()){
  }
  visit(root);return root
 }
+
+// Merge across static groups while keeping each animation's local coordinate frame
+export function batchStaticHierarchy(root){
+ const animated=new Set((root.userData.motions??[]).map(m=>m.obj)),buckets=new Map()
+ root.updateMatrixWorld(true)
+ root.traverse(object=>{
+  if(!object.isMesh||animated.has(object)||Array.isArray(object.material))return
+  let anchor=object.parent
+  while(anchor!==root&&!animated.has(anchor))anchor=anchor.parent
+  const keys=Object.keys(object.geometry.attributes).sort().join(',')
+  const key=anchor.uuid+'|'+object.material.uuid+'|'+keys+'|'+object.castShadow+'|'+object.receiveShadow
+  if(!buckets.has(key))buckets.set(key,{anchor,objects:[]})
+  buckets.get(key).objects.push(object)
+ })
+ for(const {anchor,objects} of buckets.values()){
+  if(objects.length<2)continue
+  const inverse=anchor.matrixWorld.clone().invert()
+  const geometries=objects.map(o=>o.geometry.clone().applyMatrix4(inverse.clone().multiply(o.matrixWorld)))
+  const merged=new T.BufferGeometry()
+  for(const key of Object.keys(geometries[0].attributes)){
+   const attrs=geometries.map(g=>g.attributes[key]),first=attrs[0]
+   const data=new first.array.constructor(attrs.reduce((n,a)=>n+a.array.length,0));let offset=0
+   for(const a of attrs){data.set(a.array,offset);offset+=a.array.length}
+   merged.setAttribute(key,new T.BufferAttribute(data,first.itemSize,first.normalized))
+  }
+  const indices=[];let offset=0
+  for(const g of geometries){if(g.index)for(const i of g.index.array)indices.push(i+offset);else for(let i=0;i<g.attributes.position.count;i++)indices.push(i+offset);offset+=g.attributes.position.count}
+  merged.setIndex(indices);merged.computeBoundingSphere()
+  const mesh=new T.Mesh(merged,objects[0].material);mesh.name=anchor.name+'-surface-batch';mesh.castShadow=objects[0].castShadow;mesh.receiveShadow=objects[0].receiveShadow
+  for(const object of objects){object.removeFromParent();if(!object.geometry.userData.sharedAsset)object.geometry.dispose()}
+  geometries.forEach(g=>g.dispose());anchor.add(mesh)
+ }
+ return root
+}

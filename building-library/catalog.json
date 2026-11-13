@@ -1,0 +1,122 @@
+[
+  {
+    "name": "Crane",
+    "id": "02",
+    "title": "Кран"
+  },
+  {
+    "name": "Theatre",
+    "id": "04",
+    "title": "Театр"
+  },
+  {
+    "name": "Twig Barge",
+    "id": "06",
+    "title": "Лесовоз"
+  },
+  {
+    "name": "Resin Refinery",
+    "id": "08",
+    "title": "Смолокурня"
+  },
+  {
+    "name": "University",
+    "id": "10",
+    "title": "Университет"
+  },
+  {
+    "name": "Fairgrounds",
+    "id": "12",
+    "title": "Балаган"
+  },
+  {
+    "name": "Clock Tower",
+    "id": "14",
+    "title": "Башенные часы"
+  },
+  {
+    "name": "Evertree",
+    "id": "17",
+    "title": "Древо жизни"
+  },
+  {
+    "name": "Farm",
+    "id": "18",
+    "title": "Ферма"
+  },
+  {
+    "name": "Inn",
+    "id": "20",
+    "title": "Трактир"
+  },
+  {
+    "name": "Courthouse",
+    "id": "22",
+    "title": "Зал суда"
+  },
+  {
+    "name": "Castle",
+    "id": "24",
+    "title": "Замок"
+  },
+  {
+    "name": "Mine",
+    "id": "26",
+    "title": "Шахта"
+  },
+  {
+    "name": "Monastery",
+    "id": "28",
+    "title": "Монастырь"
+  },
+  {
+    "name": "Ruins",
+    "id": "30",
+    "title": "Руины"
+  },
+  {
+    "name": "Post Office",
+    "id": "32",
+    "title": "Почта"
+  },
+  {
+    "name": "Palace",
+    "id": "34",
+    "title": "Дворец"
+  },
+  {
+    "name": "Dungeon",
+    "id": "36",
+    "title": "Подземелье"
+  },
+  {
+    "name": "Chapel",
+    "id": "38",
+    "title": "Часовня"
+  },
+  {
+    "name": "General Store",
+    "id": "40",
+    "title": "Лавка"
+  },
+  {
+    "name": "School",
+    "id": "42",
+    "title": "Школа"
+  },
+  {
+    "name": "Cemetary",
+    "id": "44",
+    "title": "Кладбище"
+  },
+  {
+    "name": "Lookout",
+    "id": "46",
+    "title": "Вышка"
+  },
+  {
+    "name": "Storehouse",
+    "id": "48",
+    "title": "Склад"
+  }
+]
