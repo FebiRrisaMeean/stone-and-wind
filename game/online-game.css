@@ -1,0 +1,14 @@
+.online-panel{position:absolute;top:14px;left:14px;width:330px;max-height:calc(100% - 160px);overflow:auto;background:#f0e6ca;color:#28291d;border:1px solid #bda574;border-radius:12px;padding:14px;z-index:45;box-shadow:0 4px 20px #0006;font:15px system-ui}.online-panel button,.online-panel select,.online-panel input{font:inherit;max-width:100%;padding:7px;margin:3px;border-radius:5px}.online-panel button{cursor:pointer;background:#e4d5ac;color:#28291d;border:1px solid #a48d60}.online-panel button:disabled{opacity:.5;cursor:default}.online-panel h2{font-size:19px;margin:8px 0}.online-panel p{margin:8px 0}.online-actions{display:grid;gap:5px}.online-actions button{text-align:left}.online-choice{display:block;padding:6px;border-bottom:1px solid #c5b386}.online-resource{display:flex;align-items:center;justify-content:space-between}.online-resource input{width:65px}.online-status{min-height:20px}.online-invite{width:95%;font-size:12px!important}.online-hand{position:absolute;bottom:12px;left:365px;right:15px;height:140px;display:flex;gap:5px;overflow:auto;z-index:35}.online-hand button{flex:0 0 90px;padding:0;border:2px solid #c9b47b;border-radius:7px;background:#e5d8bb;cursor:pointer}.online-hand button[disabled]{filter:brightness(.65)}.online-hand .runtime-card{width:88px;height:125px}.online-hand [data-game-card-face]{height:100%}.online-inspect{position:absolute;right:15px;top:80px;width:230px;max-height:70vh;overflow:auto;z-index:43;background:#f0e6ca;color:#28291d;border-radius:8px;padding:10px;font:15px system-ui}.online-inspect .runtime-card{width:210px;height:300px}.online-panel a{color:#314c29}.online-toolbar{display:flex;flex-wrap:wrap}.online-action-options{max-height:260px;overflow:auto}
+
+.online-panel .supply-total strong{color:#283821;text-shadow:none;font-size:17px}
+.online-panel .supply-total small{color:#62664e}
+.online-panel h2{font-family:Georgia,serif}
+.online-hand button{width:90px;min-width:0;overflow:hidden;align-self:flex-start;height:129px}
+.online-hand .runtime-card,.online-hand [data-game-card-face]{display:block;width:100%;height:auto}
+.online-hand .source-card,.online-inspect .source-card{width:100%!important;max-width:100%}
+.online-inspect .runtime-card{display:block;height:auto}
+.online-hand button:not([disabled]){box-shadow:0 0 7px #77c45e;border-color:#8bcd71}
+.online-panel .online-invite{min-width:0}
+
+.online-resource{gap:7px;margin:8px 0}.online-resource label{flex:1}
+.online-stepper{display:flex;align-items:center;gap:2px}.online-stepper button{width:30px;height:32px;padding:0;margin:0;font-size:20px}.online-stepper input{width:36px;text-align:center;padding:5px 0;margin:0;appearance:textfield}.online-stepper input::-webkit-inner-spin-button{appearance:none}

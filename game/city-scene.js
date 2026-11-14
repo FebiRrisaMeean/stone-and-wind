@@ -27,7 +27,11 @@ export function applyCityScene(drawing,viewer,viewedOwner=viewer){
  const hiddenUnits=[];
  scene.units=scene.units.filter(unit=>{
   const assigned=unit.locationId!=null;
-  const destinationHidden=hiddenIds.has(unit.locationId)||assigned&&!sharedIds.has(unit.locationId)&&!sharedObjectIds.has(unit.locationId)&&hiddenObjects.some(o=>o.type==='city-card'&&Math.hypot(o.x-unit.x,o.z+.8-unit.z)<.15);
+  const explicitDestination=unit.destinationObjectId??unit.locationId;
+  const cardPlacement=String(unit.placementKey??unit.locationId??'');
+  const hiddenCardDestination=hiddenObjects.some(o=>o.type==='city-card'&&cardPlacement===`c:${o.id.split('|')[0]}:${o.cardName}`);
+  // Identical city coordinates cannot identify which owner's card was visited
+  const destinationHidden=hiddenIds.has(explicitDestination)||hiddenCardDestination;
   if(destinationHidden){hiddenUnits.push(unit.id);return false;}
   if(hiddenOwners.includes(unit.owner)){
    const home=gatewayHome(unit.owner,unit.number);unit.home=home;

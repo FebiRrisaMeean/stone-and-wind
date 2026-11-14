@@ -8,9 +8,9 @@ The bot resolves its own choices, payments and city placement. Escape pauses its
 
 Bot saves use separate stone-wind-bot keys. Previous hotseat saves are preserved, but new hotseat games are no longer offered
 
-This mode runs entirely in the browser without a room server. Online play between two computers is a later stage
+The bot mode runs entirely in the browser. A separate local room server supports two human clients with invitations and reconnect; the public GitHub Pages deployment does not host that server
 
-Hand cards fan out at the bottom. Eight market miniatures, two freely arranged cities and worker locations surround the ancient tree
+Hand cards fan out at the bottom. Eight market miniatures and shared worker locations face the ancient tree. The enlarged city occupies the central foreground; the opponent city is shown separately with its camera button
 
 Hover an object or its fixed city foundation to inspect its card. Select a playable hand card or market object, then choose a free position in the appropriate city
 

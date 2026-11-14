@@ -20,7 +20,7 @@ function sphere(view,g,x,y,z,r,color,sx=1,sy=1,sz=1){const m=view.mesh(g,new T.S
 function disc(view,g,x,y,z,r,color,opacity=1){const m=view.mesh(g,new T.CircleGeometry(r,40),view.material(color,{transparent:opacity<1,opacity,side:T.DoubleSide,depthWrite:opacity===1}),x,y,z);m.rotation.x=-Math.PI/2;m.castShadow=false;return m;}
 function foundation(view,g,item){const r=item.type==='market'?.85:.93,c=team[item.owner]??0xbeb08c;view.cylinder(g,0,.07,0,r,.08,0xbaa777,30);disc(view,g,0,.115,0,r-.08,0xd9c99e);const edge=view.ring(r-.045,r+.02,c,.68);edge.position.y=.125;g.add(edge);return g;}
 function camp(view,g,item){
- const r=item.radius??8,color=team[item.owner]??team[0];
+ const r=item.radius??8,color=team[item.owner]??team[0],campX=(item.camp?.x??item.x)-item.x,campZ=(item.camp?.z??item.z-r*.82)-item.z;
  const bounds=item.bounds;
  if(bounds){
   // Sparse stones mark a clearing; buildings have no permanent discs
@@ -29,9 +29,9 @@ function camp(view,g,item){
    for(let i=0;i<steps;i++){const t=i/steps;sphere(view,g,a[0]+(b[0]-a[0])*t-item.x,.06,a[1]+(b[1]-a[1])*t-item.z,.10,0xb4b69b,1.3,.4,.8);}
   }
  }
- const hut=woodlandCottage(view,{x:0,z:0,kind:'house',id:item.id+'-camp'},true);hut.position.set(0,0,-r*.82);hut.scale.setScalar(.95);g.add(hut);
- for(let j=0;j<4;j++){const x=-.7+j*.45;view.cylinder(g,x,.13,-r*.82+1.4,.11,.22,0x98734b,8);}
- const post=view.cylinder(g,-1.4,.6,-r*.82+.35,.045,1.2,0x765139,7);view.box(g,-1.15,.95,-r*.82+.35,.53,.32,.045,color);post.userData.camp=true;
+ const hut=woodlandCottage(view,{x:0,z:0,kind:'house',id:item.id+'-camp'},true);hut.position.set(campX,0,campZ);hut.scale.setScalar(.95);g.add(hut);
+ for(let j=0;j<4;j++){const x=campX-.7+j*.45;view.cylinder(g,x,.13,campZ+1.4,.11,.22,0x98734b,8);}
+ const post=view.cylinder(g,campX-1.4,.6,campZ+.35,.045,1.2,0x765139,7);view.box(g,campX-1.15,.95,campZ+.35,.53,.32,.045,color);post.userData.camp=true;
  g.traverse(o=>{delete o.userData.pick;});return g;
 }
 function smallObject(view,g,item){
@@ -93,7 +93,7 @@ export function renderLivingBoard(view,state){
   if(item.type==='market'){let glow=entity.group.userData.affordance;if(!glow){glow=view.ring(.91,1.04,0x87cb78,.65);glow.position.y=.14;entity.group.add(glow);entity.group.userData.affordance=glow;}glow.visible=item.available===true;}
   applyObjectSeason(entity.group,state.season);if(!item.hideOnArrival)objectLabel(view,item);
  }
- const obstacles=[];for(const item of state.livingObjects??[]){const footprint=view.entities.get('living:'+item.id)?.group.userData.navigationFootprint;if(footprint)obstacles.push({id:item.id,minX:item.x+footprint.minX,maxX:item.x+footprint.maxX,minZ:item.z+footprint.minZ,maxZ:item.z+footprint.maxZ});if(item.type==='city-area'){const z=item.z-(item.radius??8)*.82;obstacles.push({id:item.id+':camp',minX:item.x-1.5,maxX:item.x+1.5,minZ:z-1.2,maxZ:z+1.2});}}
+ const obstacles=[];for(const item of state.livingObjects??[]){const footprint=view.entities.get('living:'+item.id)?.group.userData.navigationFootprint;if(footprint)obstacles.push({id:item.id,minX:item.x+footprint.minX,maxX:item.x+footprint.maxX,minZ:item.z+footprint.minZ,maxZ:item.z+footprint.maxZ});if(item.type==='city-area'){const z=item.camp?.z??item.z-(item.radius??8)*.82,x=item.camp?.x??item.x;obstacles.push({id:item.id+':camp',minX:x-1.5,maxX:x+1.5,minZ:z-1.2,maxZ:z+1.2});}}
  view.cityNavigation=createNavigation(obstacles,view.cityNavigation);
  if(view.journeyBoard)view.journeyBoard.hidden=true;
  renderLivingPlacementPreview(view,state.placementPreview??null);

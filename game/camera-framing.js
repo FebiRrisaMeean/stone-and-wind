@@ -39,9 +39,9 @@ function targetLimits(camera,bounds){
 export function constrainPresetFrame(frame,viewport,bounds=LIVING_CAMERA_BOUNDS){
  const limits=targetLimits({...viewport,zoom:frame.zoom,yaw:frame.yaw,pitch:frame.pitch},bounds);
  // Horizontal centring prevents edge-city presets pointing mostly beyond the map
- // Keep the vertical composition when an overview is taller than the map itself
- const fitsDepth=limits.extent.maxZ-limits.extent.minZ<=bounds.maxZ-bounds.minZ;
- return{...frame,target:{x:clamp(frame.target.x,limits.minX,limits.maxX),z:fitsDepth?clamp(frame.target.z,limits.minZ,limits.maxZ):frame.target.z}};
+ // Preserve UI-aware composition when an overview exceeds a map dimension
+ const fitsDepth=limits.extent.maxZ-limits.extent.minZ<=bounds.maxZ-bounds.minZ, fitsWidth=limits.extent.maxX-limits.extent.minX<=bounds.maxX-bounds.minX;
+ return{...frame,target:{x:fitsWidth?clamp(frame.target.x,limits.minX,limits.maxX):frame.target.x,z:fitsDepth?clamp(frame.target.z,limits.minZ,limits.maxZ):frame.target.z}};
 }
 
 export function livingCameraLimits(camera,bounds=LIVING_CAMERA_BOUNDS){
