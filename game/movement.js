@@ -1,4 +1,4 @@
-import {TROOPS,WORLD} from './data.js';
+import {TROOPS,WORLD} from './data.js?v=pages29-cozy';
 
 const WORKER=TROOPS.worker;
 const BASE_VISION=7.8;

@@ -1,10 +1,10 @@
-import {createMovementWorld} from './movement.js';
-import {WORLD} from './data.js';
-import {Card,Location} from './everdell/engine.js';
-import {LIVING_CITIES,LIVING_TREE,MARKET_POSITIONS,BASIC_POSITIONS,FOREST_POSITIONS,COMMON_POSITIONS,CITY_CAMPS,CITY_FOREST_GATEWAYS,cityCardEntries,reconcileCityLayout} from './living-board-state.js';
-import {CARD_NAMES,LOCATION_NAMES,LOCATION_TEXT,EVENT_NAMES,SEASONS} from './everdell/locale.js';
-import {cityWorkerMarker,zoneBadge,storedResources} from './living-ui.js';
-import {workerSeatPosition} from './production-props.js';
+import {createMovementWorld} from './movement.js?v=pages29-cozy';
+import {WORLD} from './data.js?v=pages29-cozy';
+import {Card,Location} from './everdell/engine.js?v=pages29-cozy';
+import {LIVING_CITIES,LIVING_TREE,MARKET_POSITIONS,BASIC_POSITIONS,FOREST_POSITIONS,COMMON_POSITIONS,CITY_CAMPS,CITY_FOREST_GATEWAYS,cityCardEntries,reconcileCityLayout} from './living-board-state.js?v=pages29-cozy';
+import {CARD_NAMES,LOCATION_NAMES,LOCATION_TEXT,EVENT_NAMES,SEASONS} from './everdell/locale.js?v=pages29-cozy';
+import {cityWorkerMarker,zoneBadge,storedResources} from './living-ui.js?v=pages29-cozy';
+import {workerSeatPosition} from './production-props.js?v=pages29-cozy';
 const key=w=>w.location?'l:'+w.location:w.event?'e:'+w.event:'c:'+w.playedCard?.cardOwnerId+':'+w.playedCard?.cardName;
 // Reads only a private-per-seat public projection. No engine restore and no invented cards
 export function onlineDrawing(view,layout={},previous=null){
@@ -28,13 +28,13 @@ export function onlineDrawing(view,layout={},previous=null){
    const available=offered('VISIT_DESTINATION_CARD').some(o=>o.clientOptions.playedCard.cardName===pos.cardName&&o.clientOptions.playedCard.cardOwnerId===p.playerId);
    const previousItem=previous?.livingObjects.find(item=>item.id===id&&item.type==='city-card');
    let arrival=previousItem?.arrival?structuredClone(previousItem.arrival):undefined;
-   if(previous&&!previousItem){
+   if(previous&&!previousItem&&card.isCritter){
     const replaced=(previous.livingObjects??[]).filter(item=>item.type==='market'&&item.cardName===pos.cardName&&g.meadowCards[item.index]!==pos.cardName);
     const from=replaced.length===1?{x:replaced[0].x,z:replaced[0].z}:{...(owner===viewer?CITY_CAMPS[owner]:CITY_FOREST_GATEWAYS[owner])};
     arrival={key:`${view.roomId}:${view.revision}:${id}`,from,style:card.isCritter?'walk':'carry',species:owner?3:1};
    }
    const reason=available?'можно разместить рабочего':occupied>=capacity?'Все места заняты':'Это место сейчас недоступно';
-   state.livingObjects.push({id,type:'city-card',...pos,cardName:pos.cardName,played,critter:card.isCritter,homeCardName:card.associatedCard?.cardName,roamCenter:center,roamRadius:6,label:name,workerDestination,workerInfo:{capacity,workers:played?.workers??[],available,reason,open:!!card.isOpenDestination},statusHtml:workerDestination?cityWorkerMarker({name,available,occupied,capacity})+(pos.cardName==='Storehouse'?storedResources(played?.resources):''):undefined,ariaLabel:workerDestination?`${name} — место рабочего, ${occupied} из ${capacity} занято — ${reason}`:name,available:!card.maxWorkerSpots||available,arrival});
+   state.livingObjects.push({id,type:'city-card',...pos,cardName:pos.cardName,played,critter:card.isCritter,homeCardName:card.associatedCard?.cardName,roamCenter:center,roamRadius:6,label:name,workerDestination,workerInfo:{capacity,workers:played?.workers??[],available,reason,open:!!card.isOpenDestination},statusHtml:workerDestination?cityWorkerMarker({name,available,occupied,capacity})+(['Storehouse','Chapel','Clock Tower'].includes(pos.cardName)?storedResources(played?.resources):''):undefined,ariaLabel:workerDestination?`${name} — место рабочего, ${occupied} из ${capacity} занято — ${reason}`:name,available:!card.maxWorkerSpots||available,arrival});
   }
   for(let number=1;number<=p.numWorkers;number++){
    const placement=p.placedWorkers[number-1],home={x:camp.x-1+(number-1)%3,z:camp.z+Math.floor((number-1)/3)},unit={id:`e-${owner}-${number}`,number,owner,portrait:owner?3:1,teamSpecies:owner?3:1,kind:'worker',name:'Рабочий '+number,x:home.x,z:home.z,home,roamCenter:center,roamRadius:3,hp:1,ready:1,attacked:0,locationId:null,hiddenAtLocation:false,seatHeight:0,placementKey:placement?key(placement):null};

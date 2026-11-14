@@ -1,4 +1,5 @@
-import {canActShared,stepSharedGame,requestSharedSeason} from './shared-seasons.js';
+import {serializeGame,restoreGame} from './everdell/engine.js?v=pages29-cozy';
+import {canActShared,stepSharedGame,requestSharedSeason} from './shared-seasons.js?v=pages29-cozy';
 
 // A bot party never reads or overwrites the previous local two-player party
 export const BOT_SAVE_KEYS=Object.freeze({
@@ -42,4 +43,16 @@ export function applySessionCommand(game,meta,session,actorId,command){
  if(command?.kind!=='step'||!command.input||typeof command.input.inputType!=='string')throw new Error('Неизвестное действие');
  if(command.input.inputType==='UNDO')throw new Error('Используйте отмену текущего действия');
  return stepSharedGame(game,command.input,meta);
+}
+
+// Call exactly once on a freshly dealt party, before shared-season metadata is created
+// Keep identity/seat order stable; transfer the initial hands so the starter has five cards
+export function chooseInitialPlayer(game,random=Math.random){
+ if(game.gameStateId!==1||game.pendingGameInputs.length||game.players.some(p=>p.getPlayedCards().length||p.toJSON(true).placedWorkers.length))throw new Error('Жребий допустим только в новой партии');
+ const json=serializeGame(game),count=json.players.length;
+ const value=random();if(!Number.isFinite(value)||value<0||value>=1)throw new Error('Некорректный результат жеребьёвки');
+ const start=Math.floor(value*count),hands=json.players.map(p=>p.cardsInHand);
+ json.players.forEach((p,i)=>{p.cardsInHand=hands[(i-start+count)%count];p.numCardsInHand=p.cardsInHand.length;});
+ json.activePlayerId=json.players[start].playerId;
+ return restoreGame(json);
 }

@@ -23,8 +23,16 @@ export function woodlandPlacements(state){
   const density=.42+.17*Math.sin(px*.23+pz*.12)+.15*Math.cos(pz*.35-px*.15)
   if(seed>density||!vegetationAllowed(state,px,pz,1.5))continue
   if(trees.some(t=>Math.hypot(t.x-px,t.z-pz)<3.4))continue
-  trees.push({x:px,z:pz,size:4.5+forestNoise(px+8,pz)*1.5,r:seed*Math.PI*2,kind:forestNoise(px,pz+7)>.65?'spruce':'oak'})
+  trees.push({x:px,z:pz,size:4.5+forestNoise(px+8,pz)*1.5+(pz<8?1.1:0),r:seed*Math.PI*2,kind:forestNoise(px,pz+7)>.65?'spruce':'oak'})
  }
  for(const t of trees){const a=t.r+1.4,x=t.x+Math.sin(a)*1.8,z=t.z+Math.cos(a)*1.8;if(vegetationAllowed(state,x,z,.7))shrubs.push({x,z,size:.55+forestNoise(x,z)*.4,r:a,kind:'shrub'})}
  return{trees:trees.slice(0,110),shrubs:shrubs.slice(0,80)}
+}
+
+// Relief stays outside the city and production rectangles, so old placements remain level
+// WorldView.heightAt adds this term after its water check
+export function woodlandRelief(x,z){
+ const smooth=t=>{t=Math.max(0,Math.min(1,t));return t*t*(3-2*t)}
+ const edge=Math.max(smooth((7-x)/6),smooth((x-54)/6),smooth((6-z)/6))
+ return edge*(.65+.55*Math.sin(x*.19+z*.11)**2+.35*Math.cos(z*.27-x*.08)**2)
 }

@@ -1,5 +1,5 @@
-import {SOURCE_CARD_IDS} from './source-card-map.js';
-import {renderIcon} from './original-icons.js';
+import {SOURCE_CARD_IDS} from './source-card-map.js?v=pages29-cozy';
+import {renderIcon} from './original-icons.js?v=pages29-cozy';
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 // One button per played instance, including residents sharing a city space
@@ -10,8 +10,9 @@ export function cityRailMarkup(objects,owner,humanOwner){
  return tabs+`<div class="city-rail-list" aria-label="${owner===humanOwner?'Карты вашего города':'Карты города соперника'}">${entries.length?entries.map(entry=>{
   const id=SOURCE_CARD_IDS[entry.name],image=id?new URL(`./assets/cards64/illustrations/${id}.webp`,import.meta.url).href:null;
   const stored=Object.keys(entry.resources).filter(key=>entry.resources[key]>0),saved=stored.length>0;
+  const coins=Number(entry.resources.VP??0),showCoins=entry.name==='Chapel'||coins>0;
   const storedIcon=stored.length===1?stored[0].toLowerCase():'resource';
-  return `<button type="button" class="city-rail-card${entry.worker?' is-destination':''}${entry.available?' is-available':''}" data-city-card-id="${esc(entry.id)}"${owner===humanOwner&&!entry.critter?' title="Переместить: правый клик или Shift+Enter" aria-keyshortcuts="Shift+Enter"':''} aria-label="${esc(entry.ariaLabel)}${saved?' — есть запас на карте':''}"${entry.pairId?' data-paired="true"':''}><span class="city-rail-portrait"${image?` style="background-image:url('${image}')"`:''} aria-hidden="true"></span><span class="city-rail-name">${esc(entry.label)}</span>${entry.worker?`<span class="city-rail-worker" aria-hidden="true">${renderIcon('worker',{size:15,label:''})}<b>${entry.occupied}/${entry.capacity}</b></span>`:saved?`<span class="city-rail-stored" aria-hidden="true">${renderIcon(storedIcon,{size:16,label:''})}</span>`:''}</button>`;
+  return `<button type="button" class="city-rail-card${entry.worker?' is-destination':''}${entry.available?' is-available':''}" data-city-card-id="${esc(entry.id)}"${owner===humanOwner&&!entry.critter?' title="Переместить: правый клик или Shift+Enter" aria-keyshortcuts="Shift+Enter"':''} aria-label="${esc(entry.ariaLabel)}${showCoins?' — монет на карте: '+coins:saved?' — есть запас на карте':''}"${entry.pairId?' data-paired="true"':''}><span class="city-rail-portrait"${image?` style="background-image:url('${image}')"`:''} aria-hidden="true"></span><span class="city-rail-name">${esc(entry.label)}</span>${showCoins?`<span class="city-rail-coins" aria-hidden="true">${renderIcon('vp',{size:14,label:''})}<b>${coins}</b></span>`:''}${entry.worker?`<span class="city-rail-worker" aria-hidden="true">${renderIcon('worker',{size:15,label:''})}<b>${entry.occupied}/${entry.capacity}</b></span>`:saved?`<span class="city-rail-stored" aria-hidden="true">${renderIcon(storedIcon,{size:16,label:''})}</span>`:''}</button>`;
  }).join(''):'<span class="city-rail-empty">Город пока пуст</span>'}</div>`;
 }
 export function bindCityRail(element,{onHover,onLeave,onPick,onOwner,onReposition}){

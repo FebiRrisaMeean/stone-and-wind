@@ -1,4 +1,4 @@
-import {stepGame,serializeGame,restoreGame,Season,GameInputType,PlayerStatus,Card,CardType,Location} from './everdell/engine.js?v=20261112-23';
+import {stepGame,serializeGame,restoreGame,Season,GameInputType,PlayerStatus,Card,CardType,Location} from './everdell/engine.js?v=pages29-cozy';
 
 // The controller keeps the base rules intact while holding normal turns behind a shared season barrier
 const SEASON_ORDER=[Season.WINTER,Season.SPRING,Season.SUMMER,Season.AUTUMN];
@@ -16,11 +16,11 @@ export function sharedSeason(game,meta){return meta?.season??game.players[0]?.cu
 export function createSharedSeasonState(game,saved=null){
  const ids=game.players.map(p=>p.playerId),seasons=game.players.map(p=>p.currentSeason),least=SEASON_ORDER[Math.min(...seasons.map(index))],latest=SEASON_ORDER[Math.max(...seasons.map(index))];
  if(saved?.version===1&&SEASON_ORDER.includes(saved.season)){
-  const meta=cloneMeta(saved);meta.passed=(meta.passed??[]).filter(id=>ids.includes(id));
+  const meta=cloneMeta(saved);meta.roundStarter=ids.includes(meta.roundStarter)?meta.roundStarter:ids[0];meta.passed=(meta.passed??[]).filter(id=>ids.includes(id));
   if(meta.transition){meta.transition.queue=(meta.transition.queue??[]).filter(id=>ids.includes(id));if(meta.transition.current&&!ids.includes(meta.transition.current))meta.transition.current=null;}
   return meta;
  }
- const meta={version:1,season:least,passed:game.players.filter(ended).map(p=>p.playerId),transition:null,round:1+index(least)};
+ const meta={version:1,roundStarter:game.activePlayerId,season:least,passed:game.players.filter(ended).map(p=>p.playerId),transition:null,round:1+index(least)};
  // Older independent-season parties catch up the lagging side without discarding cards or resources
  const preparing=game.players.find(p=>p.getStatus()===PlayerStatus.PREPARING_FOR_SEASON);
  if(preparing&&game.pendingGameInputs.length){const target=SEASON_ORDER[Math.max(index(latest),index(preparing.currentSeason)+1)];meta.transition={kind:'migrate',from:least,to:target,queue:game.players.filter(p=>p.playerId!==preparing.playerId&&index(p.currentSeason)<index(target)&&!ended(p)).map(p=>p.playerId),current:preparing.playerId,startPlayer:ids[0]};}
@@ -30,7 +30,8 @@ export function createSharedSeasonState(game,saved=null){
 export function canActShared(game,meta,id=game.activePlayerId){return !game.isGameOver()&&!meta?.transition&&!meta?.passed?.includes(id)&&!game.pendingGameInputs.length&&hasAction(game,id);}
 function beginTransition(game,meta){
  const from=meta.season,kind=from===Season.AUTUMN?'finish':'advance';
- meta.transition={kind,from,to:kind==='finish'?null:SEASON_ORDER[index(from)+1],queue:game.players.filter(p=>!ended(p)).map(p=>p.playerId),current:null,startPlayer:game.players[0].playerId};
+ const ids=game.players.map(p=>p.playerId),current=ids.indexOf(meta.roundStarter??ids[0]),next=ids[(current+1)%ids.length];
+ meta.transition={kind,from,to:kind==='finish'?null:SEASON_ORDER[index(from)+1],queue:game.players.filter(p=>!ended(p)).map(p=>p.playerId),current:null,startPlayer:next};
 }
 function driveTransition(game,meta){
  let safety=0;
@@ -44,7 +45,7 @@ function driveTransition(game,meta){
   const id=transition.queue.shift();
   if(!id){
    const to=transition.to;meta.transition=null;meta.passed=[];
-   if(to){meta.season=to;meta.round=1+index(to);game=activeAs(game,transition.startPlayer);}
+   if(to){meta.roundStarter=transition.startPlayer;meta.season=to;meta.round=1+index(to);game=activeAs(game,transition.startPlayer);}
    return{game,meta};
   }
   const p=game.getPlayer(id);

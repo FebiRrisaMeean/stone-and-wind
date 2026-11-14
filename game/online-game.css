@@ -12,3 +12,28 @@
 
 .online-resource{gap:7px;margin:8px 0}.online-resource label{flex:1}
 .online-stepper{display:flex;align-items:center;gap:2px}.online-stepper button{width:30px;height:32px;padding:0;margin:0;font-size:20px}.online-stepper input{width:36px;text-align:center;padding:5px 0;margin:0;appearance:textfield}.online-stepper input::-webkit-inner-spin-button{appearance:none}
+
+/* Source-card paper palette shared by the field menus, with quiet readable controls */
+.online-panel,.online-inspect,.online-field section,#online-choice{font-family:Tahoma,Arial,sans-serif;color:#493c2b}
+.online-panel,.online-inspect{background:linear-gradient(120deg,#f4ead3,#e9d9b6);border:1px solid #ae8b58;box-shadow:0 8px 24px #30251635}
+.online-panel h2,.online-field h2,.online-field h3,#online-choice h2{font-family:'Rum Raisin Cyrillic',Georgia,serif;color:#62452d}
+.online-panel button,.online-field button,#online-choice button{font:inherit;border:1px solid #b59968;background:#eddfbf;color:#493c2b;border-radius:7px;padding:8px 12px;cursor:pointer}
+.online-panel button:disabled,.online-field button:disabled{cursor:default}
+.online-toolbar button.is-ready{border-color:#6a9e4b;box-shadow:0 0 0 2px #84b05b55,0 0 12px #79a84b55;position:relative}
+.online-toolbar button[data-online=events].is-ready:after{content:'';position:absolute;right:1px;top:1px;width:8px;height:8px;border-radius:50%;background:#b44531;border:1px solid #fff1cf}
+.online-field{position:absolute;inset:0;z-index:70;background:#211e184d;display:grid;place-items:center;padding:24px}
+.online-field[hidden]{display:none}
+.online-field section{width:min(1050px,100%);max-height:calc(100vh - 48px);overflow:auto;border-radius:15px;border:2px solid #b0905c;background:linear-gradient(135deg,#f6edd6,#e7d5ad);box-shadow:0 16px 60px #211b185c;padding:16px}
+.online-field header{position:sticky;top:-16px;z-index:2;background:#f1e4c8;display:flex;align-items:center;justify-content:space-between;padding:6px 10px;margin:-16px -16px 12px;border-bottom:1px solid #c2a777}
+.online-field h2{margin:7px;font-size:28px}.online-field header button{font-size:25px;line-height:1;padding:5px 12px}
+.online-market-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;padding:10px}
+.online-field .online-market-card{min-width:0;border:2px solid transparent;padding:0;background:none;border-radius:14px;overflow:hidden;filter:brightness(.65)}
+.online-field .online-market-card.is-ready{filter:none;border-color:#91c86e;box-shadow:0 0 0 2px #8bbb5c80,0 0 16px #7ba94f99}
+.online-market-card .runtime-card,.online-market-card [data-game-card-face],.online-card-choice .runtime-card,.online-card-choice [data-game-card-face]{display:block;width:100%;min-width:0;height:auto}
+.online-market-card .source-card,.online-card-choice .source-card{width:100%!important;max-width:100%;display:block}
+.online-event-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.online-event{padding:14px;border:1px solid #baa173;border-radius:10px;background:#f7efd9}.online-event p{line-height:1.5}.online-event.is-ready{border-color:#70964c;box-shadow:0 0 0 2px #8caa6140}.online-event h3{margin:0;font-size:21px}
+#online-choice:has(form){position:fixed;z-index:75;left:50%;top:50%;transform:translate(-50%,-50%);width:min(850px,calc(100vw - 64px));max-height:calc(100vh - 64px);overflow:auto;padding:20px;border:2px solid #af915e;border-radius:14px;background:linear-gradient(135deg,#f7ecd4,#e9d7b0);box-shadow:0 16px 70px #211b1866}
+.online-choice-options{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start;padding:8px}.online-card-choice{position:relative;display:block;width:190px;max-width:100%;padding:3px;border:2px solid transparent;border-radius:12px;cursor:pointer}.online-card-choice input{position:absolute;left:8px;top:8px;z-index:1;accent-color:#527c39;width:20px;height:20px}.online-card-choice:has(input:checked){border-color:#648f43;box-shadow:0 0 0 3px #98b96d66}.online-card-choice:focus-within{outline:2px solid #795f35;outline-offset:3px}
+.online-inspect{pointer-events:none}
+@media(max-width:1050px){.online-market-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.living-shell .online-panel h2,.living-shell .online-field h2,.living-shell .online-field h3,.living-shell #online-choice h2{font-family:var(--card-title);font-weight:400}

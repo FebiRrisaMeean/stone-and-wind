@@ -1,4 +1,4 @@
-import {footprintAt,hullsOverlap,footprintFitsBounds,isBuildingFootprint,navigationFootprint,navigationPassageClear} from './city-footprints.js';
+import {footprintAt,hullsOverlap,footprintFitsBounds,isBuildingFootprint,navigationFootprint,navigationPassageClear,normalizeCityRotation} from './city-footprints.js?v=pages29-cozy';
 // Presentation positions never change engine costs, turns, city capacity or card effects
 export const CITY_LAYOUT_VERSION=2;
 // Cities are independent canonical spaces, shown one at a time by applyCityScene
@@ -15,33 +15,33 @@ export function inCity(owner,x,z){const c=LIVING_CITIES[owner];return !!c&&Numbe
 export function cityCardEntries(player){const counts={},entries=player.getPlayedCards().map(played=>{const ordinal=counts[played.cardName]??0;counts[played.cardName]=ordinal+1;return{key:player.playerId+'|'+played.cardName+'|'+ordinal,played,cardName:played.cardName};});for(const entry of entries)entry.pairedWith=entry.played.pairId?entries.find(other=>other.key!==entry.key&&other.played.pairId===entry.played.pairId)?.key??null:null;return entries;}
 export function cityCampHull(owner){const c=CITY_CAMPS[owner],z=c.z;return [[c.x-1.5,z-1.2],[c.x+1.5,z-1.2],[c.x+1.5,z+1.2],[c.x-1.5,z+1.2]];}
 const reservesGround=name=>name==null||isBuildingFootprint(name);
-export function validCityPosition(owner,x,z,positions,ignore=null,cardName=null){
+export function validCityPosition(owner,x,z,positions,ignore=null,cardName=null,rotation=0){
  const c=LIVING_CITIES[owner];if(!c||!inCity(owner,x,z))return false;
- const hull=footprintAt(cardName,x,z);if(!footprintFitsBounds(hull,c.bounds)||hullsOverlap(hull,cityCampHull(owner)))return false;
- return Object.entries(positions).every(([key,p])=>key===ignore||p.owner!==owner||(!reservesGround(cardName)||!reservesGround(p.cardName??key.split('|')[1]))||(!hullsOverlap(hull,footprintAt(p.cardName??key.split('|')[1],p.x,p.z))&&navigationPassageClear(navigationFootprint(cardName,x,z),navigationFootprint(p.cardName??key.split('|')[1],p.x,p.z))));
+ const hull=footprintAt(cardName,x,z,rotation);if(!footprintFitsBounds(hull,c.bounds)||hullsOverlap(hull,cityCampHull(owner)))return false;
+ return Object.entries(positions).every(([key,p])=>key===ignore||p.owner!==owner||(!reservesGround(cardName)||!reservesGround(p.cardName??key.split('|')[1]))||(!hullsOverlap(hull,footprintAt(p.cardName??key.split('|')[1],p.x,p.z,p.rotation??0))&&navigationPassageClear(navigationFootprint(cardName,x,z,1,rotation),navigationFootprint(p.cardName??key.split('|')[1],p.x,p.z,1,p.rotation??0))));
 }
-export function freeCityPosition(owner,entries,cardName=null){
+export function freeCityPosition(owner,entries,cardName=null,rotation=0){
  const c=LIVING_CITIES[owner],positions=Object.fromEntries(entries.map((p,i)=>[String(i),{...p,owner}]));
  // Wide lanes first, then a finer deterministic search for an unusual remaining footprint
- for(const step of [6.6,.5])for(let z=c.bounds.minZ+2.5;z<c.bounds.maxZ-1;z+=step)for(let x=c.bounds.minX+2.5;x<c.bounds.maxX-1;x+=step)if(validCityPosition(owner,x,z,positions,null,cardName))return{x,z};
+ for(const step of [6.6,.5])for(let z=c.bounds.minZ+2.5;z<c.bounds.maxZ-1;z+=step)for(let x=c.bounds.minX+2.5;x<c.bounds.maxX-1;x+=step)if(validCityPosition(owner,x,z,positions,null,cardName,rotation))return{x,z,rotation:normalizeCityRotation(rotation)};
  return null;
 }
 export function cityLayoutConflicts(positions){
  const conflicts=[];
- for(const [key,p] of Object.entries(positions))if(!validCityPosition(p.owner,p.x,p.z,positions,key,p.cardName))conflicts.push(key);
+ for(const [key,p] of Object.entries(positions))if(!validCityPosition(p.owner,p.x,p.z,positions,key,p.cardName,p.rotation??0))conflicts.push(key);
  return conflicts;
 }
 function reconcileCityLayoutPass(game,positions,preferred=null){const next={},added=[];game.players.slice(0,2).forEach((player,owner)=>{for(const entry of cityCardEntries(player)){const previous=positions[entry.key],pair=entry.pairedWith?next[entry.pairedWith]:null,chosen=preferred&&preferred.owner===owner&&preferred.cardName===entry.cardName&&!preferred.used;let pos=previous;
  // The paired resident shares the partner's foundation, even in older layouts
  // where a second free placement mistakenly separated the two residents
  if(pair){pos={x:pair.x+.58,z:pair.z+.28};if(chosen)preferred.used=true;}
- else if(!pos||!validCityPosition(owner,pos.x,pos.z,next,null,entry.cardName)){
-  if(chosen&&validCityPosition(owner,preferred.x,preferred.z,next,null,entry.cardName)){pos={x:preferred.x,z:preferred.z};preferred.used=true;}
+ else if(!pos||!validCityPosition(owner,pos.x,pos.z,next,null,entry.cardName,pos.rotation??0)){
+  if(chosen&&validCityPosition(owner,preferred.x,preferred.z,next,null,entry.cardName,preferred.rotation??0)){pos={x:preferred.x,z:preferred.z,rotation:preferred.rotation??0};preferred.used=true;}
   else pos=freeCityPosition(owner,Object.values(next).filter(p=>p.owner===owner),entry.cardName);
   if(!pos)throw new Error('City layout has no legal position for '+entry.cardName);
  }
  if(!previous)added.push({...entry,owner});
- next[entry.key]={x:pos.x,z:pos.z,owner,cardName:entry.cardName,pairId:entry.played.pairId??null};}});return{positions:next,added,conflicts:cityLayoutConflicts(next)};}
+ next[entry.key]={x:pos.x,z:pos.z,rotation:normalizeCityRotation(pos.rotation??0),owner,cardName:entry.cardName,pairId:entry.played.pairId??null};}});return{positions:next,added,conflicts:cityLayoutConflicts(next)};}
 
 // A fragmented old layout can consume all lanes even when the whole city fits
 // Retry a deterministic repack, preserving every card identity and engine owner

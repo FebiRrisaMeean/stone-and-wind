@@ -25,19 +25,25 @@ export function nearestFree(p,obstacles){
  return candidates.filter(q=>!pointBlocked(q,obstacles)).sort((a,b)=>Math.hypot(a.x-p.x,a.z-p.z)-Math.hypot(b.x-p.x,b.z-p.z))[0]??null
 }
 const visibilityGraphs=new WeakMap()
-function obstacleGraph(obstacles){
- let graph=visibilityGraphs.get(obstacles);if(graph)return graph
+const EMPTY_ROADS=[]
+function obstacleGraph(obstacles,roads=EMPTY_ROADS){
+ let variants=visibilityGraphs.get(obstacles);if(!variants){variants=new WeakMap();visibilityGraphs.set(obstacles,variants)}
+ let graph=variants.get(roads);if(graph)return graph
  const points=[]
  for(const o of obstacles)for(const x of [o.minX-EPS,o.maxX+EPS])for(const z of [o.minZ-EPS,o.maxZ+EPS]){const p={x,z};if(!pointBlocked(p,obstacles))points.push(p)}
+ const roadEdges=[]
+ for(const segment of roads){if(pointBlocked(segment.a,obstacles)||pointBlocked(segment.b,obstacles)||!segmentClear(segment.a,segment.b,obstacles))continue;const index=p=>{let i=points.findIndex(q=>Math.hypot(p.x-q.x,p.z-q.z)<1e-5);if(i<0){i=points.length;points.push({...p})}return i};roadEdges.push([index(segment.a),index(segment.b)])}
+ const discounted=new Set(roadEdges.flatMap(([i,j])=>[i+':'+j,j+':'+i]))
  const edges=points.map(()=>[])
- for(let i=0;i<points.length;i++)for(let j=i+1;j<points.length;j++)if(segmentClear(points[i],points[j],obstacles)){const d=Math.hypot(points[i].x-points[j].x,points[i].z-points[j].z);edges[i].push([j,d]);edges[j].push([i,d])}
- graph={points,edges};visibilityGraphs.set(obstacles,graph);return graph
+ for(let i=0;i<points.length;i++)for(let j=i+1;j<points.length;j++)if(segmentClear(points[i],points[j],obstacles)){const d=Math.hypot(points[i].x-points[j].x,points[i].z-points[j].z)*(discounted.has(i+':'+j)?.42:1);edges[i].push([j,d]);edges[j].push([i,d])}
+ graph={points,edges};variants.set(roads,graph);return graph
 }
-export function planRoute(start,goal,obstacles){
+export function planRoute(start,goal,obstacles,roads=EMPTY_ROADS){
  if(pointBlocked(start,obstacles)||pointBlocked(goal,obstacles))return null
- if(segmentClear(start,goal,obstacles))return[{...goal}]
+ if(!roads.length&&segmentClear(start,goal,obstacles))return[{...goal}]
  // Reuse corner-to-corner visibility for all actors with the same clearance
- const graph=obstacleGraph(obstacles),points=[start,goal,...graph.points],edges=[[],[],...graph.edges.map(row=>row.map(([j,d])=>[j+2,d]))]
+ const graph=obstacleGraph(obstacles,roads),points=[start,goal,...graph.points],edges=[[],[],...graph.edges.map(row=>row.map(([j,d])=>[j+2,d]))]
+ if(segmentClear(start,goal,obstacles)){const d=Math.hypot(start.x-goal.x,start.z-goal.z);edges[0].push([1,d]);edges[1].push([0,d])}
  for(let i=0;i<2;i++)for(let j=2;j<points.length;j++)if(segmentClear(points[i],points[j],obstacles)){const d=Math.hypot(points[i].x-points[j].x,points[i].z-points[j].z);edges[i].push([j,d]);edges[j].push([i,d])}
  const d=points.map(()=>Infinity),previous=points.map(()=>-1),visited=new Set();d[0]=0
  for(let round=0;round<points.length;round++){
@@ -49,9 +55,9 @@ export function planRoute(start,goal,obstacles){
  }
  return null
 }
-export function createNavigation(obstacles,previous){
- const key=obstacles.map(o=>[o.id,o.minX,o.maxX,o.minZ,o.maxZ].join(':')).join('|')
- return previous?.key===key?previous:{key,obstacles,revision:(previous?.revision??0)+1,expanded:new Map()}
+export function createNavigation(obstacles,previous,roads=EMPTY_ROADS){
+ const key=obstacles.map(o=>[o.id,o.minX,o.maxX,o.minZ,o.maxZ].join(':')).join('|')+'#'+roads.map(s=>[s.a.x,s.a.z,s.b.x,s.b.z].join(':')).join('|')
+ return previous?.key===key?previous:{key,obstacles,roads,revision:(previous?.revision??0)+1,expanded:new Map()}
 }
 function clearance(nav,radius,exclude){const key=radius+':'+exclude;let obstacles=nav.expanded.get(key);if(!obstacles){obstacles=expandedObstacles(nav.obstacles,radius,exclude);nav.expanded.set(key,obstacles)}return obstacles}
 export function stepNavigation(position,goal,state,dt,speed,nav,{radius=.45,exclude=null}={}){
@@ -61,7 +67,7 @@ export function stepNavigation(position,goal,state,dt,speed,nav,{radius=.45,excl
  // free boundary once, rather than animate it walking through the new wall
  let displaced=false
  if(pointBlocked(position,obstacles)){const free=nearestFree(position,obstacles);if(!free)return{moving:false,blocked:true};position.x=free.x;position.z=free.z;state.key=null;displaced=true}
- if(state.key!==key){state.key=key;state.destination=nearestFree(goal,obstacles);state.route=state.destination?planRoute(position,state.destination,obstacles):null;state.index=0}
+ if(state.key!==key){state.key=key;state.destination=nearestFree(goal,obstacles);state.route=state.destination?planRoute(position,state.destination,obstacles,nav.roads):null;state.index=0}
  if(!state.route)return{moving:false,blocked:true,displaced}
  const before={x:position.x,z:position.z};let remaining=Math.max(0,Math.min(dt,.1))*speed
  while(remaining>1e-7&&state.index<state.route.length){

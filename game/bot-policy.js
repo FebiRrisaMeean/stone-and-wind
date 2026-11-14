@@ -1,4 +1,4 @@
-import {Card,Location,Event,GameInputType,CardType,Season,restoreGame,getPaymentOptions} from './everdell/engine.js?v=20261112-23';
+import {Card,Location,Event,GameInputType,CardType,Season,restoreGame,getPaymentOptions} from './everdell/engine.js?v=pages29-cozy';
 
 const KEYS=['TWIG','RESIN','PEBBLE','BERRY'];
 const BASE={TWIG:.9,RESIN:1.25,PEBBLE:1.7,BERRY:1.1};

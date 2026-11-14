@@ -8,7 +8,7 @@ export function installPerformancePanel(probe, loop) {
  panel.style.cssText='position:fixed;z-index:100000;right:8px;top:8px;width:420px;max-height:70vh;overflow:auto;background:#101820;color:#fff;padding:12px;font:12px monospace;pointer-events:auto';
  const title=document.createElement('div');title.textContent='QA performance probe · 30s capture';panel.append(title);
  const output=document.createElement('pre');output.id='performance-probe-output';output.style.cssText='white-space:pre-wrap;overflow-wrap:anywhere';
- const snapshot=()=>{output.textContent=JSON.stringify({...probe.snapshot(),renderSuspended:loop.disposed},null,2);};
+ const snapshot=()=>{output.textContent=JSON.stringify({...probe.snapshot(),renderSuspended:loop.disposed,totalRenderedFrames:loop.frames,overlayPaused:!loop.active()},null,2);};
  const addButton=(label,action)=>{const b=document.createElement('button');b.type='button';b.textContent=label;b.style.cssText='margin:8px 6px 8px 0;color:#101820;background:#fff;padding:6px';b.addEventListener('click',action);panel.append(b);return b;};
  addButton('Snapshot',snapshot);
  const toggle=addButton('Suspend rendering',()=>{if(loop.disposed){loop.disposed=false;loop.invalidate();toggle.textContent='Suspend rendering';}else{loop.dispose();toggle.textContent='Resume rendering';}snapshot();});

@@ -1,10 +1,11 @@
-import {createWorkerCharacter} from './local-sculpt/worker-characters.js';
-import {batchProductionSite} from './static-batching.js';
-import {addWoodlandAssets,addWoodlandPaths,createWoodlandAsset} from './woodland-assets.js';
-import {addProductionProps} from './production-props.js?v=field19';
-import {seasonVisuals} from './seasonal-visuals.js?v=20261112-23';
+import {createSeasonalWeather} from './seasonal-weather.js?v=pages29-cozy';
+import {createWorkerCharacter} from './local-sculpt/worker-characters.js?v=pages29-cozy';
+import {batchProductionSite} from './static-batching.js?v=pages29-cozy';
+import {addWoodlandAssets,addWoodlandPaths,createWoodlandAsset} from './woodland-assets.js?v=pages29-cozy';
+import {addProductionProps} from './production-props.js?v=pages29-cozy';
+import {seasonVisuals} from './seasonal-visuals.js?v=pages29-cozy';
 import * as T from '../vendor/three.module.js';
-import {WORLD} from './data.js?v=20261112-23';
+import {WORLD} from './data.js?v=pages29-cozy';
 
 // All geometry is local to the miniature so world-space placement and picking stay unchanged
 const bark=0x765039,moss=0x587c43,cream=0xf2ddac,soil=0x77654b;
@@ -156,11 +157,13 @@ export function addWoodlandTerrain(view,s,p,menu,known){const seasonal=s.livingB
  if(journeyStops.length>1&&!s.livingBoard){const path=new T.Group();for(let i=0;i<journeyStops.length-1;i++){const a=journeyStops[i],b=journeyStops[i+1],steps=Math.ceil(Math.hypot(b.x-a.x,b.z-a.z)*5);for(let j=0;j<=steps;j++){const t=j/steps,x=a.x+(b.x-a.x)*t,z=a.z+(b.z-a.z)*t;const stone=view.cylinder(path,x,view.heightAt(x,z)+.03,z,.69,.045,0xd8c398,20);stone.scale.z=.8;stone.receiveShadow=true;}}view.detail.add(path);}
  // Woodland silhouette around the existing terrain, without introducing new board obstacles
  if(s.mode==='placement'&&!s.livingBoard){const elder=ancientTree(view,{x:30,z:22,id:'elder',kind:'decoration'});elder.traverse(o=>{delete o.userData.pick;});view.detail.add(elder);}
- const fireflies=[];for(let i=0;i<38;i++){const x=2+n(i,4)*29,z=6+n(i,8)*32;fireflies.push({x,y:.5+n(i,11)*1.7,z,phase:n(i,19)*6.28});}
- const swarm=new T.InstancedMesh(new T.SphereGeometry(.025,5,4),view.material(0xffe7a1,{emissive:0xffd969,emissiveIntensity:1.7,transparent:true,opacity:.82,depthWrite:false}),fireflies.length);swarm.castShadow=false;swarm.userData.fireflies=fireflies;view.detail.add(swarm);view.fireflies=swarm;
- const falling=new T.InstancedMesh(new T.SphereGeometry(.085,5,4),view.material(0xd8bc66,{transparent:true,opacity:.75,depthWrite:false}),15);falling.castShadow=false;view.detail.add(falling);view.fallingLeaves=falling;falling.visible=!s.livingBoard||s.season==='AUTUMN';if(s.season==='WINTER')swarm.visible=false;
+ // Old terrain weather belongs to detail and is disposed by WorldView.clear
+ view.fireflies=null;view.fallingLeaves=null;
+ view.seasonalWeather=createSeasonalWeather(s.season,globalThis.location?.search??'');
+ if(view.seasonalWeather)view.detail.add(view.seasonalWeather.mesh);
 }
 
-export function animateWoodland(view){if(!view.fireflies)return;const dummy=new T.Object3D();view.fireflies.userData.fireflies.forEach((f,i)=>{dummy.position.set(f.x+Math.sin(view.t*.24+f.phase)*.4,f.y+Math.sin(view.t*.6+f.phase)*.23,f.z+Math.cos(view.t*.20+f.phase)*.3);const size=.50+Math.pow((1+Math.sin(view.t*1.3+f.phase))*.5,2)*1.1;dummy.scale.setScalar(size);dummy.updateMatrix();view.fireflies.setMatrixAt(i,dummy.matrix);});view.fireflies.instanceMatrix.needsUpdate=true;
- if(view.fallingLeaves){for(let i=0;i<view.fallingLeaves.count;i++){const phase=(view.t*.065+i/15)%1,a=i*2.399;dummy.position.set(30+Math.sin(a)*2.3+Math.sin(phase*6+a)*.45,4.1-phase*3.8,22+Math.cos(a)*1.8+phase*.7);dummy.rotation.set(view.t*.4+a,a,Math.sin(view.t+i)*.7);dummy.scale.set(.6,.14,1.3);dummy.updateMatrix();view.fallingLeaves.setMatrixAt(i,dummy.matrix);}view.fallingLeaves.instanceMatrix.needsUpdate=true;}}
-
+export function animateWoodland(view){
+ // The render loop already sleeps in hidden tabs; only two scalar uniforms change per frame
+ view.seasonalWeather?.update(view.t,view.renderer?.getPixelRatio?.()??1);
+}

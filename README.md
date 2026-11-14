@@ -10,27 +10,27 @@ Bot saves use separate stone-wind-bot keys. Previous hotseat saves are preserved
 
 The bot mode runs entirely in the browser. A separate local room server supports two human clients with invitations and reconnect; the public GitHub Pages deployment does not host that server
 
-Hand cards fan out at the bottom. Eight market miniatures and shared worker locations face the ancient tree. The enlarged city occupies the central foreground; the opponent city is shown separately with its camera button
+Hand cards fan out at the bottom. A button opens eight market cards; shared worker locations face the ancient tree. The enlarged city occupies the central foreground; the opponent city is shown separately with its camera button
 
-Hover an object or its fixed city foundation to inspect its card. Select a playable hand card or market object, then choose a free position in the appropriate city
+Hover an object or its fixed city foundation to inspect its card. Select a playable hand card or market card, then choose a free position in the appropriate city
 
 Starting placement frames the destination city. Right-click during placement cancels the complete action, including payment and choices. Paired Husband and Wife share one logical city space and appear beside each other, even when the city is full
 
-The character-library/ gallery compares all 24 local animated critters with their card illustrations. These meshes also appear in the market and cities, with independent movement and shared geometry. All 24 constructions now follow their source cards, using connected timber, bark and masonry forms with restrained animation. The three approved Crane, Resin Refinery and Clock Tower shapes are preserved. The building-library/ gallery compares each model with its source card
+The character-library/ gallery compares all 24 local animated critters with their card illustrations. These meshes appear in cities, with independent movement and shared geometry. All 24 constructions now follow their source cards, using connected timber, bark and masonry forms with restrained animation. The three approved Crane, Resin Refinery and Clock Tower shapes are preserved. The building-library/ gallery compares each model with its source card
 
 The separate world-study/ gallery preserves six animated 3D samples with their source cards: Architect, Bard, Doctor, Crane, Resin Refinery and Clock Tower. Earlier samples remain available as a historical visual reference
 
-Four camera buttons frame your city, production, the market and the opponent’s city. Moving the pointer releases the preset without changing its current view
+Camera buttons frame your city, production and the opponent’s city; the market button opens a card gallery. Moving the pointer releases the preset without changing its current view
 
 Free camera: drag, screen edges, right drag to rotate, wheel to zoom, WASD and Q/E. Elastic boundaries keep the view on the drawn field
 
-Your supplies and next-season forecast stay at the top left. Hover the opponent’s supply crates to see their stock. Choose distinct worker species at setup
+Your supplies and next-season forecast stay at the top left. Hover the opponent’s supply button to see their stock. Choose squirrels or rabbits at setup
 
-Seasons are shared: a player may pass, then the other may continue. Advance only after both pass or run out of legal actions, resolving production choices before the shared landscape changes. No free workers alone does not end a season while card actions remain
+The first player is random for a new game and alternates each shared season. Seasons are shared: a player may pass, then the other may continue. Advance only after both pass or run out of legal actions, resolving production choices before the shared landscape changes. No free workers alone does not end a season while card actions remain
 
 Production clearings contain resource miniatures and physical worker seats. Hover for exact rewards, exchanges and occupied/total capacity. Locks explain unavailable actions on hover
 
-Snow, flowers and autumn foliage follow the season. Market residents wander, recruited residents walk into the city, and animal porters carry new buildings. Escape opens the game menu
+Snow, flowers and autumn foliage follow the season. Recruited residents walk into the city; buildings appear without the former porter animation. Escape opens the game menu
 
 Choice dialogs share original resource and victory-point symbols. Use plus/minus counters to choose amounts; X, Cancel or Escape restores the complete state before your initiated action. Mandatory rewards triggered after the opponent ends the shared season must be resolved
 

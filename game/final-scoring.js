@@ -1,5 +1,5 @@
-import {Card,Event,Location,getScores} from './everdell/engine.js?v=20261112-23';
-import {cityCardEntries} from './living-board-state.js?v=feedback21';
+import {Card,Event,Location,getScores} from './everdell/engine.js?v=pages29-cozy';
+import {cityCardEntries} from './living-board-state.js?v=pages29-cozy';
 
 const sum=steps=>steps.reduce((total,step)=>total+step.points,0);
 const categories=['cards','events','journey','tokens'];

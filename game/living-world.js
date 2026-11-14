@@ -1,15 +1,16 @@
-import {nightAssetRevision} from './local-sculpt/lazy-assets.js';
-import {animateWorkerCharacter} from './local-sculpt/worker-characters.js';
-import {navigationFootprint} from './city-footprints.js';
-import {createWoodlandAsset} from './woodland-assets.js';
-import {cityFootprint} from './city-footprints.js';
-import {createNavigation,stepNavigation} from './city-navigation.js';
-import {findCityHabitat,stepHabitatWalk} from './city-habitats.js';
-import {applyObjectSeason} from './seasonal-visuals.js?v=resources17';
+import {buildCityRoads} from './city-roads.js?v=pages29-cozy';
+import {nightAssetRevision} from './local-sculpt/lazy-assets.js?v=pages29-cozy';
+import {animateWorkerCharacter} from './local-sculpt/worker-characters.js?v=pages29-cozy';
+import {navigationFootprint} from './city-footprints.js?v=pages29-cozy';
+import {createWoodlandAsset} from './woodland-assets.js?v=pages29-cozy';
+import {cityFootprint} from './city-footprints.js?v=pages29-cozy';
+import {createNavigation,stepNavigation} from './city-navigation.js?v=pages29-cozy';
+import {findCityHabitat,stepHabitatWalk} from './city-habitats.js?v=pages29-cozy';
+import {applyObjectSeason} from './seasonal-visuals.js?v=pages29-cozy';
 import * as T from '../vendor/three.module.js';
-import {createCardMiniature,animateCardMiniature} from './living-models.js?v=pages25-architecture';
-import {woodlandCottage,ancientTree,woodlandFigure} from './woodland-world.js?v=resources17';
-import {resourceIcon} from './everdell/art.js?v=20261112-23';
+import {createCardMiniature,animateCardMiniature} from './living-models.js?v=pages29-cozy';
+import {woodlandCottage,ancientTree,woodlandFigure} from './woodland-world.js?v=pages29-cozy';
+import {resourceIcon} from './everdell/art.js?v=pages29-cozy';
 
 const team=[0x719bb6,0xd7a073,0x97b485,0xb99ac7];
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -19,21 +20,7 @@ const shortest=(a,b)=>Math.atan2(Math.sin(b-a),Math.cos(b-a));
 function sphere(view,g,x,y,z,r,color,sx=1,sy=1,sz=1){const m=view.mesh(g,new T.SphereGeometry(r,10,7),color,x,y,z);m.scale.set(sx,sy,sz);return m;}
 function disc(view,g,x,y,z,r,color,opacity=1){const m=view.mesh(g,new T.CircleGeometry(r,40),view.material(color,{transparent:opacity<1,opacity,side:T.DoubleSide,depthWrite:opacity===1}),x,y,z);m.rotation.x=-Math.PI/2;m.castShadow=false;return m;}
 function foundation(view,g,item){const r=item.type==='market'?.85:.93,c=team[item.owner]??0xbeb08c;view.cylinder(g,0,.07,0,r,.08,0xbaa777,30);disc(view,g,0,.115,0,r-.08,0xd9c99e);const edge=view.ring(r-.045,r+.02,c,.68);edge.position.y=.125;g.add(edge);return g;}
-function camp(view,g,item){
- const r=item.radius??8,color=team[item.owner]??team[0],campX=(item.camp?.x??item.x)-item.x,campZ=(item.camp?.z??item.z-r*.82)-item.z;
- const bounds=item.bounds;
- if(bounds){
-  // Sparse stones mark a clearing; buildings have no permanent discs
-  const corners=[[bounds.minX,bounds.minZ],[bounds.maxX,bounds.minZ],[bounds.maxX,bounds.maxZ],[bounds.minX,bounds.maxZ]];
-  for(let edge=0;edge<4;edge++){const a=corners[edge],b=corners[(edge+1)%4],steps=Math.ceil(Math.hypot(b[0]-a[0],b[1]-a[1])/3);
-   for(let i=0;i<steps;i++){const t=i/steps;sphere(view,g,a[0]+(b[0]-a[0])*t-item.x,.06,a[1]+(b[1]-a[1])*t-item.z,.10,0xb4b69b,1.3,.4,.8);}
-  }
- }
- const hut=woodlandCottage(view,{x:0,z:0,kind:'house',id:item.id+'-camp'},true);hut.position.set(campX,0,campZ);hut.scale.setScalar(.95);g.add(hut);
- for(let j=0;j<4;j++){const x=campX-.7+j*.45;view.cylinder(g,x,.13,campZ+1.4,.11,.22,0x98734b,8);}
- const post=view.cylinder(g,campX-1.4,.6,campZ+.35,.045,1.2,0x765139,7);view.box(g,campX-1.15,.95,campZ+.35,.53,.32,.045,color);post.userData.camp=true;
- g.traverse(o=>{delete o.userData.pick;});return g;
-}
+function camp(view,g,item){return g;}
 function smallObject(view,g,item){
  const color=team[item.owner]??0xb4a36b;
  if(item.type==='city-area')return camp(view,g,item);
@@ -58,9 +45,9 @@ function smallObject(view,g,item){
 }
 function makeObject(view,item){
  const g=new T.Group();g.position.set(item.x,view.heightAt(item.x,item.z)+.025,item.z);
- if(item.cardName){const miniature=createCardMiniature(view,item.cardName,item.owner??0);miniature.scale.multiplyScalar(item.modelScale??1.10);miniature.position.y=0;miniature.rotation.y=miniature.userData.isCritter?0:Math.PI;g.add(miniature);g.userData.miniature=miniature;}
+ if(item.cardName){const miniature=createCardMiniature(view,item.cardName,item.owner??0);miniature.scale.multiplyScalar(item.modelScale??1.10);miniature.position.y=0;miniature.rotation.y=miniature.userData.isCritter?0:Math.PI+(item.rotation??0);g.add(miniature);g.userData.miniature=miniature;}
  else smallObject(view,g,item);
- if(item.cardName&&!item.critter){g.updateMatrixWorld(true);const box=new T.Box3().setFromObject(g.userData.miniature);g.userData.navigationFootprint=navigationFootprint(item.cardName,0,0,(item.modelScale??1.10)/1.10)??{minX:box.min.x-item.x-.12,maxX:box.max.x-item.x+.12,minZ:box.min.z-item.z-.12,maxZ:box.max.z-item.z+.12};}
+ if(item.cardName&&!item.critter){g.updateMatrixWorld(true);const box=new T.Box3().setFromObject(g.userData.miniature);g.userData.navigationFootprint=navigationFootprint(item.cardName,0,0,(item.modelScale??1.10)/1.10,item.rotation??0)??{minX:box.min.x-item.x-.12,maxX:box.max.x-item.x+.12,minZ:box.min.z-item.z-.12,maxZ:box.max.z-item.z+.12};}
  if(item.type!=='city-area'&&!item.hideOnArrival)view.tagged(g,{type:item.type,id:item.id});
  return g;
 }
@@ -89,17 +76,21 @@ export function renderLivingBoard(view,state){
 
  }
  for(const item of [...(state.livingObjects??[]),...(state.cityScene?.gatewayArrivals??[]).filter(item=>!view.completedLivingArrivals?.has(item.arrival.key))]){
-  const entity=view.syncEntity('living:'+item.id,`${item.type}:${nightAssetRevision(item.cardName)}:${item.cardName??''}:${item.owner??''}:${item.x}:${item.z}:${item.radius??''}:${item.type==='city-area'?state.season:''}`,()=>makeObject(view,item));entity.living=item;
+  if(['market','event','supplies','season'].includes(item.type))continue;
+  const entity=view.syncEntity('living:'+item.id,`${item.type}:${nightAssetRevision(item.cardName)}:${item.cardName??''}:${item.owner??''}:${item.x}:${item.z}:${item.rotation??0}:${item.radius??''}:${item.type==='city-area'?state.season:''}`,()=>makeObject(view,item));entity.living=item;
   if(item.type==='market'){let glow=entity.group.userData.affordance;if(!glow){glow=view.ring(.91,1.04,0x87cb78,.65);glow.position.y=.14;entity.group.add(glow);entity.group.userData.affordance=glow;}glow.visible=item.available===true;}
   applyObjectSeason(entity.group,state.season);if(!item.hideOnArrival)objectLabel(view,item);
  }
- const obstacles=[];for(const item of state.livingObjects??[]){const footprint=view.entities.get('living:'+item.id)?.group.userData.navigationFootprint;if(footprint)obstacles.push({id:item.id,minX:item.x+footprint.minX,maxX:item.x+footprint.maxX,minZ:item.z+footprint.minZ,maxZ:item.z+footprint.maxZ});if(item.type==='city-area'){const z=item.camp?.z??item.z-(item.radius??8)*.82,x=item.camp?.x??item.x;obstacles.push({id:item.id+':camp',minX:x-1.5,maxX:x+1.5,minZ:z-1.2,maxZ:z+1.2});}}
- view.cityNavigation=createNavigation(obstacles,view.cityNavigation);
+ const obstacles=[];for(const item of state.livingObjects??[]){const footprint=view.entities.get('living:'+item.id)?.group.userData.navigationFootprint;if(footprint)obstacles.push({id:item.id,minX:item.x+footprint.minX,maxX:item.x+footprint.maxX,minZ:item.z+footprint.minZ,maxZ:item.z+footprint.maxZ});}
+ view.cityRoads=buildCityRoads((state.livingObjects??[]).filter(item=>item.type==='city-card'),{obstacles,previous:view.cityRoads});
+ view.cityNavigation=createNavigation(obstacles,view.cityNavigation,view.cityRoads.segments);
+ view.syncEntity('city-roads',view.cityRoads.key,()=>{const g=new T.Group(),vertices=[];for(const {a,b} of view.cityRoads.segments){const length=Math.hypot(b.x-a.x,b.z-a.z),nx=-(b.z-a.z)/length*.46,nz=(b.x-a.x)/length*.46,steps=Math.max(1,Math.ceil(length));for(let i=0;i<steps;i++){const p={x:a.x+(b.x-a.x)*i/steps,z:a.z+(b.z-a.z)*i/steps},q={x:a.x+(b.x-a.x)*(i+1)/steps,z:a.z+(b.z-a.z)*(i+1)/steps};const corners=[[p.x+nx,p.z+nz],[p.x-nx,p.z-nz],[q.x+nx,q.z+nz],[q.x-nx,q.z-nz]];for(const index of [0,1,2,2,1,3]){const [x,z]=corners[index];vertices.push(x,view.heightAt(x,z)+.028,z);}}}if(vertices.length){const geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(vertices,3));geo.computeVertexNormals();const mesh=new T.Mesh(geo,new T.MeshStandardMaterial({color:0xb6a17a,roughness:1,side:T.DoubleSide,polygonOffset:true,polygonOffsetFactor:-1}));mesh.receiveShadow=true;g.add(mesh);}return g;});
  if(view.journeyBoard)view.journeyBoard.hidden=true;
  renderLivingPlacementPreview(view,state.placementPreview??null);
 }
 export function renderLivingPlacementPreview(view,preview){
  renderPlacementGhost(view,{placementPreview:preview});
+ if(view.livingGhost&&preview&&!view.livingGhost.userData.isCritter)view.livingGhost.rotation.y=Math.PI+(preview.rotation??0);
  if(view.livingGhost&&preview&&Number.isFinite(preview.x)&&Number.isFinite(preview.z)){view.livingGhost.position.set(preview.x,view.heightAt(preview.x,preview.z),preview.z);view.livingGhost.visible=true;view.livingGhost.traverse(o=>{if(o.material?.color)o.material.emissive?.setHex(preview.valid===false?0x70352b:0x16301a);});}
  const shapeKey=preview?.cardName??'';
  if(view.placementShapeKey!==shapeKey){
@@ -108,7 +99,7 @@ export function renderLivingPlacementPreview(view,preview){
   if(shapeKey){const points=cityFootprint(shapeKey).map(([x,z])=>new T.Vector3(x,.12,z));const line=new T.LineLoop(new T.BufferGeometry().setFromPoints(points),new T.LineBasicMaterial({color:0xe5cf8c,depthTest:false,transparent:true,opacity:.9}));line.renderOrder=9;view.markers.add(line);view.livingPlacementRing=line;}
  }
  const outline=view.livingPlacementRing;
- if(outline){outline.visible=!!preview&&Number.isFinite(preview.x)&&Number.isFinite(preview.z);if(outline.visible){outline.position.set(preview.x,view.heightAt(preview.x,preview.z)+.04,preview.z);outline.material.color.setHex(preview.valid===false?0xc46d4e:0x9cc881);}}
+ if(outline){outline.rotation.y=preview?.rotation??0;outline.visible=!!preview&&Number.isFinite(preview.x)&&Number.isFinite(preview.z);if(outline.visible){outline.position.set(preview.x,view.heightAt(preview.x,preview.z)+.04,preview.z);outline.material.color.setHex(preview.valid===false?0xc46d4e:0x9cc881);}}
 
 }
 function renderPlacementGhost(view,state){
@@ -147,6 +138,7 @@ function idleWalk(view,entity,home,center,radius,dt,seed){
  return walk.walking;
 }
 function beginArrival(view,entity,item){
+ if(!item.critter)return null;
  const data=item.arrival;if(entity.arrival&&!entity.arrival.done&&(!data?.key||data.key===entity.arrival.key))return entity.arrival;if(!data?.key||!data.from)return null;view.completedLivingArrivals??=new Set();if(view.completedLivingArrivals.has(data.key))return null;
  if(entity.arrival?.key===data.key)return entity.arrival;
  const distance=Math.hypot(data.from.x-item.x,data.from.z-item.z),a={key:data.key,style:data.style??(item.critter?'walk':'carry'),from:{...data.from},elapsed:0,duration:clamp(distance*.24,2.0,7.5),progress:0,done:false,position:{x:data.from.x,z:data.from.z},navigation:{}};

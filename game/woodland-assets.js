@@ -1,6 +1,6 @@
 import * as T from '../vendor/three.module.js'
 import {GLTFLoader} from '../vendor/addons/loaders/GLTFLoader.js'
-import {WOODLAND_PATHS,woodlandPlacements} from './woodland-layout.js'
+import {WOODLAND_PATHS,woodlandPlacements} from './woodland-layout.js?v=pages29-cozy'
 const templates=new Map(),materials=new Map()
 await Promise.all(['elder','oak','spruce','shrub'].map(async name=>{
  try{const gltf=await new GLTFLoader().loadAsync(new URL(`./assets/night-environment/${name}.glb`,import.meta.url).href)
@@ -26,7 +26,7 @@ function seasonalMaterial(base,kind,season){
 export function createWoodlandAsset(kind,season='SUMMER',height=1){
  const parts=templates.get(kind);if(!parts)return null
  const g=new T.Group();g.name=`woodland-${kind}`;g.userData.woodlandAsset=true
- for(const p of parts){const m=new T.Mesh(p.geometry,seasonalMaterial(p.material,kind,season));m.castShadow=true;m.receiveShadow=true;g.add(m)}g.scale.setScalar(height);return g
+ for(const p of parts){const m=new T.Mesh(p.geometry,seasonalMaterial(p.material,kind,season));m.castShadow=true;m.receiveShadow=true;g.add(m)}g.scale.setScalar(height);if(kind==='elder')g.scale.multiply(new T.Vector3(1.05,1.23,1.05));return g
 }
 export function addWoodlandAssets(view,state){
  if(!templates.has('oak')||!templates.has('spruce'))return false
