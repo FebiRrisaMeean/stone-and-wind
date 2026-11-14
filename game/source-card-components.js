@@ -76,7 +76,8 @@ export async function loadCardFonts(card) {
   const key=`${weight} 16px "${family}"`
   requests.set(key,(requests.get(key)||'')+node.textContent)
  }
- const results=await Promise.all([...requests].map(async([font,chars])=>{try{return {font,count:(await document.fonts.load(font,chars)).length,characters:chars.length}}catch(error){throw new Error(font+': '+error.message)}}))
+ const results=[]
+ for(const [font,chars] of requests){try{results.push({font,count:(await document.fonts.load(font,chars)).length,characters:chars.length})}catch(error){throw new Error(font+': '+error.message)}}
  if(!results.length||results.some(x=>x.count===0))throw new Error('Не загрузился исходный шрифт карточки')
  return results
 }

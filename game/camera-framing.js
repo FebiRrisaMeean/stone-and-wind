@@ -2,7 +2,7 @@
 // All world positions are on the XZ ground plane, elevation is Y
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const finite=(v,fallback)=>Number.isFinite(v)?v:fallback;
-export const LIVING_CAMERA_BOUNDS={minX:-.5,maxX:60.5,minZ:-.5,maxZ:44.5};
+export const LIVING_CAMERA_BOUNDS={minX:-.5,maxX:60.5,minZ:-.5,maxZ:70.5};
 
 export function fitLivingZone(bounds,viewport,padding={}){
  if(!bounds||!['minX','maxX','minZ','maxZ'].every(k=>Number.isFinite(bounds[k]))||bounds.maxX<bounds.minX||bounds.maxZ<bounds.minZ)return null;

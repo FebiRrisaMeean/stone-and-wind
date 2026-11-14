@@ -1,5 +1,5 @@
 import {T,random,mesh,box,cyl,rod,curve,torus,group,motion,leaf} from './card-style-primitives.js'
-import {skin,branch,timber,rock,nail} from './card-style-buildings.js?v=pages24'
+import {skin,branch,timber,rock,nail} from './card-style-buildings.js?v=pages25'
 
 // Exact card sources: 17, 22, 24, 28, 30, 34, 36, 38, 44 and 46
 // These are wooden woodland structures, including the cards named Castle and Palace
@@ -14,61 +14,73 @@ const angleDist=(a,b)=>Math.atan2(Math.sin(a-b),Math.cos(a-b))
 // A genuinely hollow bark shell, with a thick reveal at every cut-out
 // Rings are continuous surfaces, with longitudinal flutes rather than added floating rods
 function trunk(g,{name='hollow-old-trunk',h=2,r=.4,base=.24,cx=0,cz=0,lean=.04,palette=BARK,seed=1,holes=[],jag=.06,frontPale=false,ns=56,nr=32}={}){
- const p=[],idx=[],colors=[],rng=random(seed)
+ const p=[],idx=[],colors=[]
  const radius=(y,a)=>{const t=y/h;return(r+base*Math.exp(-t*7))*(1-.12*t)*(1+.065*Math.sin(a*9+t*2+seed)+.025*Math.sin(a*19-t*4))}
  const centre=y=>cx+lean*(y/h)**1.5
  const point=(y,a,inner=false)=>{
-  const rr=radius(y,a)-(inner?.055:0),t=y/h
-  return[centre(y)+Math.sin(a)*rr,y+(t>.97?jag*(Math.sin(a*7+seed)+.40*Math.sin(a*17)):0),cz+Math.cos(a)*rr*.83]
+  const rr=radius(y,a)-(inner?.055:0),t=y/h,s=Math.abs(Math.sin(a))<1e-12?0:Math.sin(a),c=Math.abs(Math.cos(a))<1e-12?0:Math.cos(a)
+  return[centre(y)+s*rr,y+(t>.97?jag*(Math.sin(a*7+seed)+.40*Math.sin(a*17)):0),cz+c*rr*.83]
  }
- // Triangulate the unwrapped bark around explicit smooth aperture contours
- // Their boundaries are independent of the coarse trunk tessellation
- const outline=[new T.Vector2(0,0),new T.Vector2(TAU,0),new T.Vector2(TAU,h),new T.Vector2(0,h)]
- const contours=holes.map(o=>Array.from({length:32},(_,i)=>{
-  const t=i/32*TAU,teardrop=o.shape==='teardrop'?(.45+.55*(1-Math.cos(t))*.5):1
-  return new T.Vector2((o.a??Math.PI)+Math.sin(t)*o.w*.5*teardrop,Math.max(.004,o.y+Math.cos(t)*o.h*.5))
- }))
- const uv=[...outline,...contours.flat()].map(v=>[v.x,v.y])
- let triangles=T.ShapeUtils.triangulateShape(outline,contours)
- // Split long interior edges conformingly; cut-out vertices stay on their source contour
- // This refines the nearby surface without turning apertures into removed grid cells
- const stepA=TAU/ns*3.7,stepY=h/nr*2.8
- for(let pass=0;pass<14;pass++){
-  const mids=new Map(),key=(a,b)=>a<b?a+':'+b:b+':'+a
-  for(const tr of triangles)for(let k=0;k<3;k++){
-   const a=tr[k],b=tr[(k+1)%3],d=uv[a],e=uv[b]
-   if(Math.abs(d[0]-e[0])>stepA||Math.abs(d[1]-e[1])>stepY){const id=key(a,b);if(!mids.has(id)){mids.set(id,uv.length);uv.push([(d[0]+e[0])*.5,(d[1]+e[1])*.5])}}
-  }
-  if(!mids.size)break
-  const next=[]
-  for(const [a,b,c]of triangles){
-   const ab=mids.get(key(a,b)),bc=mids.get(key(b,c)),ca=mids.get(key(c,a)),mask=(ab===undefined?0:1)|(bc===undefined?0:2)|(ca===undefined?0:4)
-   if(mask===0)next.push([a,b,c])
-   if(mask===1)next.push([a,ab,c],[ab,b,c])
-   if(mask===2)next.push([b,bc,a],[bc,c,a])
-   if(mask===4)next.push([c,ca,b],[ca,a,b])
-   if(mask===3)next.push([ab,b,bc],[a,ab,c],[ab,bc,c])
-   if(mask===6)next.push([bc,c,ca],[b,bc,a],[bc,ca,a])
-   if(mask===5)next.push([ca,a,ab],[c,ca,b],[ca,ab,b])
-   if(mask===7)next.push([a,ab,ca],[ab,b,bc],[ca,bc,c],[ab,bc,ca])
-  }
-  triangles=next
- }
- const layer=uv.length
- for(let side=0;side<2;side++)for(const [i,[a,y]]of uv.entries()){
-  p.push(...point(y,a,side===1))
-  let c=new T.Color(side?'#34392c':palette[Math.floor(a/TAU*palette.length)%palette.length])
-  if(frontPale&&!side&&Math.abs(angleDist(a,Math.PI))<.88&&y>.25&&y<h*.93)c=new T.Color('#a89a74')
+ // Complete welded rings carry the back and side walls
+ // Smooth window contours live in small independent annular patches, never in a
+ // whole-cylinder UV triangulation that can bridge the angular seam
+ const patches=holes.map(o=>({...o,ac:o.a??Math.PI,x0:(o.a??Math.PI)-o.w*.65-.012,x1:(o.a??Math.PI)+o.w*.65+.012,y0:Math.max(.002,o.y-o.h*.56-.008),y1:Math.min(h-.002,o.y+o.h*.56+.008)}))
+ const unique=values=>[...new Map(values.map(v=>[v.toFixed(10),v])).values()].sort((a,b)=>a-b)
+ const angles=unique([...Array.from({length:ns+1},(_,i)=>i/ns*TAU),...patches.flatMap(o=>[o.x0,o.x1])])
+ const levels=unique([...Array.from({length:nr+1},(_,i)=>i/nr*h),...patches.flatMap(o=>[o.y0,o.y1])])
+ const vertexMap=new Map()
+ function vertex(a,y,inner=false){
+  a=Math.abs(a-TAU)<1e-8?0:a
+  const key=(inner?'i':'o')+a.toFixed(10)+':'+y.toFixed(10)
+  if(vertexMap.has(key))return vertexMap.get(key)
+  const index=p.length/3;vertexMap.set(key,index);p.push(...point(y,a,inner))
+  const t=a/TAU*palette.length,k=Math.floor(t),c=inner?new T.Color('#34392c'):new T.Color(palette[k%palette.length]).lerp(new T.Color(palette[(k+1)%palette.length]),t-k)
+  if(frontPale&&!inner&&Math.abs(angleDist(a,Math.PI))<.88&&y>.25&&y<h*.93)c.set('#a89a74')
   c.multiplyScalar(.98+.02*Math.sin(a*7+y*1.4));colors.push(c.r,c.g,c.b)
+  return index
  }
- const edges=new Map(),edgeKey=(a,b)=>a<b?a+':'+b:b+':'+a
- for(let [a,b,c]of triangles){
-  if((uv[b][0]-uv[a][0])*(uv[c][1]-uv[a][1])-(uv[b][1]-uv[a][1])*(uv[c][0]-uv[a][0])<0)[b,c]=[c,b]
-  idx.push(a,b,c,a+layer,c+layer,b+layer)
-  for(const [u,v]of [[a,b],[b,c],[c,a]]){const id=edgeKey(u,v);if(edges.has(id))edges.delete(id);else edges.set(id,[u,v])}
+ const face=(a,b,c)=>{idx.push(vertex(...a),vertex(...b),vertex(...c),vertex(...a,true),vertex(...c,true),vertex(...b,true))}
+ const extrasH=new Map(),extrasV=new Map(),register=(map,key,value)=>{const id=key.toFixed(10),list=map.get(id)??[];list.push(value);map.set(id,list)}
+ for(const o of patches){
+  const boundary=[]
+  const add=(a,y)=>boundary.push([a,y])
+  // Every existing grid intersection remains a vertex of the patch boundary
+  for(const a of angles)if(a>=o.x0-1e-9&&a<=o.x1+1e-9){add(a,o.y0);add(a,o.y1)}
+  for(const y of levels)if(y>=o.y0-1e-9&&y<=o.y1+1e-9){add(o.x0,y);add(o.x1,y)}
+  for(let i=0;i<32;i++){
+   const t=i/32*TAU,dx=Math.sin(t)*o.w*.5,dy=Math.cos(t)*o.h*.5
+   const sx=dx>1e-10?(o.x1-o.ac)/dx:dx< -1e-10?(o.x0-o.ac)/dx:Infinity
+   const sy=dy>1e-10?(o.y1-o.y)/dy:dy< -1e-10?(o.y0-o.y)/dy:Infinity
+   const s=Math.min(sx,sy);add(o.ac+dx*s,o.y+dy*s)
+  }
+  const ring=[...new Map(boundary.map(v=>[v.map(n=>n.toFixed(10)).join(':'),v])).values()].sort((a,b)=>Math.atan2((a[0]-o.ac)/(o.w*.5),(a[1]-o.y)/(o.h*.5))-Math.atan2((b[0]-o.ac)/(o.w*.5),(b[1]-o.y)/(o.h*.5)))
+  const inner=ring.map(([a,y])=>{
+   const t=Math.atan2((a-o.ac)/(o.w*.5),(y-o.y)/(o.h*.5)),taper=o.shape==='teardrop'?(.45+.55*(1-Math.cos(t))*.5):1
+   return[o.ac+Math.sin(t)*o.w*.5*taper,Math.max(.004,o.y+Math.cos(t)*o.h*.5)]
+  })
+  ring.forEach(([a,y])=>{
+   if(Math.abs(y-o.y0)<1e-8||Math.abs(y-o.y1)<1e-8)register(extrasH,y,a)
+   if(Math.abs(a-o.x0)<1e-8||Math.abs(a-o.x1)<1e-8)register(extrasV,a,y)
+  })
+  for(let i=0;i<ring.length;i++){
+   const j=(i+1)%ring.length;face(ring[i],inner[i],inner[j]);face(ring[i],inner[j],ring[j])
+   // The cavity-facing reveal connects the same inner and outer contour vertices
+   const a=vertex(...inner[i]),b=vertex(...inner[j]),ai=vertex(...inner[i],true),bi=vertex(...inner[j],true);idx.push(a,ai,b,b,ai,bi)
+  }
  }
- // Close all contour and end boundaries across bark thickness
- for(const [a,b]of edges.values())idx.push(a,a+layer,b,b,a+layer,b+layer)
+ const between=(map,key,lo,hi)=>unique((map.get(key.toFixed(10))??[]).filter(v=>v>lo+1e-9&&v<hi-1e-9))
+ for(let j=0;j<levels.length-1;j++)for(let i=0;i<angles.length-1;i++){
+  const a=angles[i],b=angles[i+1],y=levels[j],z=levels[j+1]
+  if(patches.some(o=>(a+b)*.5>o.x0&&(a+b)*.5<o.x1&&(y+z)*.5>o.y0&&(y+z)*.5<o.y1))continue
+  const poly=[[a,y],...between(extrasH,y,a,b).map(v=>[v,y]),[b,y],...between(extrasV,b,y,z).map(v=>[b,v]),[b,z],...between(extrasH,z,a,b).reverse().map(v=>[v,z]),[a,z],...between(extrasV,a,y,z).reverse().map(v=>[a,v])]
+  if(poly.length===4){face(poly[0],poly[1],poly[2]);face(poly[0],poly[2],poly[3])}
+  else{const c=[(a+b)*.5,(y+z)*.5];for(let k=0;k<poly.length;k++)face(c,poly[k],poly[(k+1)%poly.length])}
+ }
+ // Only top and bottom annular rims remain open to the hollow interior
+ for(let i=0;i<angles.length-1;i++)for(const y of [0,h]){
+  const a=vertex(angles[i],y),b=vertex(angles[i+1],y),ai=vertex(angles[i],y,true),bi=vertex(angles[i+1],y,true)
+  idx.push(...(y===0?[a,ai,b,b,ai,bi]:[a,b,ai,b,bi,ai]))
+ }
  const o=skin(g,name,p,idx,'#ffffff','bark',colors)
  return{object:o,radius,point,centre,h,r,cz,cx}
 }
@@ -329,6 +341,7 @@ function chapel(root){
  const g=group(root,'riverside-wooden-chapel')
  // The building stands on its timber sill; river and waterfall stay out of the miniature
  for(const x of [-.43,.43])timber(g,'continuous-foundation-sill',[x,.13,-.51],[x,.13,.62],.12,.13,'#5d5b3e',x<0?4:5)
+ box(g,0,.185,.12,.86,.055,1.10,'#77704f','bark').name='closed-chapel-timber-floor'
  box(g,0,.63,-.41,.83,.96,.075,'#b5ac80','bark').name='pale-front-gable-wall'
  box(g,0,.63,.62,.83,.96,.075,'#b5ac80','bark').name='pale-rear-gable-wall'
  box(g,0,.64,.12,.66,.88,.92,'#454936','bark').name='dark-chapel-interior'
@@ -351,7 +364,8 @@ function chapel(root){
  for(const side of [-1,1]){timber(g,'side-timber-sill',[side*.45,.30,-.46],[side*.45,.30,.68],.065,.065,'#71674a',4);timber(g,'long-wall-rail',[side*.44,.98,-.44],[side*.44,.98,.67],.04,.04,'#7a7450',5)}
  // Filled gables keep the roof attached to the frame
  for(const z of [-.435,.65]){
-  const p=[-.415,1.1,z,.415,1.1,z,0,1.58,z];skin(g,'closed-plastered-gable',p,[0,1,2,0,2,1],'#b5ac80','bark')
+  const shape=new T.Shape();shape.moveTo(-.415,1.1);shape.lineTo(.415,1.1);shape.lineTo(0,1.58);shape.closePath()
+  const gable=mesh(g,new T.ExtrudeGeometry(shape,{depth:.055,bevelEnabled:false}),'#b5ac80',0,0,z-.0275,'bark');gable.name='closed-plastered-gable'
  }
  gableRoof(g,{y:1.10,z:.11,w:1.02,d:1.27,rise:.49,seed:38})
  // The source tower rises through the front roof slope and has an open timber upper stage

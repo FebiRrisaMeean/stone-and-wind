@@ -1,0 +1,43 @@
+<!doctype html><html lang="ru"><meta charset="utf-8"><title>Эверделл — новые модели</title><style>*{box-sizing:border-box}body{margin:0;background:#ede8da;color:#303b31;font:16px system-ui}header{position:sticky;top:0;z-index:2;background:#ede8da;padding:18px 24px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}h1{font:26px Georgia;margin:0}button,a{color:inherit}button{background:#fff9e9;border:1px solid #aaa58e;border-radius:8px;padding:10px 16px;cursor:pointer}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding:0 20px}.tile{background:#d6d8cb;border-radius:12px;overflow:hidden}h2{margin:14px 18px;font:22px Georgia}.view{height:60vh;min-height:350px}.stats{padding:12px 18px;background:#faf5e8;min-height:65px;line-height:1.6}footer{padding:18px 24px}canvas{display:block;width:100%;height:100%}.note{max-width:900px;line-height:1.5}</style><header><h1>Персонажи Эверделла</h1><button id="front">Спереди</button><button id="back">Сзади</button><button id="rotate">Вращение</button><button id="size">Игровой размер</button><button id="motion">Пауза</button><button id="gait">Ходьба</button></header><main class="grid" id="grid"></main><footer class="note" id="note">Одинаковые камера, освещение и высота моделей • Meshy — проверка движений</footer><script type="module">
+import {RenderLoop,renderBudgetEnabled} from '../game/render-budget.js';
+import {createNightCharacter as createGameSculpt,animateNightCharacter as animateGameSculpt} from '../game/local-sculpt/night-characters.js';import * as T from '../vendor/three.module.js';import{GLTFLoader}from'../vendor/addons/loaders/GLTFLoader.js';import{createArchitecture,animateArchitecture}from'../game/architecture-models.js';
+const panels=[];let angle=Math.PI+.45,spin=false,small=false,motion=true,gaitMode=1;
+async function add(title,object,animations=[],original=false,bytes=0){const tile=document.createElement('section');tile.className='tile';tile.innerHTML=`<h2>${title}</h2><div class="view"></div><div class="stats"></div>`;grid.append(tile);const el=tile.querySelector('.view'),scene=new T.Scene();scene.background=new T.Color('#c2c7bb');const camera=new T.PerspectiveCamera(35,1,.1,100),renderer=new T.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(2,devicePixelRatio));el.append(renderer.domElement);scene.add(new T.HemisphereLight(0xffffff,0x6d735b,2));const light=new T.DirectionalLight(0xffffff,2.8);light.position.set(-3,6,5);scene.add(light);let tris=0,meshes=0;object.traverse(o=>{if(o.isMesh){tris+=(o.geometry.index?.count??o.geometry.attributes.position.count)/3;meshes++}});const wrapper=new T.Group();if(original)object.rotation.y=Math.PI;wrapper.add(object);object.updateMatrixWorld(true);const b=new T.Box3().setFromObject(object),sz=b.getSize(new T.Vector3()),c=b.getCenter(new T.Vector3());const scale=Math.min(2.8/sz.y,3.6/Math.max(sz.x,sz.z));object.scale.multiplyScalar(scale);object.position.set(-c.x*scale,-b.min.y*scale,-c.z*scale);scene.add(wrapper);const floor=new T.Mesh(new T.CircleGeometry(4,64),new T.MeshStandardMaterial({color:0xa9af9c}));floor.rotation.x=-Math.PI/2;floor.position.y=-.01;scene.add(floor);const mixer=animations.length?new T.AnimationMixer(object):null;if(mixer)for(const clip of animations)mixer.clipAction(clip).play();tile.querySelector('.stats').textContent=`${Math.round(tris).toLocaleString('ru')} треугольников · ${meshes} ${meshes===1?'меш':'мешей'}${bytes?' · '+(bytes/1048576).toFixed(2)+' МБ':''} · ${'покой / ходьба / бег'}`;panels.push({renderer,el,scene,camera,wrapper,object,mixer,original,visible:false,dirty:true,time:0,width:0,height:0})}
+const batch=Number(new URLSearchParams(location.search).get('batch')||0);const names=["Husband", "Wife", "Shopkeeper", "Barge Toad", "Chip Sweep", "Innkeeper", "Fool", "Judge", "King", "Miner Mole", "Monk", "Peddler", "Queen", "Ranger", "Wanderer", "Woodcarver", "Bard", "Historian", "Postal Pigeon", "Shepherd", "Teacher", "Undertaker"];for(const name of (names.includes(new URLSearchParams(location.search).get('model'))?[new URLSearchParams(location.search).get('model')]:names.slice(batch*6,batch*6+6))) {const object=createGameSculpt(name);await add(name,object);panels.at(-1).gameSculpt=true}
+grid.style.gridTemplateColumns='repeat(2,minmax(0,1fr))';note.innerHTML='Партия '+(batch+1)+' из 4 · '+[0,1,2,3].map(n=>'<a href="?batch='+n+'">'+(n+1)+'</a>').join(' · ')+' — одинаковый свет и камера, поворот и походка';
+const budget=renderBudgetEnabled(location.search),qaStats=new URLSearchParams(location.search).has('qa')
+function invalidate(){for(const p of panels)p.dirty=true;loop.invalidate()}
+function draw(ms,dt){
+ if(spin)angle+=dt*.35
+ for(const p of panels){
+  if(budget&&!p.visible)continue
+  if(budget&&!p.dirty&&!motion&&!spin)continue
+  const w=p.el.clientWidth,h=p.el.clientHeight;if(!w||!h)continue
+  if(!budget||w!==p.width||h!==p.height){p.renderer.setSize(w,h,false);p.width=w;p.height=h;p.camera.aspect=w/h;p.dirty=true}
+  if(!budget||p.dirty){p.camera.position.set(0,2.1,small?Math.max(19,12/p.camera.aspect):Math.max(6.4,4.8/p.camera.aspect));p.camera.lookAt(0,1.4,0);p.camera.updateProjectionMatrix()}
+  p.wrapper.rotation.y=angle
+  if(motion){
+   p.time+=dt;const time=budget?p.time:ms/1000
+   if(p.gameSculpt){p.object.userData.walking=gaitMode>0;p.object.userData.running=gaitMode===2;animateGameSculpt(p.object,time,{walking:gaitMode>0,running:gaitMode===2})}
+   p.mixer?.update(dt);if(p.original)animateArchitecture(p.object,time)
+  }
+  p.renderer.render(p.scene,p.camera);p.dirty=false;if(qaStats){p.renderer.domElement.dataset.frames=String((p.frames??0)+1);p.frames=(p.frames??0)+1}
+ }
+}
+const loop=new RenderLoop(draw,{enabled:budget,hidden:document.hidden,active:()=>panels.some(p=>p.visible)&&(motion||spin)})
+const observer=new IntersectionObserver(entries=>{for(const entry of entries){const p=panels.find(p=>p.el===entry.target);if(p){p.visible=entry.isIntersecting&&entry.intersectionRatio>.05;p.dirty=true}}loop.invalidate()},{threshold:[0,.05],rootMargin:`-${document.querySelector('header').offsetHeight}px 0px 0px 0px`})
+for(const p of panels)observer.observe(p.el)
+const resizeObserver=new ResizeObserver(invalidate);for(const p of panels)resizeObserver.observe(p.el)
+document.addEventListener('visibilitychange',()=>loop.setHidden(document.hidden))
+document.querySelector('#gait').onclick=e=>{gaitMode=(gaitMode+1)%3;e.target.textContent=['Покой','Ходьба','Бег'][gaitMode];invalidate()}
+front.onclick=()=>{angle=Math.PI;spin=false;invalidate()}
+back.onclick=()=>{angle=0;spin=false;invalidate()}
+rotate.onclick=()=>{spin=!spin;rotate.textContent=spin?'Остановить вращение':'Вращение';invalidate()}
+size.onclick=()=>{small=!small;size.textContent=small?'Крупно':'Игровой размер';invalidate()}
+document.querySelector('#motion').onclick=e=>{motion=!motion;if(budget&&!motion){spin=false;rotate.textContent='Вращение'}e.target.textContent=motion?'Пауза':'Включить движение';invalidate()}
+// Retain the opt-out while paging through the six-model groups
+if(!budget)for(const a of note.querySelectorAll('a'))a.search+='&renderBudget=off'
+window.addEventListener('pagehide',()=>loop.setHidden(true))
+window.addEventListener('pageshow',()=>loop.setHidden(document.hidden))
+loop.invalidate()
+</script></html>

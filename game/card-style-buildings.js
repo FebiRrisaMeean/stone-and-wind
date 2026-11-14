@@ -140,6 +140,12 @@ export function refinery(root){
    if(j<nr&&i<ns){const q=j*(ns+1)+i;idx.push(q,q+1,q+ns+1,q+1,q+ns+2,q+ns+1)}
   }
  }
+ // Close the actual irregular rim, not a smaller disk floating inside it
+ for(const [j,up]of [[0,false],[nr,true]]){
+  const y=j/nr*2.35,{cx,cz}=trunkProfile(y),center=pos.length/3
+  pos.push(cx,y,cz);const c=new T.Color(up?'#9a8054':'#514a32');colors.push(c.r,c.g,c.b)
+  for(let i=0;i<ns;i++){const a=j*(ns+1)+i,b=a+1;idx.push(center,...(up?[a,b]:[b,a]))}
+ }
  skin(tree,'fluted-old-living-trunk',pos,idx,'#ffffff','bark',colors)
  // Broad buttresses physically flow into the lower trunk; all roots end on the ground
  for(let i=0;i<9;i++){
@@ -187,6 +193,10 @@ export function clockTower(root){
   pos.push(cx+x*s,j*.104+.12,cz+z*s)
   const c=new T.Color(['#868d7a','#929984','#7d8776','#848b76'][i%4]);c.multiplyScalar(.96+rng()*.065);colors.push(c.r,c.g,c.b)
   if(j<20){const a=j*8+i,b=j*8+(i+1)%8;idx.push(a,a+8,b,b,a+8,b+8)}
+ }
+ for(const [j,up]of [[0,false],[20,true]]){
+  const center=pos.length/3;pos.push(cx,j*.104+.12,cz);const c=new T.Color('#7d8776');colors.push(c.r,c.g,c.b)
+  for(let i=0;i<8;i++){const a=j*8+i,b=j*8+(i+1)%8;idx.push(center,...(up?[b,a]:[a,b]))}
  }
  skin(tower,'tapered-weatherworn-plastered-stone',pos,idx,'#ffffff','stone',colors)
  // Exposed stone foot: varied angular blocks with their lower edges embedded in the river bank

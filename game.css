@@ -365,6 +365,30 @@
 .living-shell .world-label .stored-resource b{font:800 14px/1 system-ui,sans-serif;color:#fff8e7!important}
 .living-shell .world-label.living-city-card-label:not(.is-hovered):not(:focus-visible)>.stored-resources{display:none}
 
+/* City card access follows the played instances, independent of roaming models */
+.city-icon-rail{position:absolute;left:18px;top:128px;bottom:215px;width:122px;z-index:70;display:flex;flex-direction:column;gap:8px;pointer-events:auto;min-height:84px}
+.city-rail-tabs{display:flex;gap:4px;flex:none}
+.city-rail-tabs button{border:1px solid #c8bd9680;border-radius:7px;background:#233b30ed;color:#fff0cf;padding:6px 5px;font:600 10px/1.2 system-ui;cursor:pointer}
+.city-rail-tabs button[aria-pressed=true]{background:#577148;border-color:#ead39c}
+.city-rail-list{display:grid;grid-template-columns:repeat(2,46px);grid-auto-rows:52px;align-content:start;gap:7px 8px;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#dac99c #20362b55;padding:3px 12px 9px 3px;min-height:0}
+.city-rail-card{position:relative;display:block;width:46px;height:46px;border:2px solid #dbc794;border-radius:50%;padding:0;background:#21372c;box-shadow:0 2px 6px #10201960;cursor:pointer;color:#fff1d1}
+.city-rail-portrait{display:block;width:100%;height:100%;border-radius:50%;background-size:170% auto;background-position:62% 21%;background-repeat:no-repeat}
+.city-rail-card:hover,.city-rail-card:focus-visible{outline:2px solid #fff1bd;outline-offset:2px;border-color:#fff4ce;z-index:2}
+.city-rail-card.is-destination{border-color:#91b3d5}
+.city-rail-card.is-available{box-shadow:0 0 0 2px #5c9d54,0 2px 7px #10201970}
+.city-rail-name{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.city-rail-worker{position:absolute;left:50%;bottom:-7px;transform:translateX(-50%);display:flex;align-items:center;gap:1px;background:#20362bf5;border:1px solid #cbbd94;border-radius:8px;padding:1px 3px;white-space:nowrap;font:700 10px/1.2 system-ui;color:#fff4db}
+.city-rail-worker .original-icon{width:13px!important;height:13px!important}
+.city-rail-stored{position:absolute;right:-4px;bottom:-4px;background:#20362b;border-radius:50%;padding:2px}
+.city-rail-empty{grid-column:1/-1;color:#fff5dc;background:#263d30e8;border-radius:8px;padding:9px;font:12px/1.4 system-ui}
+.living-shell.is-final-scoring .city-icon-rail{visibility:hidden}
+@media(max-width:600px){.city-icon-rail{left:8px;width:112px;bottom:180px}.city-rail-list{grid-template-columns:repeat(2,42px);grid-auto-rows:48px;gap:7px 5px}.city-rail-card{width:42px;height:42px}.city-rail-tabs button{font-size:9px;padding:6px 4px}}
+
+.city-icon-rail[hidden]{display:none}
+
+/* Placement instructions must not cover the stock counters */
+.living-shell .placement-caption{top:128px;max-width:calc(100% - 36px)}
+
 /* Shared dialogue language: evergreen frame, warm paper, original resource symbols */
 .living-shell .decision-backdrop:has(.choice-dialog){padding:24px;background:#1220198c;backdrop-filter:blur(2px)}
 .living-shell .decision-modal.choice-dialog{position:relative;display:flex;flex-direction:column;width:min(620px,calc(100vw - 48px));max-height:calc(100dvh - 48px);padding:0;overflow:hidden;outline:0;border:1px solid #c7b582;border-radius:16px;background:#f3ebd7;color:#2f3b30;box-shadow:0 20px 70px #101b1599;font:14px/1.5 system-ui,sans-serif}

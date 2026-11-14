@@ -138,6 +138,7 @@ const EXACT={
  'Must have cards to discard':'Нужны карты для сброса','must have cards to discard':'Нужны карты для сброса',
  'Could not find selected card':'Выбранная карта недоступна',
  'Cannot afford this card, even with discount':'Для этой карты не хватает ресурсов даже со скидкой',
+ 'Cannot play any cards from the Meadow':'На поляне нет доступных карт для розыгрыша',
  'Cannot play any meadow cards even after discounts':'На поляне нет карты, которую можно сыграть даже со скидкой'
 };
 const WORDS={...CARD_NAMES,...LOCATION_NAMES,...EVENT_NAMES,...SEASONS,...CARD_TYPES,...RESOURCE_NAMES,Meadow:'Поляна',HAND:'Рука',MEADOW:'Поляна',FROM_DECK:'Из колоды',Critters:'Существа',Critter:'Существо',Constructions:'Сооружения',Construction:'Сооружение',BASIC:'Основная',FOREST:'Лесная',SPECIAL:'Особое',JOURNEY:'Путешествие'};

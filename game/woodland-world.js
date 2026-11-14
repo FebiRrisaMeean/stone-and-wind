@@ -1,3 +1,5 @@
+import {batchProductionSite} from './static-batching.js';
+import {addWoodlandAssets,addWoodlandPaths,createWoodlandAsset} from './woodland-assets.js';
 import {addProductionProps} from './production-props.js?v=field19';
 import {seasonVisuals} from './seasonal-visuals.js?v=20261112-23';
 import * as T from '../vendor/three.module.js';
@@ -16,8 +18,8 @@ function window(view,g,x,y,z,r=.13){disc(view,g,x,y,z,r*1.22,bark);disc(view,g,x
 function leaf(view,g,x,y,z,size,color,angle=0){const l=rounded(view,g,x,y,z,size,color,.52,.17,1);l.rotation.set(.25,angle,.12);return l;}
 function mushroom(view,g,x,z,size=1,color=0xbd7657){view.cylinder(g,x,.13*size,z,.045*size,.27*size,cream,8);rounded(view,g,x,.28*size,z,.18*size,color,1,.5,1);for(let j=0;j<3;j++){const a=j*2.1;rounded(view,g,x+Math.cos(a)*.10*size,.335*size,z+Math.sin(a)*.10*size,.026*size,cream,1,.4,1);}}
 function log(view,g,x,y,z,length=.9,angle=Math.PI/2){const a=view.cylinder(g,x,y,z,.13,length,bark,12);a.rotation.z=angle;const end=view.cylinder(g,x+length*.5,y,z,.105,.018,0xd7ad73,14);end.rotation.z=Math.PI/2;const ring=view.mesh(g,new T.TorusGeometry(.063,.008,4,16),0x9b764b,x+length*.515,y,z);ring.rotation.y=Math.PI/2;}
-function bush(view,g,x,z,scale=.65,berries=false){for(let j=0;j<4;j++){const a=j*2.4;rounded(view,g,x+Math.sin(a)*scale*.36,.33*scale+j*.06,z+Math.cos(a)*scale*.36,scale*.45,foliage[j]);}if(berries)for(let j=0;j<9;j++){const a=j*2.399;rounded(view,g,x+Math.sin(a)*scale*.46,.27*scale+(j%3)*scale*.16,z+Math.cos(a)*scale*.46,.065*scale,0x9c4962);}}
-function tree(view,g,x,z,size=1,seed=0){const trunk=view.cylinder(g,x,.72*size,z,.16*size,1.45*size,bark,9,.10*size);trunk.rotation.z=Math.sin(seed)*.09;for(let j=0;j<3;j++){const a=j*2.1+seed;view.beam(g,v(x,.7*size,z),v(x+Math.sin(a)*.42*size,1.45*size,z+Math.cos(a)*.42*size),.075*size,bark);rounded(view,g,x+Math.sin(a)*.40*size,(1.53+j*.17)*size,z+Math.cos(a)*.40*size,.67*size,foliage[j],1,.82,1);}rounded(view,g,x,2.05*size,z,.65*size,foliage[2],1,.82,1);}
+function bush(view,g,x,z,scale=.65,berries=false){const asset=createWoodlandAsset('shrub',view.currentVisualSeason??'SUMMER',scale*.7);if(asset){asset.position.set(x,0,z);g.add(asset);}else for(let j=0;j<4;j++){const a=j*2.4;rounded(view,g,x+Math.sin(a)*scale*.36,.33*scale+j*.06,z+Math.cos(a)*scale*.36,scale*.45,foliage[j]);}if(berries)for(let j=0;j<9;j++){const a=j*2.399;rounded(view,g,x+Math.sin(a)*scale*.46,.27*scale+(j%3)*scale*.16,z+Math.cos(a)*scale*.46,.065*scale,0x9c4962);}}
+function tree(view,g,x,z,size=1,seed=0){const asset=createWoodlandAsset('oak',view.currentVisualSeason??'SUMMER',2.5*size);if(asset){asset.position.set(x,0,z);asset.rotation.y=seed;g.add(asset);return;}const trunk=view.cylinder(g,x,.72*size,z,.16*size,1.45*size,bark,9,.10*size);trunk.rotation.z=Math.sin(seed)*.09;for(let j=0;j<3;j++){const a=j*2.1+seed;view.beam(g,v(x,.7*size,z),v(x+Math.sin(a)*.42*size,1.45*size,z+Math.cos(a)*.42*size),.075*size,bark);rounded(view,g,x+Math.sin(a)*.40*size,(1.53+j*.17)*size,z+Math.cos(a)*.40*size,.67*size,foliage[j],1,.82,1);}rounded(view,g,x,2.05*size,z,.65*size,foliage[2],1,.82,1);}
 function lantern(view,g,x,y,z){view.beam(g,v(x,y+.24,z),v(x,y+.45,z),.012,bark);view.cylinder(g,x,y+.12,z,.08,.22,glow(view),6);view.cone(g,x,y+.27,z,.13,.12,bark,6);view.cylinder(g,x,y,z,.10,.035,bark,6);}
 
 export function woodlandCottage(view,b,active=true){const g=new T.Group();g.position.set(b.x,view.heightAt(b.x,b.z),b.z);const large=b.kind==='castle'||b.kind==='hall',scale=large?1.5:1;g.scale.setScalar(scale);
@@ -97,7 +99,7 @@ function livingProductionSite(view,l){
   if(token('CARD')&&(token('PEBBLE')||token('TWIG')||token('RESIN')||token('BERRY'))){view.cylinder(g,-1.1,.61,.15,.035,.90,bark,7);view.box(g,-1.1,.90,.15,.45,.52,.055,bark);view.box(g,-1.1,.90,.19,.34,.40,.035,cream);view.box(g,-1.1,.95,.22,.22,.025,.015,0x81744a);}
   if(token('VP')){const medal=view.cylinder(g,1.13,.69,-.18,.24,.05,0xe2bb54,20);medal.rotation.x=Math.PI/2;view.cylinder(g,1.13,.39,-.18,.03,.65,bark,7);}
  }
- addProductionProps(view,g,l);view.tagged(g,{type:'location',id:l.id});g.userData.productionKind=id;return g;
+ addProductionProps(view,g,l);view.tagged(g,{type:'location',id:l.id});g.userData.productionKind=id;return batchProductionSite(g);
 }
 
 export function woodlandLocation(view,l){if(view.state?.livingBoard)return livingProductionSite(view,l);const id=l.actualName??l.id;let g;
@@ -120,22 +122,25 @@ export function woodlandLocation(view,l){if(view.state?.livingBoard)return livin
 
 export function addWoodlandTerrain(view,s,p,menu,known){const seasonal=s.livingBoard?seasonVisuals(s.season):null,trees=[],rocks=[],ferns=[],flowers=[],stems=[],caps=[],spots=[];
  const lily=[],bank=[];
- for(const t of s.tiles){if(!menu&&!known(s,p,t))continue;if(t.type==='water'){if(n(t.x,t.z)>.84)lily.push({x:t.x+.18,y:.025,z:t.z-.16,size:.65+n(t.z,t.x)*.4,r:n(t.x,t.z)*6});continue;}const besideWater=[[-1,0],[1,0],[0,-1],[0,1]].some(([dx,dz])=>s.tiles[(t.z+dz)*WORLD.width+t.x+dx]?.type==='water');if(besideWater&&n(t.x,t.z)>.55)bank.push({x:t.x,y:view.heightAt(t.x,t.z)+.07,z:t.z,size:.25+n(t.z,t.x)*.3,r:0});const near=(s.locations??[]).some(l=>Math.hypot(l.x-t.x,l.z-t.z)<2.55)||s.buildings.some(b=>Math.hypot(b.x-t.x,b.z-t.z)<1.9)||s.sources.some(m=>Math.hypot(m.x-t.x,m.z-t.z)<.9)||(s.mode==='placement'&&Math.hypot(t.x-30,t.z-22)<3.3);if(near||t.type==='water'||s.livingBoard&&(s.livingClearings??[]).some(c=>Math.hypot((c.x-t.x)/(c.scaleX??1),(c.z-t.z)/(c.scaleZ??1))<(c.radius??3)))continue;
+ for(const t of s.tiles){if(!menu&&!known(s,p,t))continue;if(t.type==='water'){if(n(t.x,t.z)>.84)lily.push({x:t.x+.18,y:.025,z:t.z-.16,size:.65+n(t.z,t.x)*.4,r:n(t.x,t.z)*6});continue;}const besideWater=[[-1,0],[1,0],[0,-1],[0,1]].some(([dx,dz])=>s.tiles[(t.z+dz)*WORLD.width+t.x+dx]?.type==='water');if(besideWater&&n(t.x,t.z)>.55)bank.push({x:t.x,y:view.heightAt(t.x,t.z)+.07,z:t.z,size:.25+n(t.z,t.x)*.3,r:0});const near=(s.locations??[]).some(l=>Math.hypot(l.x-t.x,l.z-t.z)<2.55)||s.buildings.some(b=>Math.hypot(b.x-t.x,b.z-t.z)<1.9)||s.sources.some(m=>Math.hypot(m.x-t.x,m.z-t.z)<.9)||(s.mode==='placement'&&Math.hypot(t.x-30,t.z-22)<3.3);if(near||t.type==='water'||s.livingBoard&&(s.livingClearings??[]).some(c=>c.bounds?t.x>c.bounds.minX-1&&t.x<c.bounds.maxX+1&&t.z>c.bounds.minZ-1&&t.z<c.bounds.maxZ+1:Math.hypot((c.x-t.x)/(c.scaleX??1),(c.z-t.z)/(c.scaleZ??1))<(c.radius??3)))continue;
   const seed=n(t.x,t.z),ground=view.heightAt(t.x,t.z);
   if(t.type==='forest'){const size=.72+n(t.z,t.x)*.55;trees.push({x:t.x,z:t.z,y:ground,size,r:seed*6.28});}
   if(t.type==='rock')rocks.push({x:t.x,z:t.z,y:ground+.16,size:.5+seed*.65,r:seed*6.28});
   if(t.type==='plain'||t.type==='meadow'||t.type==='forest'){
-   if(s.season!=='WINTER'&&seed>.36)for(let j=0;j<3;j++){const a=j*2.1+seed*6,dist=.10+j*.045;ferns.push({x:t.x+Math.sin(a)*dist,y:ground+.12,z:t.z+Math.cos(a)*dist,r:a,size:.7+seed*.5});}
+   if(s.season!=='WINTER'&&seed>.70&&Math.sin(t.x*.35+t.z*.14)+Math.cos(t.z*.37-t.x*.11)>.05)for(let j=0;j<3;j++){const a=j*2.1+seed*6,dist=.10+j*.045;ferns.push({x:t.x+(seed-.5)*.75+Math.sin(a)*dist,y:ground+.12,z:t.z+(n(t.z,t.x)-.5)*.75+Math.cos(a)*dist,r:a,size:.7+seed*.5});}
    if((seed>(s.season==='SPRING'?.53:.84))&&t.type!=='forest'&&s.season!=='WINTER')for(let j=0;j<3;j++){const x=t.x+Math.sin(j*2.4)*.23,z=t.z+Math.cos(j*2.4)*.23;flowers.push({x,y:ground+.24,z,r:seed,size:.65+j*.15});}
    if(t.type==='forest'&&seed>.68){const x=t.x+.38,z=t.z+.22,size=.55+seed*.5;stems.push({x,y:ground+.10*size,z,size});caps.push({x,y:ground+.21*size,z,size});spots.push({x:x+.04,y:ground+.27*size,z,size});}
   }
  }
+ const importedForest=s.livingBoard&&addWoodlandAssets(view,s);if(s.livingBoard)addWoodlandPaths(view,s);
  const trunks=trees.map(t=>({...t,y:t.y+.65*t.size})),low=[],high=[];
  for(const t of trees){for(let j=0;j<3;j++){const a=t.r+j*2.1;low.push({...t,x:t.x+Math.sin(a)*.32*t.size,z:t.z+Math.cos(a)*.32*t.size,y:t.y+(1.40+j*.10)*t.size});}high.push({...t,y:t.y+1.98*t.size});}
  const transform=t=>({position:[t.x,t.y,t.z],scale:[t.size,t.size,t.size],rotation:[0,t.r??0,0]});
+ if(!importedForest){
  view.instances(view.detail,new T.CylinderGeometry(.09,.14,1.3,8),view.material(bark),trunks,transform);
  view.instances(view.detail,new T.SphereGeometry(.61,10,8),view.material(seasonal?.foliage[0]??foliage[0]),low,t=>({...transform(t),scale:[t.size,t.size*.78,t.size]}));
  view.instances(view.detail,new T.SphereGeometry(.63,10,8),view.material(seasonal?.foliage[1]??foliage[2]),high,t=>({...transform(t),scale:[t.size,t.size*.80,t.size]}));
+ }
  view.instances(view.detail,new T.SphereGeometry(.35,9,6),view.material(0xa8aa95),rocks,t=>({...transform(t),scale:[t.size,t.size*.62,t.size*1.12]}));
  view.instances(view.detail,new T.SphereGeometry(.18,6,4),view.material(seasonal?.grass??0x70924f),ferns,t=>({...transform(t),rotation:[.34,t.r,.4],scale:[t.size*.35,t.size*.27,t.size*1.5]}));
  view.instances(view.detail,new T.SphereGeometry(.07,7,5),view.material(seasonal?.flower??0xe5c985),flowers,transform);
@@ -146,7 +151,7 @@ export function addWoodlandTerrain(view,s,p,menu,known){const seasonal=s.livingB
  view.instances(view.detail,new T.SphereGeometry(.28,8,6),view.material(0xc3c2a5),bank,t=>({...transform(t),scale:[t.size,t.size*.5,t.size*.8]}));
  // A broad winding path joins the autumn stops into a visible destination
  const journeyStops=(s.locations??[]).filter(l=>(l.actualName??l.id).includes('JOURNEY')).sort((a,b)=>a.x-b.x);
- if(journeyStops.length>1){const path=new T.Group();for(let i=0;i<journeyStops.length-1;i++){const a=journeyStops[i],b=journeyStops[i+1],steps=Math.ceil(Math.hypot(b.x-a.x,b.z-a.z)*5);for(let j=0;j<=steps;j++){const t=j/steps,x=a.x+(b.x-a.x)*t,z=a.z+(b.z-a.z)*t;const stone=view.cylinder(path,x,view.heightAt(x,z)+.03,z,.69,.045,0xd8c398,20);stone.scale.z=.8;stone.receiveShadow=true;}}view.detail.add(path);}
+ if(journeyStops.length>1&&!s.livingBoard){const path=new T.Group();for(let i=0;i<journeyStops.length-1;i++){const a=journeyStops[i],b=journeyStops[i+1],steps=Math.ceil(Math.hypot(b.x-a.x,b.z-a.z)*5);for(let j=0;j<=steps;j++){const t=j/steps,x=a.x+(b.x-a.x)*t,z=a.z+(b.z-a.z)*t;const stone=view.cylinder(path,x,view.heightAt(x,z)+.03,z,.69,.045,0xd8c398,20);stone.scale.z=.8;stone.receiveShadow=true;}}view.detail.add(path);}
  // Woodland silhouette around the existing terrain, without introducing new board obstacles
  if(s.mode==='placement'&&!s.livingBoard){const elder=ancientTree(view,{x:30,z:22,id:'elder',kind:'decoration'});elder.traverse(o=>{delete o.userData.pick;});view.detail.add(elder);}
  const fireflies=[];for(let i=0;i<38;i++){const x=2+n(i,4)*29,z=6+n(i,8)*32;fireflies.push({x,y:.5+n(i,11)*1.7,z,phase:n(i,19)*6.28});}

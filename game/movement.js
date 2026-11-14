@@ -18,6 +18,7 @@ const assert=(condition,message)=>{if(!condition)throw new Error(message);};
 export const count=u=>Math.max(0,Math.ceil((u?.hp??0)/(TROOPS[u?.kind]?.hp??WORKER.hp)));
 export const moveRange=(_state,_unit)=>WORKER.speed;
 export function known(state,player,pos){
+ if(state.livingBoard&&pos){const x=Math.round(pos.x),z=Math.round(pos.z);return Number.isFinite(x)&&Number.isFinite(z)&&x>=0&&x<WORLD.width&&z>=0&&z<(state.worldHeight??WORLD.height)&&!!state.players[player]?.explored[z*WORLD.width+x];}
  if(!pos||!Number.isFinite(pos.x)||!Number.isFinite(pos.z)||pos.x<0||pos.z<0||pos.x>=WORLD.width||pos.z>=WORLD.height)return false;
  const x=Math.round(pos.x),z=Math.round(pos.z);
  return inside(x,z)&&!!state.players[player]?.explored[index(x,z)];

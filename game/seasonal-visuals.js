@@ -1,3 +1,4 @@
+import {woodlandPlacements} from './woodland-layout.js';
 import * as T from '../vendor/three.module.js';
 
 export const SEASON_VISUALS={
@@ -16,8 +17,8 @@ export function applyObjectSeason(group,season){
 }
 export function addSeasonGroundDetails(view,state){
  const season=String(state.season).toUpperCase(),palette=seasonVisuals(season);if(!season)return;
- const items=[];for(const t of state.tiles){if(t.type==='water')continue;const hash=Math.sin(t.x*97.1+t.z*51.7)*23794.19,seed=hash-Math.floor(hash);if(season==='AUTUMN'&&seed>.60)for(let j=0;j<3;j++)items.push({x:t.x+Math.sin(j*2.4)*.30,z:t.z+Math.cos(j*2.4)*.30,y:view.heightAt(t.x,t.z)+.04,size:.7+seed,r:seed*6+j});if(season==='WINTER'&&seed>.83)items.push({x:t.x,z:t.z,y:view.heightAt(t.x,t.z)+.025,size:.45+seed,r:seed});}
+ const canopy=season==='AUTUMN'?[...woodlandPlacements(state).trees,state.livingTree??{x:30,z:9}]:[];
+ const items=[];for(const t of state.tiles){if(t.type==='water')continue;const hash=Math.sin(t.x*97.1+t.z*51.7)*23794.19,seed=hash-Math.floor(hash);if(season==='AUTUMN'&&seed>.55&&canopy.some(p=>Math.hypot(p.x-t.x,p.z-t.z)<4.5))for(let j=0;j<3;j++)items.push({x:t.x+Math.sin(j*2.4)*.30,z:t.z+Math.cos(j*2.4)*.30,y:view.heightAt(t.x,t.z)+.04,size:.7+seed,r:seed*6+j});}
  if(season==='AUTUMN')view.instances(view.detail,new T.SphereGeometry(.12,5,3),view.material(palette.leaves),items,t=>({position:[t.x,t.y,t.z],rotation:[0,t.r,.2],scale:[t.size,.08,t.size*.5]}));
- if(season==='WINTER')view.instances(view.detail,new T.SphereGeometry(.42,9,5),view.material(0xf4f5ec),items,t=>({position:[t.x,t.y,t.z],rotation:[0,t.r,0],scale:[t.size,.1,t.size*.75]}));
  view.seasonGroundDetails={season,count:items.length};
 }
