@@ -1,3 +1,5 @@
+import {nightAssetRevision} from './local-sculpt/lazy-assets.js';
+import {animateWorkerCharacter} from './local-sculpt/worker-characters.js';
 import {navigationFootprint} from './city-footprints.js';
 import {createWoodlandAsset} from './woodland-assets.js';
 import {cityFootprint} from './city-footprints.js';
@@ -59,7 +61,7 @@ function makeObject(view,item){
  if(item.cardName){const miniature=createCardMiniature(view,item.cardName,item.owner??0);miniature.scale.multiplyScalar(item.modelScale??1.10);miniature.position.y=0;miniature.rotation.y=miniature.userData.isCritter?0:Math.PI;g.add(miniature);g.userData.miniature=miniature;}
  else smallObject(view,g,item);
  if(item.cardName&&!item.critter){g.updateMatrixWorld(true);const box=new T.Box3().setFromObject(g.userData.miniature);g.userData.navigationFootprint=navigationFootprint(item.cardName,0,0,(item.modelScale??1.10)/1.10)??{minX:box.min.x-item.x-.12,maxX:box.max.x-item.x+.12,minZ:box.min.z-item.z-.12,maxZ:box.max.z-item.z+.12};}
- if(item.type!=='city-area')view.tagged(g,{type:item.type,id:item.id});
+ if(item.type!=='city-area'&&!item.hideOnArrival)view.tagged(g,{type:item.type,id:item.id});
  return g;
 }
 function labelHover(view,label,pick){
@@ -86,10 +88,10 @@ export function renderLivingBoard(view,state){
   const entity=view.entities.get('location:'+location.id);if(entity)applyObjectSeason(entity.group,state.season);
 
  }
- for(const item of state.livingObjects??[]){
-  const entity=view.syncEntity('living:'+item.id,`${item.type}:${item.cardName??''}:${item.owner??''}:${item.x}:${item.z}:${item.radius??''}:${item.type==='city-area'?state.season:''}`,()=>makeObject(view,item));entity.living=item;
+ for(const item of [...(state.livingObjects??[]),...(state.cityScene?.gatewayArrivals??[]).filter(item=>!view.completedLivingArrivals?.has(item.arrival.key))]){
+  const entity=view.syncEntity('living:'+item.id,`${item.type}:${nightAssetRevision(item.cardName)}:${item.cardName??''}:${item.owner??''}:${item.x}:${item.z}:${item.radius??''}:${item.type==='city-area'?state.season:''}`,()=>makeObject(view,item));entity.living=item;
   if(item.type==='market'){let glow=entity.group.userData.affordance;if(!glow){glow=view.ring(.91,1.04,0x87cb78,.65);glow.position.y=.14;entity.group.add(glow);entity.group.userData.affordance=glow;}glow.visible=item.available===true;}
-  applyObjectSeason(entity.group,state.season);objectLabel(view,item);
+  applyObjectSeason(entity.group,state.season);if(!item.hideOnArrival)objectLabel(view,item);
  }
  const obstacles=[];for(const item of state.livingObjects??[]){const footprint=view.entities.get('living:'+item.id)?.group.userData.navigationFootprint;if(footprint)obstacles.push({id:item.id,minX:item.x+footprint.minX,maxX:item.x+footprint.maxX,minZ:item.z+footprint.minZ,maxZ:item.z+footprint.maxZ});if(item.type==='city-area'){const z=item.z-(item.radius??8)*.82;obstacles.push({id:item.id+':camp',minX:item.x-1.5,maxX:item.x+1.5,minZ:z-1.2,maxZ:z+1.2});}}
  view.cityNavigation=createNavigation(obstacles,view.cityNavigation);
@@ -162,7 +164,7 @@ function animateArrival(view,entity,item,mini,dt){
  if((mini.children[0]?.userData.meshyScholar||mini.children[0]?.userData.meshyPilot)&&a.style==='walk')mini.position.y=view.heightAt(x,z)-entity.group.position.y;
  const travelYaw=result.yaw??mini.rotation.y;
  mini.rotation.y=a.style==='carry'?Math.PI:travelYaw;mini.userData.walking=result.moving;
- if(a.porters){a.porters.position.set(offsetX,view.heightAt(x,z)-entity.group.position.y,offsetZ);a.porters.rotation.y=travelYaw;a.porters.traverse(o=>{if(o.userData.limb)o.rotation.x=Math.sin(view.t*10+o.userData.limb.phase)*o.userData.limb.amplitude;});}
+ if(a.porters){a.porters.position.set(offsetX,view.heightAt(x,z)-entity.group.position.y,offsetZ);a.porters.rotation.y=travelYaw;a.porters.traverse(o=>{if(o.userData.meshyWorker)animateWorkerCharacter(o,view.t,{walking:true});if(o.userData.limb)o.rotation.x=Math.sin(view.t*10+o.userData.limb.phase)*o.userData.limb.amplitude;});}
  if(t>=1){entity.arrivalEndpoint={x,z};a.done=true;view.completedLivingArrivals.add(a.key);mini.position.set(0,.12,0);mini.userData.walking=false;if(a.porters)view.disposeObject(a.porters);a.porters=null;entity.miniActor=null;return false;}return true;
 }
 
@@ -173,6 +175,7 @@ export function animateLivingBoard(view,dt){
    const item=entity.living,mini=entity.group.userData.miniature;
    if(mini){
     const arriving=animateArrival(view,entity,item,mini,dt);
+    if(item.hideOnArrival&&!arriving&&view.completedLivingArrivals?.has(item.arrival.key)){entity.group.visible=false;continue;}
     if(!arriving&&item.critter&&(item.type==='city-card'||item.type==='market')){
      const market=item.type==='market',center=market?{x:item.x,z:item.z}:item.roamCenter??(state.livingObjects??[]).find(o=>o.type==='city-area'&&o.owner===item.owner)??item;
      const proxy=entity.miniActor??={group:new T.Group(),livingWalk:null};
@@ -183,7 +186,9 @@ export function animateLivingBoard(view,dt){
      else{if(proxy.habitatWalk){delete proxy.habitatWalk;proxy.livingWalk=null;}moving=idleWalk(view,proxy,item,center,market?.34:item.roamRadius??Math.max(2,(center.radius??6)-1),dt,item.id);}
      mini.position.set(proxy.group.position.x-item.x,proxy.group.position.y-entity.group.position.y+((mini.children[0]?.userData.meshyScholar||mini.children[0]?.userData.meshyPilot)?0:.12),proxy.group.position.z-item.z);mini.rotation.y=proxy.group.rotation.y;mini.userData.walking=moving;if((mini.children[0]?.userData.meshyScholar||mini.children[0]?.userData.meshyPilot))mini.position.y=view.heightAt(proxy.group.position.x,proxy.group.position.z)-entity.group.position.y;
     }
-    animateCardMiniature(mini,view.t,dt);
+    const far=view.optimizations?.animationBudget&&entity.group.position.distanceToSquared(view.camera.position)>42*42;
+    entity.animationElapsed=(entity.animationElapsed??0)+dt;
+    if(!far||entity.animationElapsed>=1/30){animateCardMiniature(mini,view.t,entity.animationElapsed);entity.animationElapsed=0;}
    }
   }else if(entity.living?.type==='city-area')entity.group.traverse(o=>{if(o.material?.emissive&&o.material.emissive.getHex()){o.material.emissiveIntensity=.48+Math.sin(view.t*1.7+o.id)*.16;}});
 
@@ -191,7 +196,7 @@ export function animateLivingBoard(view,dt){
    const u=entity.unit;if(u.locationId){entity.livingWalk=null;continue;}
    const center=u.roamCenter??(state.livingObjects??[]).find(o=>o.type==='city-area'&&o.owner===u.owner)??u.home??u,home=u.home??u;
    const moving=idleWalk(view,entity,home,center,u.roamRadius??Math.max(2,(center.radius??5)-1),dt,u.id);
-   entity.group.traverse(o=>{if(o.userData.limb)o.rotation.x=Math.sin(view.t*(moving?11:2)+o.userData.limb.phase)*(moving?o.userData.limb.amplitude:.025);});
+   entity.group.traverse(o=>{if(o.userData.meshyWorker)animateWorkerCharacter(o,view.t,{walking:!!moving});if(o.userData.limb)o.rotation.x=Math.sin(view.t*(moving?11:2)+o.userData.limb.phase)*(moving?o.userData.limb.amplitude:.025);});
   }
  }
  if(view.livingGhost){const mouse=view.windowPointer,preview=state.placementPreview;if(Number.isFinite(preview?.x)&&Number.isFinite(preview?.z)){view.livingGhost.position.set(preview.x,view.heightAt(preview.x,preview.z),preview.z);view.livingGhost.visible=!view.inputPaused;}else if(mouse.inside&&!view.isCameraUI(document.elementFromPoint(mouse.x,mouse.y))){const point=view.groundPoint(mouse.x,mouse.y),area=(state.livingObjects??[]).find(o=>o.type==='city-area'&&o.owner===preview?.owner);const valid=point&&area&&point.x>area.bounds.minX&&point.x<area.bounds.maxX&&point.z>area.bounds.minZ&&point.z<area.bounds.maxZ;if(point){view.livingGhost.position.set(point.x,view.heightAt(point.x,point.z),point.z);view.livingGhost.visible=!!valid&&!view.inputPaused;}}else view.livingGhost.visible=false;}

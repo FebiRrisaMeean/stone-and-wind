@@ -1,6 +1,7 @@
 import * as T from '../vendor/three.module.js'
-import {createNightBuilding} from '../game/local-sculpt/night-buildings.js'
+import {createNightBuilding,preloadNightBuildings} from '../game/local-sculpt/night-buildings.js'
 const catalog=await (await fetch('./catalog.json')).json()
+await preloadNightBuildings(catalog.map(c=>c.name))
 let selected='Mine'
 const castLabels=[]
 function createFigure(name){const g=createNightBuilding(name);const b=new T.Box3().setFromObject(g),z=b.getSize(new T.Vector3()),c=b.getCenter(new T.Vector3());const s=2.2/Math.max(z.x,z.y,z.z);g.scale.setScalar(s);g.position.set(-c.x*s,-b.min.y*s,-c.z*s);return g}

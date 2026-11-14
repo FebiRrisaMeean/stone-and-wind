@@ -31,6 +31,12 @@ export function createWoodlandAsset(kind,season='SUMMER',height=1){
 export function addWoodlandAssets(view,state){
  if(!templates.has('oak')||!templates.has('spruce'))return false
  const layout=woodlandPlacements(state),dummy=new T.Object3D();let triangles=0,calls=0
+ for(const peak of state.cityScene?.decor?.mountains??[]){
+  const g=new T.DodecahedronGeometry(1,1);g.scale(peak.width/2,peak.height,peak.depth/2);
+  const mesh=new T.Mesh(g,view.material(state.season==='WINTER'?0xb9c3ba:0x7c8a7e));
+  mesh.position.set(peak.x,view.heightAt(peak.x,peak.z)-peak.height*.35,peak.z);mesh.rotation.y=peak.x*.31;mesh.receiveShadow=true;mesh.castShadow=true;view.detail.add(mesh);
+ }
+ for(const patch of state.cityScene?.decor?.forest??[])for(let i=0;i<3;i++){const a=i*2.1;layout.trees.push({x:patch.x+Math.cos(a)*patch.radius,z:patch.z+Math.sin(a)*patch.radius,size:4.8+i*.35,r:a,kind:i%2?'oak':'spruce'});}
  for(const kind of ['oak','spruce','shrub']){const entries=(kind==='shrub'?layout.shrubs:layout.trees.filter(t=>t.kind===kind));if(!entries.length)continue
   for(const p of templates.get(kind)??[]){const mesh=new T.InstancedMesh(p.geometry,seasonalMaterial(p.material,kind,state.season),entries.length)
    entries.forEach((t,i)=>{dummy.position.set(t.x,view.heightAt(t.x,t.z),t.z);dummy.rotation.set(0,t.r,0);dummy.scale.setScalar(t.size);dummy.updateMatrix();mesh.setMatrixAt(i,dummy.matrix)})

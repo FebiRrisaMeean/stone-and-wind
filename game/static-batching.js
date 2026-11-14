@@ -1,7 +1,9 @@
+import {optimizationSettings} from './optimization-settings.js'
 import * as T from '../vendor/three.module.js'
 import {mergeGeometries} from '../vendor/addons/utils/BufferGeometryUtils.js'
 // Batch only an explicitly static production-site subtree, retaining its semantic groups
 export function batchProductionSite(root){
+ if(!optimizationSettings(globalThis.location?.search??'').staticBatching)return root
  root.updateMatrixWorld(true);const inverse=root.matrixWorld.clone().invert(),groups=new Map()
  root.traverse(o=>{
   if(!o.isMesh||o.isSkinnedMesh||o.isInstancedMesh||Array.isArray(o.material)||o.geometry.userData.sharedAsset||o.material.map||o.material.transparent)return

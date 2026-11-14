@@ -2,7 +2,9 @@ import * as T from '../../vendor/three.module.js'
 import {GLTFLoader} from '../../vendor/addons/loaders/GLTFLoader.js'
 import {clone as cloneSkeleton} from '../../vendor/addons/utils/SkeletonUtils.js'
 
-const assets=new Map(),states=new WeakMap(),point=new T.Vector3()
+import {createAssetLibrary,eagerAssetsRequested} from './lazy-assets.js'
+
+const states=new WeakMap(),point=new T.Vector3()
 const definitions={"Husband": {"file": "husband/rigged", "critter": true}, "Wife": {"file": "wife/rigged", "critter": true}, "Shopkeeper": {"file": "shopkeeper/rigged", "critter": true}, "Barge Toad": {"file": "barge-toad/rigged", "critter": true}, "Chip Sweep": {"file": "chip-sweep/rigged", "critter": true}, "Innkeeper": {"file": "innkeeper/rigged", "critter": true}, "Fool": {"file": "fool/rigged", "critter": true}, "Judge": {"file": "judge/rigged", "critter": true}, "King": {"file": "king/rigged", "critter": true}, "Miner Mole": {"file": "miner-mole/rigged", "critter": true}, "Monk": {"file": "monk/rigged", "critter": true}, "Peddler": {"file": "peddler/rigged", "critter": true}, "Queen": {"file": "queen/rigged", "critter": true}, "Ranger": {"file": "ranger/rigged", "critter": true}, "Wanderer": {"file": "wanderer/rigged", "critter": true}, "Woodcarver": {"file": "woodcarver/rigged", "critter": true}, "Bard": {"file": "bard/rigged", "critter": true}, "Historian": {"file": "historian/rigged", "critter": true}, "Postal Pigeon": {"file": "postal-pigeon/rigged", "critter": true}, "Shepherd": {"file": "shepherd/rigged", "critter": true}, "Teacher": {"file": "teacher/rigged", "critter": true}, "Undertaker": {"file": "undertaker/rigged", "critter": true}}
 const loader=new GLTFLoader()
 async function load(file){
@@ -18,7 +20,7 @@ function inPlace(source){
  }
  return clip
 }
-await Promise.all(Object.entries(definitions).map(async([name,definition])=>{
+const library=createAssetLibrary(definitions,async(name,definition)=>{
  const main=await load(definition.file);if(!main)return
  let walk=null,run=null
  if(definition.critter){[walk,run]=await Promise.all([load(definition.file.replace("rigged","walk")),load(definition.file.replace("rigged","run"))])}
@@ -26,8 +28,11 @@ await Promise.all(Object.entries(definitions).map(async([name,definition])=>{
  // Meshy's animation file also contains the full rigged model
  const model=hasRig?main:(walk??main)
  share(model.scene)
- assets.set(name,{...definition,model,walk:walk?.animations[0]??model.animations[0],run:run?.animations[0]})
-}))
+ return {...definition,model,walk:walk?.animations[0]??model.animations[0],run:run?.animations[0]}
+})
+export const preloadNightCharacters=library.preload
+export const requestNightCharacter=library.request
+if(eagerAssetsRequested())await preloadNightCharacters()
 function sampleSoles(model){
  const soles=[]
  model.traverse(mesh=>{
@@ -83,7 +88,7 @@ function clearArchitectArms(state,root){
  }
 }
 export function createNightCharacter(name){
- const asset=assets.get(name);if(!asset)return null
+ const asset=library.assets.get(name);if(!asset){void requestNightCharacter(name);return null}
  const root=new T.Group(),model=asset.critter?cloneSkeleton(asset.model.scene):asset.model.scene.clone(true)
  root.name=`meshy-pilot:${name}`;root.userData.meshyPilot=true;root.userData.pilotName=name
  model.rotation.y=Math.PI;root.add(model);root.updateMatrixWorld(true)

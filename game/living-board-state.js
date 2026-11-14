@@ -43,3 +43,7 @@ export function reconcileCityLayout(game,positions,preferred=null){const next={}
 // A resident joining a pair already has its shared place and must not be sent
 // through the separate free-slot prompt after the engine resolves Pair
 export function queuedCityPlacements(game,previousKeys,preferred=null){return game.players.slice(0,2).flatMap((player,owner)=>cityCardEntries(player).filter(entry=>!previousKeys.has(entry.key)&&!entry.pairedWith&&!(preferred?.used&&preferred.cardName===entry.cardName&&preferred.owner===owner)).map(entry=>({...entry,owner})));}
+
+// Presentation-only waiting points at the edge of the shared woodland
+// Logical homes and saved layouts remain in LIVING_CITIES
+export const CITY_FOREST_GATEWAYS=[{x:17,z:24,radius:1.8},{x:44,z:24,radius:1.8}];

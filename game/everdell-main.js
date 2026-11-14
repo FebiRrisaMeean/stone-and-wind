@@ -1,3 +1,4 @@
+import {applyCityScene} from './city-scene.js';
 import {cityRailMarkup,bindCityRail} from './city-icon-rail.js';
 import {finalScoringPlan,createFinalScoring} from './final-scoring.js?v=pages25-architecture';
 import {chooseBotCommand,paymentFitsCity} from './bot-policy.js?v=bot20';
@@ -49,7 +50,7 @@ export function mountGame(root){
  let savedSession=null;try{savedSession=JSON.parse(localStorage.getItem(SESSION_SAVE)||'null');}catch{}
  const session=createBotSession(game,savedSession);
  let placementContextCancel=false;
- let cityRailOwner=null;
+ let cityRailOwner=null,viewedCityOwner=null;
  let teamDraft=teams.slice(),disposed=false,tooltipExclusion=null,detailOrigin=null,botTimer=null,botError=false,botThinking=false;
  let finalRun=null,finalPlan=null,finalStepId=null,finishedGameSeen=game.isGameOver();
  const requestedCards=new Set(),paymentAvailability=new Map();
@@ -302,7 +303,7 @@ export function mountGame(root){
   if(!html){hideDetail();return;}clearTimeout(hoverTimer);hoverTimer=null;hoverKey=key;d.innerHTML=html;d.hidden=false;const x=obj.clientX??world.windowPointer?.x??innerWidth/2,y=obj.clientY??world.windowPointer?.y??innerHeight/2;d.style.width=(object?.type==='supplies'?344:location?280:Math.min(320,(innerHeight-180)*.708))+'px';const width=d.offsetWidth;d.style.left=Math.max(12,Math.min(innerWidth-width-12,x>innerWidth*.6?x-width-24:x+24))+'px';d.style.top=(y-100)+'px';detailOrigin={type:obj.type,id:obj.id,x,y,anchorRect:obj.anchorRect,card:['market','city-card'].includes(object?.type)};clampDetail();
  }
  function render(){
-  actions=new Map();root.querySelector('.living-shell').dataset.player=playerIndex();root.querySelector('.living-shell').dataset.season=drawing.season;world.render(drawing,playerIndex(),{selected,menu:false});
+  actions=new Map();root.querySelector('.living-shell').dataset.player=playerIndex();root.querySelector('.living-shell').dataset.season=drawing.season;world.render(new URLSearchParams(location.search).get('cityScene')==='off'?drawing:applyCityScene(drawing,playerIndex(),viewedCityOwner??playerIndex()),playerIndex(),{selected,menu:false});
   $('turn-announcement').textContent=`Ход: ${game.getActivePlayer().name}, ${SEASONS[sharedSeason(game,sharedMeta)]}`;
   $('player-stock').innerHTML=supplyStatus(player(),sharedMeta.transition?null:forecastNextSeason(game,session.humanPlayerId,sharedMeta),true);
   hideDetail();renderHand();renderDecision();renderCityRail();scheduleBot();
@@ -419,7 +420,7 @@ export function mountGame(root){
  }
 
  function focusCamera(zone,immediate=false){
-  hideDetail();let bounds;
+  hideDetail();const nextOwner=zone==='opponent'?1-playerIndex():playerIndex();if(viewedCityOwner!==nextOwner){viewedCityOwner=nextOwner;cityRailOwner=nextOwner;render();}let bounds;
   if(zone==='own'||zone==='opponent'){const owner=zone==='own'?playerIndex():1-playerIndex(),c=LIVING_CITIES[owner];bounds={...(c.bounds??{minX:c.x-8.8,maxX:c.x+8.8,minZ:26.8,maxZ:41.2}),minY:0,maxY:5};}
   else if(zone==='market'){bounds={minX:19.7,maxX:41.3,minZ:23.7,maxZ:32,minY:0,maxY:3};}
   else {const points=drawing.locations.filter(p=>p.actualName!=='HAVEN'&&!p.actualName.includes('JOURNEY'));bounds={minX:Math.min(...points.map(p=>p.x))-2.3,maxX:Math.max(...points.map(p=>p.x))+2.3,minZ:9,maxZ:Math.max(...points.map(p=>p.z))+2.3,minY:0,maxY:3.8};}

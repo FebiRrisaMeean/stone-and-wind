@@ -1,3 +1,4 @@
+import {createWorkerCharacter} from './local-sculpt/worker-characters.js';
 import {batchProductionSite} from './static-batching.js';
 import {addWoodlandAssets,addWoodlandPaths,createWoodlandAsset} from './woodland-assets.js';
 import {addProductionProps} from './production-props.js?v=field19';
@@ -54,6 +55,7 @@ export function ancientTree(view,b){const g=new T.Group();g.position.set(b.x,vie
 }
 
 export function woodlandFigure(view,kind,owner,phase=0,portrait=null){const g=new T.Group(),species=((portrait??owner)%6+6)%6,coat=[0xb69b7a,0xbf7a49,0x8c816b,0xc9baa2,0x77756f,0x9b7758][species],cloth=team[owner]??team[0];
+ if(kind==='worker'&&(species===1||species===3)){const worker=createWorkerCharacter(species===1?'squirrel':'rabbit');if(worker){worker.scale.setScalar(species===1?1.08:1.25);return worker;}}
  g.userData.species=['mouse','squirrel','hedgehog','hare','mole','beaver'][species];
  // Rounded body, tiny feet and paws distinguish the critters even at board scale
  rounded(view,g,0,.43,.03,.25,coat,.95,1.25,.83);rounded(view,g,0,.39,-.12,.19,cream,.75,1,.45);
