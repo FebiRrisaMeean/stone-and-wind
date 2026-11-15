@@ -1,5 +1,5 @@
-import {renderIcon} from './original-icons.js?v=pages29-cozy';
-import {cardArt} from './everdell/art.js?v=pages29-cozy';
+import {renderIcon} from './original-icons.js?v=pages30-production';
+import {cardArt} from './everdell/art.js?v=pages30-production';
 
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const categories={GOVERNANCE:'governance',PRODUCTION:'production',TRAVELER:'traveler',DESTINATION:'destination',PROSPERITY:'prosperity'};

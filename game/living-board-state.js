@@ -1,4 +1,4 @@
-import {footprintAt,hullsOverlap,footprintFitsBounds,isBuildingFootprint,navigationFootprint,navigationPassageClear,normalizeCityRotation} from './city-footprints.js?v=pages29-cozy';
+import {footprintAt,hullsOverlap,footprintFitsBounds,isBuildingFootprint,navigationFootprint,navigationPassageClear,normalizeCityRotation} from './city-footprints.js?v=pages30-production';
 // Presentation positions never change engine costs, turns, city capacity or card effects
 export const CITY_LAYOUT_VERSION=2;
 // Cities are independent canonical spaces, shown one at a time by applyCityScene
@@ -31,28 +31,56 @@ export function cityLayoutConflicts(positions){
  for(const [key,p] of Object.entries(positions))if(!validCityPosition(p.owner,p.x,p.z,positions,key,p.cardName,p.rotation??0))conflicts.push(key);
  return conflicts;
 }
-function reconcileCityLayoutPass(game,positions,preferred=null){const next={},added=[];game.players.slice(0,2).forEach((player,owner)=>{for(const entry of cityCardEntries(player)){const previous=positions[entry.key],pair=entry.pairedWith?next[entry.pairedWith]:null,chosen=preferred&&preferred.owner===owner&&preferred.cardName===entry.cardName&&!preferred.used;let pos=previous;
- // The paired resident shares the partner's foundation, even in older layouts
- // where a second free placement mistakenly separated the two residents
- if(pair){pos={x:pair.x+.58,z:pair.z+.28};if(chosen)preferred.used=true;}
- else if(!pos||!validCityPosition(owner,pos.x,pos.z,next,null,entry.cardName,pos.rotation??0)){
-  if(chosen&&validCityPosition(owner,preferred.x,preferred.z,next,null,entry.cardName,preferred.rotation??0)){pos={x:preferred.x,z:preferred.z,rotation:preferred.rotation??0};preferred.used=true;}
-  else pos=freeCityPosition(owner,Object.values(next).filter(p=>p.owner===owner),entry.cardName);
-  if(!pos)throw new Error('City layout has no legal position for '+entry.cardName);
+function reconcileOwnerLayout(entries,owner,positions,preferred,repack=false){
+ const next={},choice=preferred?{...preferred}:null;
+ for(const entry of entries){
+  const previous=positions[entry.key],pair=entry.pairedWith?next[entry.pairedWith]:null;
+  const chosen=choice&&choice.owner===owner&&choice.cardName===entry.cardName&&!choice.used;
+  const rotation=normalizeCityRotation(previous?.rotation??(chosen?choice.rotation:0)??0);
+  let pos=repack?null:previous;
+  // Paired residents share a home; their heading is still independent
+  if(pair){pos={x:pair.x+.58,z:pair.z+.28,rotation};if(chosen)choice.used=true;}
+  else if(!pos||!validCityPosition(owner,pos.x,pos.z,next,null,entry.cardName,rotation)){
+   if(chosen&&validCityPosition(owner,choice.x,choice.z,next,null,entry.cardName,rotation)){pos={x:choice.x,z:choice.z,rotation};choice.used=true;}
+   else pos=freeCityPosition(owner,Object.values(next),entry.cardName,rotation);
+   if(!pos)return null;
+  }
+  next[entry.key]={x:pos.x,z:pos.z,rotation:normalizeCityRotation(pos.rotation??rotation),owner,cardName:entry.cardName,pairId:entry.played.pairId??null};
  }
- if(!previous)added.push({...entry,owner});
- next[entry.key]={x:pos.x,z:pos.z,rotation:normalizeCityRotation(pos.rotation??0),owner,cardName:entry.cardName,pairId:entry.played.pairId??null};}});return{positions:next,added,conflicts:cityLayoutConflicts(next)};}
+ return {positions:next,preferredUsed:choice?.used??false};
+}
 
-// A fragmented old layout can consume all lanes even when the whole city fits
-// Retry a deterministic repack, preserving every card identity and engine owner
+// Recover a fragmented city locally, never resetting headings or the other city
+// Largest rotated navigation envelopes first leave space for the difficult assets
 export function reconcileCityLayout(game,positions={},preferred=null){
- try{return reconcileCityLayoutPass(game,positions??{},preferred)}
- catch(error){
-  if(!error.message.startsWith('City layout has no legal position'))throw error;
-  const packed=reconcileCityLayoutPass(game,{});
-  packed.added=packed.added.filter(entry=>!positions?.[entry.key]);
-  return packed;
+ positions=positions??{};const next={},added=[],repackedOwners=[],choice=preferred?{...preferred}:null;
+ for(const [owner,player]of game.players.slice(0,2).entries()){
+  const entries=cityCardEntries(player);
+  // New cards must not take an accepted saved position from a later card
+  const hasSavedHome=entry=>!!(positions[entry.key]||(entry.pairedWith&&positions[entry.pairedWith]));
+  const savedFirst=[...entries].sort((a,b)=>Number(hasSavedHome(b))-Number(hasSavedHome(a)));
+  let result=reconcileOwnerLayout(savedFirst,owner,positions,choice);
+  if(!result){
+   const dimensions=entry=>{
+    const rotation=positions[entry.key]?.rotation??(preferred?.owner===owner&&preferred.cardName===entry.cardName?preferred.rotation:0)??0;
+    const bounds=navigationFootprint(entry.cardName,0,0,1,rotation);
+    return bounds?{width:bounds.maxX-bounds.minX,depth:bounds.maxZ-bounds.minZ}:{width:0,depth:0};
+   };
+   for(const metric of ['area','width','depth']){
+    const weight=entry=>{const d=dimensions(entry);return metric==='area'?d.width*d.depth:d[metric];};
+    const ordered=[...entries].sort((a,b)=>weight(b)-weight(a));
+    result=reconcileOwnerLayout(ordered,owner,positions,choice,true);
+    if(result)break;
+   }
+   if(!result)throw new Error('City layout has no legal position while preserving rotations for player '+owner);
+   repackedOwners.push(owner);
+  }
+  Object.assign(next,result.positions);
+  if(choice&&result.preferredUsed)choice.used=true;
+  for(const entry of entries)if(!positions[entry.key])added.push({...entry,owner});
  }
+ if(preferred&&choice.used)preferred.used=true;
+ return {positions:next,added,conflicts:cityLayoutConflicts(next),repackedOwners};
 }
 
 // A resident joining a pair already has its shared place and must not be sent

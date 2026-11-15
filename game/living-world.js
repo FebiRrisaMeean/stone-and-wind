@@ -1,16 +1,18 @@
-import {buildCityRoads} from './city-roads.js?v=pages29-cozy';
-import {nightAssetRevision} from './local-sculpt/lazy-assets.js?v=pages29-cozy';
-import {animateWorkerCharacter} from './local-sculpt/worker-characters.js?v=pages29-cozy';
-import {navigationFootprint} from './city-footprints.js?v=pages29-cozy';
-import {createWoodlandAsset} from './woodland-assets.js?v=pages29-cozy';
-import {cityFootprint} from './city-footprints.js?v=pages29-cozy';
-import {createNavigation,stepNavigation} from './city-navigation.js?v=pages29-cozy';
-import {findCityHabitat,stepHabitatWalk} from './city-habitats.js?v=pages29-cozy';
-import {applyObjectSeason} from './seasonal-visuals.js?v=pages29-cozy';
+import {productionAssetRevision} from './production-assets.js?v=pages30-production';
+import {cityRoadSurface} from './city-road-surface.js?v=pages30-production';
+import {buildCityRoads} from './city-roads.js?v=pages30-production';
+import {nightAssetRevision} from './local-sculpt/lazy-assets.js?v=pages30-production';
+import {animateWorkerCharacter} from './local-sculpt/worker-characters.js?v=pages30-production';
+import {navigationFootprint} from './city-footprints.js?v=pages30-production';
+import {createWoodlandAsset} from './woodland-assets.js?v=pages30-production';
+import {cityFootprint} from './city-footprints.js?v=pages30-production';
+import {createNavigation,stepNavigation} from './city-navigation.js?v=pages30-production';
+import {findCityHabitat,stepHabitatWalk} from './city-habitats.js?v=pages30-production';
+import {applyObjectSeason} from './seasonal-visuals.js?v=pages30-production';
 import * as T from '../vendor/three.module.js';
-import {createCardMiniature,animateCardMiniature} from './living-models.js?v=pages29-cozy';
-import {woodlandCottage,ancientTree,woodlandFigure} from './woodland-world.js?v=pages29-cozy';
-import {resourceIcon} from './everdell/art.js?v=pages29-cozy';
+import {createCardMiniature,animateCardMiniature} from './living-models.js?v=pages30-production';
+import {woodlandCottage,ancientTree,woodlandFigure} from './woodland-world.js?v=pages30-production';
+import {resourceIcon} from './everdell/art.js?v=pages30-production';
 
 const team=[0x719bb6,0xd7a073,0x97b485,0xb99ac7];
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -68,7 +70,7 @@ export function renderLivingBoard(view,state){
  view.syncEntity('living-tree',`${tree.x}:${tree.z}:${state.season}`,()=>{const g=createWoodlandAsset('elder',state.season,7.8);if(g){g.position.set(tree.x,view.heightAt(tree.x,tree.z),tree.z);view.tagged(g,{type:'tree',id:'living-tree'});return g;}const fallback=ancientTree(view,{...tree,id:'living-elder',kind:'point'});fallback.scale.setScalar(1.35);view.tagged(fallback,{type:'tree',id:'living-tree'});return fallback;});
  const elder=view.entities.get('living-tree');if(elder)applyObjectSeason(elder.group,state.season);
  for(const location of state.locations??[]){
-  view.syncEntity('location:'+location.id,`${location.x}:${location.z}:${location.workers?.join(',')}:${state.season}`,()=>view.placementLocation(location));
+  view.syncEntity('location:'+location.id,`${location.x}:${location.z}:${location.workers?.join(',')}:${state.season}:${productionAssetRevision()}`,()=>view.placementLocation(location));
   const fallback='';
   const label=view.addLabel('location:'+location.id,location.x,location.z+.15,location.badgeHtml??fallback,'living-object-label living-location-label living-zone-badge',()=>view.onPick?.({type:'location',id:location.id}),.20);
   label.living=true;label.livingZone=true;label.item=location;label.hoverOnly=false;label.el.removeAttribute('title');label.el.setAttribute('aria-label',location.ariaLabel??location.name);label.el.dataset.available=String(location.available!==false);label.el.dataset.locked=String(location.locked===true);labelHover(view,label,{type:'location',id:location.id});
@@ -84,7 +86,7 @@ export function renderLivingBoard(view,state){
  const obstacles=[];for(const item of state.livingObjects??[]){const footprint=view.entities.get('living:'+item.id)?.group.userData.navigationFootprint;if(footprint)obstacles.push({id:item.id,minX:item.x+footprint.minX,maxX:item.x+footprint.maxX,minZ:item.z+footprint.minZ,maxZ:item.z+footprint.maxZ});}
  view.cityRoads=buildCityRoads((state.livingObjects??[]).filter(item=>item.type==='city-card'),{obstacles,previous:view.cityRoads});
  view.cityNavigation=createNavigation(obstacles,view.cityNavigation,view.cityRoads.segments);
- view.syncEntity('city-roads',view.cityRoads.key,()=>{const g=new T.Group(),vertices=[];for(const {a,b} of view.cityRoads.segments){const length=Math.hypot(b.x-a.x,b.z-a.z),nx=-(b.z-a.z)/length*.46,nz=(b.x-a.x)/length*.46,steps=Math.max(1,Math.ceil(length));for(let i=0;i<steps;i++){const p={x:a.x+(b.x-a.x)*i/steps,z:a.z+(b.z-a.z)*i/steps},q={x:a.x+(b.x-a.x)*(i+1)/steps,z:a.z+(b.z-a.z)*(i+1)/steps};const corners=[[p.x+nx,p.z+nz],[p.x-nx,p.z-nz],[q.x+nx,q.z+nz],[q.x-nx,q.z-nz]];for(const index of [0,1,2,2,1,3]){const [x,z]=corners[index];vertices.push(x,view.heightAt(x,z)+.028,z);}}}if(vertices.length){const geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(vertices,3));geo.computeVertexNormals();const mesh=new T.Mesh(geo,new T.MeshStandardMaterial({color:0xb6a17a,roughness:1,side:T.DoubleSide,polygonOffset:true,polygonOffsetFactor:-1}));mesh.receiveShadow=true;g.add(mesh);}return g;});
+ view.syncEntity('city-roads',view.cityRoads.key+':'+view.state.season,()=>{const g=new T.Group();const surface=cityRoadSurface(view.cityRoads.segments,(x,z)=>view.heightAt(x,z),view.state.season);if(surface.positions.length){const geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(surface.positions,3));geo.setAttribute('color',new T.Float32BufferAttribute(surface.colors,3));geo.computeVertexNormals();const mesh=new T.Mesh(geo,new T.MeshStandardMaterial({vertexColors:true,roughness:1,side:T.DoubleSide,polygonOffset:true,polygonOffsetFactor:-1}));mesh.receiveShadow=true;g.add(mesh);}return g;});
  if(view.journeyBoard)view.journeyBoard.hidden=true;
  renderLivingPlacementPreview(view,state.placementPreview??null);
 }

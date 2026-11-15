@@ -1,6 +1,6 @@
-import {T,random,mesh,ell,rod,curve,group,bark,mergeStaticScenery} from './card-style-primitives.js?v=pages29-cozy'
-import {architect,bard,doctor} from './card-style-characters.js?v=pages29-cozy'
-import {crane,refinery,clockTower} from './card-style-buildings.js?v=pages29-cozy'
+import {T,random,mesh,ell,rod,curve,group,bark,mergeStaticScenery} from './card-style-primitives.js?v=pages30-production'
+import {architect,bard,doctor} from './card-style-characters.js?v=pages30-production'
+import {crane,refinery,clockTower} from './card-style-buildings.js?v=pages30-production'
 export const CARD_STYLE_SAMPLE_NAMES=Object.freeze(['Architect','Bard','Doctor','Crane','Resin Refinery','Clock Tower'])
 export function createCardStyleSample(name){
  if(!CARD_STYLE_SAMPLE_NAMES.includes(name))throw new Error('Unknown source-backed sample: '+name)

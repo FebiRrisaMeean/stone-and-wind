@@ -11,6 +11,7 @@ export function installPerformancePanel(probe, loop) {
  const snapshot=()=>{output.textContent=JSON.stringify({...probe.snapshot(),renderSuspended:loop.disposed,totalRenderedFrames:loop.frames,overlayPaused:!loop.active()},null,2);};
  const addButton=(label,action)=>{const b=document.createElement('button');b.type='button';b.textContent=label;b.style.cssText='margin:8px 6px 8px 0;color:#101820;background:#fff;padding:6px';b.addEventListener('click',action);panel.append(b);return b;};
  addButton('Snapshot',snapshot);
+ addButton('Restart 30s capture',()=>{probe.restart();snapshot();});
  const toggle=addButton('Suspend rendering',()=>{if(loop.disposed){loop.disposed=false;loop.invalidate();toggle.textContent='Suspend rendering';}else{loop.dispose();toggle.textContent='Resume rendering';}snapshot();});
  panel.append(output);document.body.append(panel);snapshot();
  return panel;
@@ -23,7 +24,7 @@ function distribution(values) {
 }
 
 export function createPerformanceProbe(renderer, {enabled=false, durationMs=30000, maxFrames=2400, now=()=>performance.now()}={}) {
- const noop=()=>{},disabled={enabled:false,beginFrame:noop,mark:noop,beginRender:noop,endRender:noop,endFrame:noop,stop:noop,dispose:noop,snapshot:()=>({enabled:false})};
+ const noop=()=>{},disabled={enabled:false,beginFrame:noop,mark:noop,beginRender:noop,endRender:noop,endFrame:noop,stop:noop,restart:noop,dispose:noop,snapshot:()=>({enabled:false})};
  if (!enabled) return disabled;
  const frames=[],gpuSamples=[],pending=[];
  const gl=renderer.getContext();
@@ -66,6 +67,7 @@ export function createPerformanceProbe(renderer, {enabled=false, durationMs=3000
    frames.push({cpuMs:now()-frame.start,intervalMs:frame.intervalMs,stages:frame.stages,calls:r.calls,triangles:r.triangles,lines:r.lines,points:r.points});frame=null;
   },
   stop,
+  restart(){stop();frames.length=0;gpuSamples.length=0;started=now();lastFrame=null;frame=null;discardedGpu=0;stopped=false;},
   dispose:stop,
   snapshot(){
    pollGpu();const stages={};for(const f of frames)for(const name of Object.keys(f.stages))stages[name]=true;

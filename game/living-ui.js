@@ -1,4 +1,4 @@
-import {renderIcon} from './original-icons.js?v=pages29-cozy';
+import {renderIcon} from './original-icons.js?v=pages30-production';
 const resourceIcon=key=>renderIcon(String(key).toLowerCase(),{size:24});
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const names={TWIG:'Ветки',RESIN:'Смола',PEBBLE:'Камушки',BERRY:'Ягоды',VP:'Очки',CARD:'Карты'};

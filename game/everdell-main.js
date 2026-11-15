@@ -1,26 +1,27 @@
-import {mountOnlineGame} from './online-game.js?v=pages29-cozy';
-import {applyCityScene} from './city-scene.js?v=pages29-cozy';
-import {cityRailMarkup,bindCityRail} from './city-icon-rail.js?v=pages29-cozy';
-import {finalScoringPlan,createFinalScoring} from './final-scoring.js?v=pages29-cozy';
-import {chooseBotCommand,paymentFitsCity} from './bot-policy.js?v=pages29-cozy';
-import {BOT_SAVE_KEYS,chooseInitialPlayer,createBotSession,decisionPlayerId,humanCanAct,humanOwnsDecision,applySessionCommand} from './bot-session.js?v=pages29-cozy';
-import {cameraControls,cardPreviewPlacement} from './field-ui.js?v=pages29-cozy';
-import {renderIcon} from './original-icons.js?v=pages29-cozy';
-import {captureAction,bindAction,isActionForGame,restoreAction,recoverPendingAction} from './action-checkpoint.js?v=pages29-cozy';
-import {resourceChoiceModel,changeResourceChoice,resourceChoiceMarkup,decisionResources,decisionValue,closeIcon} from './decision-ui.js?v=pages29-cozy';
-import {prepareGameCard,gameCardReady,gameCardFace} from './game-source-cards.js?v=pages29-cozy';
-import {workerSeatPosition} from './production-props.js?v=pages29-cozy';
-import {SOURCE_CARD_NAMES} from './source-card-map.js?v=pages29-cozy';
-import {createHandInteraction} from './hand-interaction.js?v=pages29-cozy';
-import {createSharedSeasonState,normalizeSharedGame,stepSharedGame,requestSharedSeason,sharedSeason,canActShared,forecastNextSeason} from './shared-seasons.js?v=pages29-cozy';
-import {zoneBadge,zoneDetail,supplyStatus,storedResources,cityWorkerMarker,cityWorkerDetail,lockIcon,SPECIES} from './living-ui.js?v=pages29-cozy';
-import {LIVING_CITIES,CITY_CAMPS,CITY_LAYOUT_VERSION,migrateCityLayout,LIVING_TREE,MARKET_POSITIONS,BASIC_POSITIONS,FOREST_POSITIONS,COMMON_POSITIONS,inCity,cityCardEntries,queuedCityPlacements,validCityPosition,reconcileCityLayout,freeCityPosition} from './living-board-state.js?v=pages29-cozy';
-import {cardArt,portraitStyle,placeArt,resourceIcon,cardTypeIcon} from './everdell/art.js?v=pages29-cozy';
-import {createGame,stepGame,serializeGame,restoreGame,getPaymentOptions as enginePaymentOptions,getScores,Card,Location,Event,CardName,LocationOccupancy,GameInputType,Season,CardType,PlayerStatus} from './everdell/engine.js?v=pages29-cozy';
-import {CARD_NAMES,CARD_TEXT,LOCATION_NAMES,LOCATION_TEXT,EVENT_NAMES,EVENT_TEXT,SEASONS,CARD_TYPES,RESOURCE_NAMES,translateText} from './everdell/locale.js?v=pages29-cozy';
-import {createMovementWorld,moveWorker} from './movement.js?v=pages29-cozy';
-import {WORLD} from './data.js?v=pages29-cozy';
-import {WorldView} from './world.js?v=pages29-cozy';
+import {seasonConfirmation} from './season-confirmation.js?v=pages30-production';
+import {mountOnlineGame} from './online-game.js?v=pages30-production';
+import {applyCityScene} from './city-scene.js?v=pages30-production';
+import {cityRailMarkup,bindCityRail} from './city-icon-rail.js?v=pages30-production';
+import {finalScoringPlan,createFinalScoring} from './final-scoring.js?v=pages30-production';
+import {chooseBotCommand,paymentFitsCity} from './bot-policy.js?v=pages30-production';
+import {BOT_SAVE_KEYS,chooseInitialPlayer,createBotSession,decisionPlayerId,humanCanAct,humanOwnsDecision,applySessionCommand} from './bot-session.js?v=pages30-production';
+import {cameraControls,cardPreviewPlacement} from './field-ui.js?v=pages30-production';
+import {renderIcon} from './original-icons.js?v=pages30-production';
+import {captureAction,bindAction,isActionForGame,restoreAction,recoverPendingAction} from './action-checkpoint.js?v=pages30-production';
+import {resourceChoiceModel,changeResourceChoice,resourceChoiceMarkup,decisionResources,decisionValue,closeIcon} from './decision-ui.js?v=pages30-production';
+import {prepareGameCard,gameCardReady,gameCardFace} from './game-source-cards.js?v=pages30-production';
+import {workerSeatPosition} from './production-props.js?v=pages30-production';
+import {SOURCE_CARD_NAMES} from './source-card-map.js?v=pages30-production';
+import {createHandInteraction} from './hand-interaction.js?v=pages30-production';
+import {createSharedSeasonState,normalizeSharedGame,stepSharedGame,requestSharedSeason,sharedSeason,canActShared,forecastNextSeason} from './shared-seasons.js?v=pages30-production';
+import {zoneBadge,zoneDetail,supplyStatus,storedResources,cityWorkerMarker,cityWorkerDetail,lockIcon,SPECIES} from './living-ui.js?v=pages30-production';
+import {LIVING_CITIES,CITY_CAMPS,CITY_LAYOUT_VERSION,migrateCityLayout,LIVING_TREE,MARKET_POSITIONS,BASIC_POSITIONS,FOREST_POSITIONS,COMMON_POSITIONS,inCity,cityCardEntries,queuedCityPlacements,validCityPosition,reconcileCityLayout,freeCityPosition} from './living-board-state.js?v=pages30-production';
+import {cardArt,portraitStyle,placeArt,resourceIcon,cardTypeIcon} from './everdell/art.js?v=pages30-production';
+import {createGame,stepGame,serializeGame,restoreGame,getPaymentOptions as enginePaymentOptions,getScores,Card,Location,Event,CardName,LocationOccupancy,GameInputType,Season,CardType,PlayerStatus} from './everdell/engine.js?v=pages30-production';
+import {CARD_NAMES,CARD_TEXT,LOCATION_NAMES,LOCATION_TEXT,EVENT_NAMES,EVENT_TEXT,SEASONS,CARD_TYPES,RESOURCE_NAMES,translateText} from './everdell/locale.js?v=pages30-production';
+import {createMovementWorld,moveWorker} from './movement.js?v=pages30-production';
+import {WORLD} from './data.js?v=pages30-production';
+import {WorldView} from './world.js?v=pages30-production';
 
 const getPaymentOptions=(game,name,source,index)=>enginePaymentOptions(game,name,source,index).filter(p=>paymentFitsCity(game,name,p));
 const {game:SAVE,layout:LAYOUT_SAVE,shared:SHARED_SAVE,teams:TEAMS_SAVE,action:ACTION_SAVE,session:SESSION_SAVE}=BOT_SAVE_KEYS;
@@ -62,7 +63,7 @@ export function mountGame(root){
  let finalRun=null,finalPlan=null,finalStepId=null,finishedGameSeen=game.isGameOver();
  const requestedCards=new Set(),paymentAvailability=new Map();
  const baseMap=createMovementWorld({seed:4811}),names=['Данила','Еремей','Ефим','Тихон','Иван','Терентий','Мирон','Савва','Матвей','Яков','Игнат','Пётр','Борис','Глеб','Назар','Лукьян','Прохор','Роман','Семён','Фёдор','Кузьма','Андрей','Степан','Елисей'];
- root.innerHTML=`<div class="game-shell placement-shell everdell-shell living-shell"><div class="world-stage" id="world-stage" tabindex="-1" aria-label="Живой Эверделл"></div><aside id="player-stock" class="player-stock" data-camera-ui aria-label="Ваш запас"></aside><aside id="city-icon-rail" class="city-icon-rail" data-camera-ui aria-label="Карты города"></aside><div class="hand-fan" id="hand-fan" data-camera-ui aria-label="Карты в руке"></div><aside id="object-detail" class="object-detail" data-camera-ui hidden></aside><div id="placement-caption" class="placement-caption" hidden></div>${cameraControls()}<nav class="field-actions" data-camera-ui aria-label="Действия партии"><button data-field="events">Задания</button><button data-field="season">Завершить сезон</button><button data-field="opponent-stock">Запас соперника</button></nav><button type="button" class="system-menu-toggle" data-system="open" data-camera-ui aria-label="Меню игры" aria-haspopup="dialog">☰ <span>Меню</span></button><div id="final-scoring-panel" class="final-scoring-panel" data-camera-ui hidden></div><div id="decision-layer"></div><aside id="bot-status" class="bot-status" data-camera-ui role="status" hidden></aside><div class="toast" id="toast" role="status"></div><span class="sr-only" id="turn-announcement" aria-live="polite"></span></div>`;
+ root.innerHTML=`<div class="game-shell placement-shell everdell-shell living-shell"><div class="world-stage" id="world-stage" tabindex="-1" aria-label="Живой Эверделл"></div><aside id="player-stock" class="player-stock" data-camera-ui aria-label="Ваш запас"></aside><aside id="city-icon-rail" class="city-icon-rail" data-camera-ui aria-label="Карты города"></aside><div class="hand-fan" id="hand-fan" data-camera-ui aria-label="Карты в руке"></div><aside id="object-detail" class="object-detail" data-camera-ui hidden></aside><div id="placement-caption" class="placement-caption" data-camera-ui hidden></div>${cameraControls()}<nav class="field-actions" data-camera-ui aria-label="Действия партии"><button data-field="events">Задания</button><button data-field="season">Завершить сезон</button><button data-field="opponent-stock">Запас соперника</button></nav><button type="button" class="system-menu-toggle" data-system="open" data-camera-ui aria-label="Меню игры" aria-haspopup="dialog">☰ <span>Меню</span></button><div id="final-scoring-panel" class="final-scoring-panel" data-camera-ui hidden></div><div id="decision-layer"></div><aside id="bot-status" class="bot-status" data-camera-ui role="status" hidden></aside><div class="toast" id="toast" role="status"></div><span class="sr-only" id="turn-announcement" aria-live="polite"></span></div>`;
  const $=id=>root.querySelector('#'+id);
  const world=new WorldView($('world-stage'),pick,hover);
  const handInteraction=createHandInteraction($('hand-fan'),hideDetail);
@@ -229,6 +230,19 @@ export function mountGame(root){
   if(!l)return;if(l.locked){hover({...obj,pinned:true});return;}const u=drawing.units.find(u=>u.id===selected);if(!u||u.locationId)selected=drawing.units.find(u=>u.owner===playerIndex()&&!u.locationId)?.id;
   if(!selected){toast('Нет свободных работников');return;}step({inputType:GameInputType.PLACE_WORKER,clientOptions:{location:l.actualName}});
  }
+ function renderPlacementControls(){
+  const host=$('placement-caption');if(!placement){host.hidden=true;return;}
+  const construction=Card.fromName(placement.name).isConstruction;
+  host.innerHTML='<strong>'+esc(cn(placement.name))+'</strong><span>'+ (placement.owner===playerIndex()?'Выберите место в своём городе':'Выберите место в городе соперника')+'</span><div class="placement-actions">'+(construction?'<button type="button" data-placement="left" aria-label="Повернуть влево" title="Shift+R">↶</button><output aria-label="Угол здания">'+Math.round((placement.rotation??0)*180/Math.PI)+'°</output><button type="button" data-placement="right" aria-label="Повернуть вправо" title="R">↷</button>':'')+'<button type="button" data-placement="cancel">Отмена</button></div>';
+  host.hidden=false;
+ }
+ function rotatePlacement(direction){
+  if(!placement||Card.fromName(placement.name).isCritter)return;
+  placement.rotation=((placement.rotation??0)+direction*Math.PI/4+Math.PI*2)%(Math.PI*2);
+  const preview=world.state?.placementPreview,point=Number.isFinite(preview?.x)?preview:world.groundPoint(world.windowPointer.x,world.windowPointer.y);
+  if(point)world.setLivingPlacementPreview({cardName:placement.name,owner:placement.owner,rotation:placement.rotation,x:point.x,z:point.z,valid:validCityPosition(placement.owner,point.x,point.z,cityLayout,placement.existingKey,placement.name,placement.rotation)});
+  const angle=$('placement-caption').querySelector('output');if(angle)angle.textContent=Math.round(placement.rotation*180/Math.PI)+'°';
+ }
  function beginPlacement(name,source,index){
   if(game.pendingGameInputs.length||menu||payment||placementQueue.length)return;if(!humanTurn()){toast('Ожидаем соперника');return;}
   if(!getPaymentOptions(game,name,source,index).length){toast('Недостаточно ресурсов или нет места в городе');return;}
@@ -239,9 +253,9 @@ export function mountGame(root){
    // Decide Pair first: a full city can accept this resident without a free slot
    stagedPosition={owner,cardName:name,arrivalFrom};showPayment(name,source,index);return;
   }
-  placement={name,source,index,owner,arrivalFrom,rotation:0};$('placement-caption').textContent=cn(name)+(Card.fromName(name).isConstruction?' · R — повернуть':'')+' · выберите место в городе '+game.players[owner].name;$('placement-caption').hidden=false;renderHand();
+  placement={name,source,index,owner,arrivalFrom,rotation:0};renderPlacementControls();renderHand();
  }
- function nextQueuedPlacement(){if(placement||payment||game.pendingGameInputs.length||!placementQueue.length)return;const e=placementQueue.shift();if(!cityLayout[e.key]){nextQueuedPlacement();return;}placement={name:e.cardName,owner:e.owner,existingKey:e.key,rotation:cityLayout[e.key]?.rotation??0};focusCamera(e.owner===playerIndex()?'own':'opponent',true,true);$('placement-caption').textContent=cn(e.cardName)+(Card.fromName(e.cardName).isConstruction?' · R — повернуть':'')+' · выберите место в городе '+game.players[e.owner].name;$('placement-caption').hidden=false;renderHand();}
+ function nextQueuedPlacement(){if(placement||payment||game.pendingGameInputs.length||!placementQueue.length)return;const e=placementQueue.shift();if(!cityLayout[e.key]){nextQueuedPlacement();return;}placement={name:e.cardName,owner:e.owner,existingKey:e.key,rotation:cityLayout[e.key]?.rotation??0};focusCamera(e.owner===playerIndex()?'own':'opponent',true,true);renderPlacementControls();renderHand();}
  function isPlayable(name,source,index){
   if(!humanTurn()||game.pendingGameInputs.length)return false;
   const key=source+':'+index+':'+name;
@@ -279,7 +293,7 @@ export function mountGame(root){
    const object=drawing?.livingObjects.find(o=>o.type==='city-card'&&o.id===id);
    if(!object||object.critter||object.owner!==playerIndex()||!humanTurn()||placement||payment||game.pendingGameInputs.length||menu)return;
    startAction();placement={name:object.cardName,owner:object.owner,existingKey:id,rotation:cityLayout[id]?.rotation??0};focusCamera('own',true);
-   $('placement-caption').textContent=cn(object.cardName)+' · новое место · правая кнопка — отмена';$('placement-caption').hidden=false;renderHand();
+   renderPlacementControls();renderHand();
   },
   onOwner(owner){cityRailOwner=owner;renderCityRail();}
  });
@@ -304,7 +318,7 @@ export function mountGame(root){
   else if(object?.type==='city-card')html=(Card.fromName(object.cardName).maxWorkerSpots?cityWorkerDetail(object.workerInfo):'')+cardHtml(object.cardName,{played:object.played,owner:game.players[object.owner]});
   else if(object?.type==='event'){const e=Event.fromName(object.eventName);html=`<div class="world-note"><h2>${esc(en(object.eventName))}</h2><p>${esc(EVENT_TEXT[object.eventName]??fmt(e.eventDescription))}</p>${e.requiredCards?`<p>${e.requiredCards.map(cn).map(esc).join(' + ')}</p>`:''}<p>${object.owner>=0?'Получено: '+esc(game.players[object.owner].name):object.available?'Нажмите, чтобы разместить работника':'Условия пока не выполнены'}</p></div>`;}
   else if(object?.type==='supplies'){if(object.owner===playerIndex()){hideDetail();return;}const q=game.players[object.owner];html=`<div class="supply-tooltip"><h2>${esc(q.name)}</h2>${supplyStatus(q,object.forecast)}</div>`;}
-  else if(object?.type==='season'){html=`<div class="world-note"><h2>${esc(SEASONS[sharedSeason(game,sharedMeta)])}</h2><p>${esc(object.reason)}</p><p>Следующий сезон начнётся, когда оба игрока закончат действия</p></div>`;}
+  else if(object?.type==='season'){html=`<div class="world-note"><h2>${esc(SEASONS[sharedSeason(game,sharedMeta)])}</h2><p>${esc(object.reason)}</p><p>${sharedSeason(game,sharedMeta)===Season.AUTUMN?'Подсчёт очков начнётся, когда оба игрока закончат действия':'Следующий сезон начнётся, когда оба игрока закончат действия'}</p></div>`;}
   else if(location)html=zoneDetail(location);
 
   if(!html){hideDetail();return;}clearTimeout(hoverTimer);hoverTimer=null;hoverKey=key;d.innerHTML=html;d.hidden=false;const x=obj.clientX??world.windowPointer?.x??innerWidth/2,y=obj.clientY??world.windowPointer?.y??innerHeight/2;d.style.width=(object?.type==='supplies'?344:location?280:Math.min(320,(innerHeight-180)*.708))+'px';const width=d.offsetWidth;d.style.left=Math.max(12,Math.min(innerWidth-width-12,x>innerWidth*.6?x-width-24:x+24))+'px';d.style.top=(y-100)+'px';detailOrigin={type:obj.type,id:obj.id,x,y,anchorRect:obj.anchorRect,card:['market','city-card'].includes(object?.type)};clampDetail();
@@ -394,14 +408,14 @@ export function mountGame(root){
   let title='',body='';
   if(fieldPanel==='market'){title='Рынок';body='<div class="market-card-grid">'+game.meadowCards.map((name,index)=>`<button class="market-card-choice ${isPlayable(name,'MEADOW',index)?'is-playable':''}" data-market-card="${index}" aria-label="${esc(cn(name))}" ${isPlayable(name,'MEADOW',index)?'':'disabled'}>${cardHtml(name,{source:'MEADOW',index})}</button>`).join('')+'</div>';}
   if(fieldPanel==='events'){title='Задания';body='<div class="event-menu-grid">'+Object.entries(game.eventsMap).map(([name,owner])=>{const event=Event.fromName(name),available=humanTurn()&&game.getClaimableEvents().includes(name);const met=eventConditionsMet(name);return `<article class="event-menu-card ${met?'is-ready':''}"><h3>${esc(en(name))}</h3><p>${esc((EVENT_TEXT[name]??fmt(event.eventDescription)).replace(event.requiredCards?/^[^·]* · /:/$^/,''))}</p>${met?'<p class="event-ready-label">Условия выполнены</p>':''}${event.requiredCards?'<p>'+event.requiredCards.map(cn).map(esc).join(' + ')+'</p>':''}<button data-claim-event="${esc(name)}" ${available?'':'disabled'}>${owner?'Получено: '+esc(game.getPlayer(owner).name):available?'Разместить рабочего':'Пока недоступно'}</button></article>`;}).join('')+'</div>';}
-  if(fieldPanel==='season'){title='Завершить сезон?';body='<p>После подтверждения вы больше не сможете действовать в этом сезоне. Следующий начнётся, когда соперник тоже завершит свои действия</p><button class="primary" data-field="confirm-season">Завершить сезон</button>';}
+  if(fieldPanel==='season'){const copy=seasonConfirmation(sharedSeason(game,sharedMeta));title=copy.title;body=`<p>${copy.message}</p><button class="primary" data-field="confirm-season">${copy.action}</button>`;}
   if(fieldPanel==='opponent-stock'){title='Запас соперника';body=supplyStatus(game.players[1-playerIndex()],sharedMeta.transition?null:forecastNextSeason(game,session.botPlayerId,sharedMeta));}
   return `<div class="decision-backdrop" data-camera-ui><section class="decision-modal choice-dialog field-dialog" role="dialog" aria-modal="true" aria-labelledby="field-title"><header class="decision-heading"><h2 id="field-title">${title}</h2>${close}</header><div class="decision-content">${body}</div></section></div>`;
  }
  function renderDecision(){
   const layer=$('decision-layer');world.inputPaused=!!fieldPanel||!!payment||menu||humanDecision()||game.isGameOver();for(const button of root.querySelectorAll('[data-camera-zone]'))button.disabled=world.inputPaused;if(world.inputPaused){handInteraction.clear();hideDetail();}
   if(fieldPanel&&!menu&&!humanDecision()&&!payment&&!game.isGameOver()){setDecision(fieldDialog());return;}
-  if(menu&&!setupOnly&&menuPage==='home'){setDecision(`<div class="decision-backdrop" data-camera-ui><section class="decision-modal system-menu" role="dialog" aria-modal="true" aria-labelledby="system-title"><button class="system-close" data-system="resume" aria-label="Закрыть меню">×</button><p class="system-eyebrow">Эверделл</p><h2 id="system-title">Меню игры</h2><p>Партия сохраняется автоматически в этом браузере</p><div class="system-actions"><button class="primary" data-system="resume">Продолжить игру</button><button data-system="new">Новая игра против бота</button></div><details class="system-help"><summary>Управление</summary><dl><dt>Камера</dt><dd>Перетаскивание или WASD · колесо — масштаб · правая кнопка или Q/E — поворот</dd><dt>Быстрый переход</dt><dd>Кнопки справа — города, производство и рынок</dd><dt>Отмена размещения</dt><dd>Правая кнопка мыши или Esc</dd><dt>Меню</dt><dd>Esc — открыть или закрыть</dd></dl></details></section></div>`);return;}
+  if(menu&&!setupOnly&&menuPage==='home'){setDecision(`<div class="decision-backdrop" data-camera-ui><section class="decision-modal system-menu" role="dialog" aria-modal="true" aria-labelledby="system-title"><button class="system-close" data-system="resume" aria-label="Закрыть меню">×</button><p class="system-eyebrow">Эверделл</p><h2 id="system-title">Меню игры</h2><p>Партия сохраняется автоматически в этом браузере</p><div class="system-actions"><button class="primary" data-system="resume">Продолжить игру</button><button data-system="new">Новая игра против бота</button></div><button data-system="shadows" aria-pressed="${world.renderer.shadowMap.enabled}">Тени: ${world.renderer.shadowMap.enabled?'включены':'выключены'}</button><p>Без теней нагрузка на видеокарту ниже · лимит 60 кадров/с сохраняется</p><details class="system-help"><summary>Управление</summary><dl><dt>Камера</dt><dd>Перетаскивание или WASD · колесо — масштаб · правая кнопка или Q/E — поворот</dd><dt>Быстрый переход</dt><dd>Кнопки справа — города, производство и рынок</dd><dt>Отмена размещения</dt><dd>Правая кнопка мыши или Esc</dd><dt>Меню</dt><dd>Esc — открыть или закрыть</dd></dl></details></section></div>`);return;}
   if(menu){setDecision(`<div class="decision-backdrop" data-camera-ui><section class="decision-modal species-setup" role="dialog" aria-modal="true" aria-labelledby="menu-title"><h2 id="menu-title">${setupOnly?'Партия против бота':'Новая партия против бота'}</h2>${setupOnly?'':'<p>Новая партия заменит текущее сохранение после нажатия «Начать новую партию»</p>'}<div class="species-teams">${[0,1].map(owner=>`<section class="species-team" data-team="${owner}"><h3>${esc(game.players[owner]?.name??'Игрок '+(owner+1))}</h3><div class="species-options">${SPECIES.filter(species=>[1,3].includes(species.id)).map(species=>`<button type="button" class="species-option ${teamDraft[owner]===species.id?'selected':''}" data-species="${owner}:${species.id}" aria-pressed="${teamDraft[owner]===species.id}" ${teamDraft[1-owner]===species.id?'disabled':''}>${cardArt(species.card)}<span>${species.name}</span></button>`).join('')}</div></section>`).join('')}</div><div class="decision-footer">${setupOnly?'':'<button data-dialog="cancel">Отмена</button>'}<button data-dialog="${setupOnly?'apply-teams':'new'}" class="primary">${setupOnly?'Начать партию':'Начать новую партию'}</button></div></section></div>`);return;}
 
   if(game.isGameOver()){
@@ -459,13 +473,14 @@ export function mountGame(root){
   if(immediate){world.target.copy(world.desiredTarget);world.yaw=world.desiredYaw;world.pitch=world.desiredPitch;world.zoom=world.desiredZoom;world.updateCamera(1);}
  }
  function click(e){
+  const place=e.target.closest('[data-placement]')?.dataset.placement;if(place){if(place==='cancel')cancelAction();else rotatePlacement(place==='left'?-1:1);return;}
   const field=e.target.closest('[data-field]')?.dataset.field;
   if(field){if(field==='close'){fieldPanel=null;render();return;}if(field==='confirm-season'){fieldPanel=null;passSeason(session.humanPlayerId);render();return;}if(placement||payment||humanDecision()||finalRun?.active)return;stopBot();fieldPanel=field;renderDecision();return;}
   const marketCard=e.target.closest('[data-market-card]');if(marketCard){const index=Number(marketCard.dataset.marketCard),name=game.meadowCards[index];fieldPanel=null;renderDecision();beginPlacement(name,'MEADOW',index);return;}
   const eventButton=e.target.closest('[data-claim-event]');if(eventButton){const name=eventButton.dataset.claimEvent;if(humanTurn()&&game.getClaimableEvents().includes(name)){fieldPanel=null;step({inputType:GameInputType.CLAIM_EVENT,clientOptions:{event:name}});}return;}
 
   const system=e.target.closest('[data-system]')?.dataset.system;
-  if(system){if(finalRun?.active)return;if(system==='resume'){menu=false;renderDecision();renderBotStatus();scheduleBot();root.querySelector('.system-menu-toggle')?.focus();}else{stopBot();hideDetail();menu=true;menuPage=system==='new'?'new':'home';teamDraft=teams.slice();renderDecision();renderBotStatus();}return;}
+  if(system){if(finalRun?.active)return;if(system==='shadows'){world.setShadows(!world.renderer.shadowMap.enabled);renderDecision();return;}if(system==='resume'){menu=false;renderDecision();renderBotStatus();scheduleBot();root.querySelector('.system-menu-toggle')?.focus();}else{stopBot();hideDetail();menu=true;menuPage=system==='new'?'new':'home';teamDraft=teams.slice();renderDecision();renderBotStatus();}return;}
 
   if(e.target.closest('[data-final-skip]')){finalRun?.skip();return;}
   if(e.target.closest('[data-final-replay]')){startFinalPresentation();return;}
@@ -494,7 +509,7 @@ export function mountGame(root){
  function change(e){if(e.target.matches('[data-resource]')){const value=Number(e.target.value);promptResources[e.target.dataset.resource]=Number.isFinite(value)?Math.max(0,Math.floor(value)):0;}}
  function key(e){
   if(e.altKey||e.metaKey||e.ctrlKey)return;
-  if(placement&&e.key.toLowerCase()==='r'&&!Card.fromName(placement.name).isCritter){e.preventDefault();e.stopPropagation();placement.rotation=((placement.rotation??0)+(e.shiftKey?-1:1)*Math.PI/4+Math.PI*2)%(Math.PI*2);const point=world.groundPoint(world.windowPointer.x,world.windowPointer.y);if(point)world.setLivingPlacementPreview({cardName:placement.name,owner:placement.owner,rotation:placement.rotation,x:point.x,z:point.z,valid:validCityPosition(placement.owner,point.x,point.z,cityLayout,placement.existingKey,placement.name,placement.rotation)});return;}
+  if(placement&&e.key.toLowerCase()==='r'&&!Card.fromName(placement.name).isCritter){e.preventDefault();e.stopPropagation();rotatePlacement(e.shiftKey?-1:1);return;}
 
   const modal=root.querySelector('.choice-dialog,.results,#final-scoring-panel:not([hidden]) [role="dialog"]');
   if(e.key==='Escape'&&fieldPanel){e.preventDefault();fieldPanel=null;render();return;}

@@ -1,11 +1,12 @@
-import {createSeasonalWeather} from './seasonal-weather.js?v=pages29-cozy';
-import {createWorkerCharacter} from './local-sculpt/worker-characters.js?v=pages29-cozy';
-import {batchProductionSite} from './static-batching.js?v=pages29-cozy';
-import {addWoodlandAssets,addWoodlandPaths,createWoodlandAsset} from './woodland-assets.js?v=pages29-cozy';
-import {addProductionProps} from './production-props.js?v=pages29-cozy';
-import {seasonVisuals} from './seasonal-visuals.js?v=pages29-cozy';
+import {createBerryProductionAsset} from './production-assets.js?v=pages30-production';
+import {createSeasonalWeather} from './seasonal-weather.js?v=pages30-production';
+import {createWorkerCharacter} from './local-sculpt/worker-characters.js?v=pages30-production';
+import {batchProductionSite} from './static-batching.js?v=pages30-production';
+import {addWoodlandAssets,addWoodlandPaths,createWoodlandAsset} from './woodland-assets.js?v=pages30-production';
+import {addProductionProps} from './production-props.js?v=pages30-production';
+import {seasonVisuals} from './seasonal-visuals.js?v=pages30-production';
 import * as T from '../vendor/three.module.js';
-import {WORLD} from './data.js?v=pages29-cozy';
+import {WORLD} from './data.js?v=pages30-production';
 
 // All geometry is local to the miniature so world-space placement and picking stay unchanged
 const bark=0x765039,moss=0x587c43,cream=0xf2ddac,soil=0x77654b;
@@ -94,7 +95,7 @@ function livingProductionSite(view,l){
  else if(id.includes('JOURNEY')){view.cylinder(g,-.45,.67,-.48,.045,1.15,bark,8);view.box(g,-.33,1.08,-.48,.82,.24,.10,0xad8858);view.cone(g,.19,1.08,-.48,.17,.25,0xad8858,3).rotation.z=-Math.PI/2;view.box(g,.42,.36,-.27,.35,.45,.26,0x9c7547);for(let j=0;j<3;j++)rounded(view,g,-.8+j*.62,.20,.20,.19,0xc1ad85,1,.20,.62);}
  else{
   if(token('PEBBLE')||/PEBBLE|STONE/.test(id)){for(let j=0;j<6;j++){const a=j*Math.PI/5;rounded(view,g,Math.cos(a)*.63,.51+Math.sin(a)*.39,-.62,.36,0x929d96,1,.92,.85);}view.box(g,0,.48,-.31,.66,.62,.10,0x293832);for(const x of [-.43,.43])view.box(g,x,.49,-.19,.10,.84,.13,bark);view.box(g,0,.94,-.19,.98,.13,.18,0xa37c50);for(const x of [-.22,.22])view.beam(g,v(x,.20,-.12),v(x,.20,.40),.028,0x777f78);view.box(g,.7,.37,.0,.38,.30,.41,bark);for(let j=0;j<3;j++)rounded(view,g,.61+j*.1,.57,.03,.12,0xa4afaa);}
-  else if(token('BERRY')||/BERRY/.test(id)){for(let row=0;row<2;row++){view.box(g,0,.22,-.65+row*.67,2.08,.11,.46,0x7a5e3e);for(let col=0;col<3;col++)bush(view,g,-.7+col*.7,-.67+row*.67,.48,true);}for(const x of [-1.17,1.17]){view.cylinder(g,x,.51,-.50,.035,.63,bark,7);view.beam(g,v(x,.6,-.9),v(x,.6,.25),.03,bark);}view.cylinder(g,1.1,.34,.25,.19,.30,0xb98b50,12,.23);for(let j=0;j<5;j++)rounded(view,g,1.03+j*.04,.51,.25,.06,0xa14b70);}
+  else if(token('BERRY')||/BERRY/.test(id)){const asset=createBerryProductionAsset();if(asset)g.add(asset);else{for(let row=0;row<2;row++){view.box(g,0,.22,-.65+row*.67,2.08,.11,.46,0x7a5e3e);for(let col=0;col<3;col++)bush(view,g,-.7+col*.7,-.67+row*.67,.48,true);}for(const x of [-1.17,1.17]){view.cylinder(g,x,.51,-.50,.035,.63,bark,7);view.beam(g,v(x,.6,-.9),v(x,.6,.25),.03,bark);}view.cylinder(g,1.1,.34,.25,.19,.30,0xb98b50,12,.23);for(let j=0;j<5;j++)rounded(view,g,1.03+j*.04,.51,.25,.06,0xa14b70);}}
   else if(token('RESIN')||/RESIN/.test(id)){for(const x of [-.65,.65]){tree(view,g,x,-.64,.62,x+2);view.cylinder(g,x,.37,-.21,.18,.26,0xa47d46,12,.23);for(let j=0;j<2;j++)rounded(view,g,x,.57+j*.14,-.31,.085,0xe7ac45,.70,1.4,.7);view.beam(g,v(x,.78,-.47),v(x,.65,-.21),.025,0xc49655);}view.cylinder(g,0,.36,.17,.26,.35,0xa47d46,12);rounded(view,g,0,.55,.17,.22,0xe4ae50,1,.14,1);}
   else if(token('TWIG')||/TWIG/.test(id)){const stump=view.cylinder(g,-.77,.4,-.44,.38,.43,bark,14);view.cylinder(g,-.77,.63,-.44,.33,.025,0xcaa26a,14);view.beam(g,v(-.77,.65,-.44),v(-.61,1.15,-.44),.035,bark);view.box(g,-.63,1.01,-.44,.28,.16,.045,0xa7aba0);for(let j=0;j<5;j++)log(view,g,.50,.29+Math.floor(j/3)*.21,-.73+j%3*.25,.95);}
   else if(token('CARD')||id.includes('DRAW')||id.includes('DISCARD')||id.includes('COPY')){view.box(g,0,.56,-.52,1.65,.78,.40,bark);for(let j=0;j<7;j++){const book=view.box(g,-.66+j*.22,.58,-.28,.15,.55,.20,[0x8f5543,0x577e88,0xa99559][j%3]);book.rotation.z=(j%3-1)*.06;}view.box(g,.93,.35,.10,.48,.08,.44,bark);view.box(g,.93,.43,.10,.35,.045,.30,cream);}

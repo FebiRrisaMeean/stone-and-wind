@@ -1,3 +1,4 @@
+import {sampleGroundFloor} from './ground-contact.js?v=pages30-production'
 import * as T from '../../vendor/three.module.js'
 import {GLTFLoader} from '../../vendor/addons/loaders/GLTFLoader.js'
 import {clone} from '../../vendor/addons/utils/SkeletonUtils.js'
@@ -35,8 +36,7 @@ function clearScholarArms(state,root){
 }
 function ground(state,root){
  state.model.position.y=0;root.updateMatrixWorld(true)
- let floor=Infinity
- for(const [mesh,indices] of state.soles){for(const index of indices){point.fromBufferAttribute(mesh.geometry.attributes.position,index);mesh.applyBoneTransform(index,point);mesh.localToWorld(point);root.worldToLocal(point);floor=Math.min(floor,point.y)}}
+ const floor=sampleGroundFloor(root,state.soles)
  if(Number.isFinite(floor))state.model.position.y=-floor
  root.updateMatrixWorld(true)
 }

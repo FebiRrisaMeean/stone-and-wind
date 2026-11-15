@@ -1,4 +1,4 @@
-import {optimizationSettings} from './optimization-settings.js?v=pages29-cozy'
+import {optimizationSettings} from './optimization-settings.js?v=pages30-production'
 import * as T from '../vendor/three.module.js'
 import {mergeGeometries} from '../vendor/addons/utils/BufferGeometryUtils.js'
 // Batch only an explicitly static production-site subtree, retaining its semantic groups

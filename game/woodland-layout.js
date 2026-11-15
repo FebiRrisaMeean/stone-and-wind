@@ -16,17 +16,30 @@ export function vegetationAllowed(state,x,z,radius=1.6){
  if((state.livingClearings??[]).some(c=>c.bounds?x>c.bounds.minX-radius&&x<c.bounds.maxX+radius&&z>c.bounds.minZ-radius&&z<c.bounds.maxZ+radius:Math.hypot((c.x-x)/(c.scaleX??1),(c.z-z)/(c.scaleZ??1))<(c.radius??3)+radius))return false
  return !state.tiles.some(t=>t.type==='water'&&Math.abs(t.x-x)<radius&&Math.abs(t.z-z)<radius)
 }
+// Grove centres create an irregular layered edge, rather than a uniformly dotted field
+const GROVES=[{x:6,z:8,r:8},{x:17,z:3,r:9},{x:41,z:3,r:10},{x:55,z:12,r:9},{x:6,z:30,r:8},{x:55,z:34,r:9},{x:3,z:51,r:7},{x:58,z:59,r:8}]
 export function woodlandPlacements(state){
- const trees=[],shrubs=[]
- // Jittered candidates plus minimum spacing avoid both tile rows and dense rectangular blocks
- for(let z=2;z<68;z+=3.1)for(let x=2;x<59;x+=3.1){const seed=forestNoise(x,z),px=x+(forestNoise(z,x)-.5)*2.4,pz=z+(seed-.5)*2.4
-  const density=.42+.17*Math.sin(px*.23+pz*.12)+.15*Math.cos(pz*.35-px*.15)
+ const trees=[],shrubs=[],candidates=[]
+ for(let z=2;z<68;z+=3.1)for(let x=2;x<59;x+=3.1){
+  const seed=forestNoise(x,z),px=x+(forestNoise(z,x)-.5)*2.4,pz=z+(seed-.5)*2.4
+  const grove=Math.max(...GROVES.map(g=>Math.max(0,1-Math.hypot(px-g.x,pz-g.z)/g.r)))
+  const density=.15+grove*.76
   if(seed>density||!vegetationAllowed(state,px,pz,1.5))continue
-  if(trees.some(t=>Math.hypot(t.x-px,t.z-pz)<3.4))continue
-  trees.push({x:px,z:pz,size:4.5+forestNoise(px+8,pz)*1.5+(pz<8?1.1:0),r:seed*Math.PI*2,kind:forestNoise(px,pz+7)>.65?'spruce':'oak'})
+  candidates.push({x:px,z:pz,seed,grove})
  }
- for(const t of trees){const a=t.r+1.4,x=t.x+Math.sin(a)*1.8,z=t.z+Math.cos(a)*1.8;if(vegetationAllowed(state,x,z,.7))shrubs.push({x,z,size:.55+forestNoise(x,z)*.4,r:a,kind:'shrub'})}
- return{trees:trees.slice(0,110),shrubs:shrubs.slice(0,80)}
+ // Prioritise stronger groves within the existing instance budget; no new draw calls
+ candidates.sort((a,b)=>b.grove-a.grove||a.z-b.z||a.x-b.x)
+ for(const t of candidates){
+  if(trees.length>=100)break
+  if(trees.some(p=>Math.hypot(p.x-t.x,p.z-t.z)<3.4))continue
+  const rear= Math.max(0,1-t.z/23),foreground=t.z>42
+  trees.push({x:t.x,z:t.z,size:(foreground?3.4:4.2)+forestNoise(t.x+8,t.z)*1.25+rear*2.2,r:t.seed*Math.PI*2,kind:forestNoise(t.x,t.z+7)>(rear>.3?.42:.73)?'spruce':'oak'})
+ }
+ for(const t of trees){
+  const a=t.r+1.4,x=t.x+Math.sin(a)*1.8,z=t.z+Math.cos(a)*1.8
+  if(shrubs.length<64&&vegetationAllowed(state,x,z,.7))shrubs.push({x,z,size:.55+forestNoise(x,z)*.4,r:a,kind:'shrub'})
+ }
+ return{trees,shrubs}
 }
 
 // Relief stays outside the city and production rectangles, so old placements remain level
@@ -34,5 +47,8 @@ export function woodlandPlacements(state){
 export function woodlandRelief(x,z){
  const smooth=t=>{t=Math.max(0,Math.min(1,t));return t*t*(3-2*t)}
  const edge=Math.max(smooth((7-x)/6),smooth((x-54)/6),smooth((6-z)/6))
- return edge*(.65+.55*Math.sin(x*.19+z*.11)**2+.35*Math.cos(z*.27-x*.08)**2)
+ // Broader asymmetric shoulders frame the valley without lifting playable ground
+ const ridge=1.0+1.2*Math.exp(-(((z-15)/12)**2))+.65*Math.exp(-(((z-45)/16)**2))
+ const rear=1.1*Math.exp(-(((x-14)/10)**2))+1.4*Math.exp(-(((x-46)/12)**2))
+ return edge*(.45+ridge*.65+.25*Math.sin(x*.19+z*.11)**2)+smooth((6-z)/6)*rear
 }

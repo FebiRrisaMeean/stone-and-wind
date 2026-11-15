@@ -1,6 +1,6 @@
 import * as T from '../vendor/three.module.js'
 import {GLTFLoader} from '../vendor/addons/loaders/GLTFLoader.js'
-import {WOODLAND_PATHS,woodlandPlacements} from './woodland-layout.js?v=pages29-cozy'
+import {WOODLAND_PATHS,woodlandPlacements} from './woodland-layout.js?v=pages30-production'
 const templates=new Map(),materials=new Map()
 await Promise.all(['elder','oak','spruce','shrub'].map(async name=>{
  try{const gltf=await new GLTFLoader().loadAsync(new URL(`./assets/night-environment/${name}.glb`,import.meta.url).href)
@@ -36,7 +36,7 @@ export function addWoodlandAssets(view,state){
   const mesh=new T.Mesh(g,view.material(state.season==='WINTER'?0xb9c3ba:0x7c8a7e));
   mesh.position.set(peak.x,view.heightAt(peak.x,peak.z)-peak.height*.35,peak.z);mesh.rotation.y=peak.x*.31;mesh.receiveShadow=true;mesh.castShadow=true;view.detail.add(mesh);
  }
- for(const patch of state.cityScene?.decor?.forest??[])for(let i=0;i<3;i++){const a=i*2.1;layout.trees.push({x:patch.x+Math.cos(a)*patch.radius,z:patch.z+Math.sin(a)*patch.radius,size:4.8+i*.35,r:a,kind:i%2?'oak':'spruce'});}
+ // Gateway framing is provided by the validated grove layout, never unchecked trees inside clearings
  for(const kind of ['oak','spruce','shrub']){const entries=(kind==='shrub'?layout.shrubs:layout.trees.filter(t=>t.kind===kind));if(!entries.length)continue
   for(const p of templates.get(kind)??[]){const mesh=new T.InstancedMesh(p.geometry,seasonalMaterial(p.material,kind,state.season),entries.length)
    entries.forEach((t,i)=>{dummy.position.set(t.x,view.heightAt(t.x,t.z),t.z);dummy.rotation.set(0,t.r,0);dummy.scale.setScalar(t.size);dummy.updateMatrix();mesh.setMatrixAt(i,dummy.matrix)})

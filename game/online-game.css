@@ -37,3 +37,9 @@
 .online-inspect{pointer-events:none}
 @media(max-width:1050px){.online-market-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .living-shell .online-panel h2,.living-shell .online-field h2,.living-shell .online-field h3,.living-shell #online-choice h2{font-family:var(--card-title);font-weight:400}
+#online-city.city-icon-rail{position:static;width:auto;max-height:220px;margin:12px 0;transform:none}
+#online-city .city-rail-list{max-height:170px;overflow:auto;display:flex;flex-wrap:wrap;gap:8px}
+#online-placement{padding:12px;background:#f4e8cb;border:1px solid #b49c70;border-radius:10px;margin-top:12px}
+#online-placement[hidden],#online-city[hidden]{display:none}
+#online-placement p{line-height:1.45;margin:8px 0}
+#online-placement>div{display:flex;flex-wrap:wrap;gap:6px}

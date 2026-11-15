@@ -1,4 +1,4 @@
-import {mountGame} from './everdell-main.js?v=pages29-cozy';
+import {mountGame} from './everdell-main.js?v=pages30-production';
 const node=document.querySelector('[data-game-host]');
 if(node&&!node.dataset.mounted){
  node.dataset.mounted='true';

@@ -1,6 +1,6 @@
-import {artStyle,cardTypeIcon,resourceIcon} from './everdell/art.js?v=pages29-cozy';
-import {Card,Location,Event,GameInputType,Season,PlayerStatus,serializeGame} from './everdell/engine.js?v=pages29-cozy';
-import {CARD_NAMES,LOCATION_NAMES,LOCATION_TEXT,EVENT_NAMES,EVENT_TEXT,SEASONS,RESOURCE_NAMES} from './everdell/locale.js?v=pages29-cozy';
+import {artStyle,cardTypeIcon,resourceIcon} from './everdell/art.js?v=pages30-production';
+import {Card,Location,Event,GameInputType,Season,PlayerStatus,serializeGame} from './everdell/engine.js?v=pages30-production';
+import {CARD_NAMES,LOCATION_NAMES,LOCATION_TEXT,EVENT_NAMES,EVENT_TEXT,SEASONS,RESOURCE_NAMES} from './everdell/locale.js?v=pages30-production';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const cn=n=>CARD_NAMES[n]??n,ln=n=>LOCATION_NAMES[n]??n,en=n=>EVENT_NAMES[n]??n;
 const asset=n=>new URL('./assets/board-'+n+'.webp?v=table-1',import.meta.url).href;

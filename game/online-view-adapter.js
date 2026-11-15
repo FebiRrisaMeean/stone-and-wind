@@ -1,17 +1,17 @@
-import {createMovementWorld} from './movement.js?v=pages29-cozy';
-import {WORLD} from './data.js?v=pages29-cozy';
-import {Card,Location} from './everdell/engine.js?v=pages29-cozy';
-import {LIVING_CITIES,LIVING_TREE,MARKET_POSITIONS,BASIC_POSITIONS,FOREST_POSITIONS,COMMON_POSITIONS,CITY_CAMPS,CITY_FOREST_GATEWAYS,cityCardEntries,reconcileCityLayout} from './living-board-state.js?v=pages29-cozy';
-import {CARD_NAMES,LOCATION_NAMES,LOCATION_TEXT,EVENT_NAMES,SEASONS} from './everdell/locale.js?v=pages29-cozy';
-import {cityWorkerMarker,zoneBadge,storedResources} from './living-ui.js?v=pages29-cozy';
-import {workerSeatPosition} from './production-props.js?v=pages29-cozy';
+import {createMovementWorld} from './movement.js?v=pages30-production';
+import {WORLD} from './data.js?v=pages30-production';
+import {Card,Location} from './everdell/engine.js?v=pages30-production';
+import {LIVING_CITIES,LIVING_TREE,MARKET_POSITIONS,BASIC_POSITIONS,FOREST_POSITIONS,COMMON_POSITIONS,CITY_CAMPS,CITY_FOREST_GATEWAYS,cityCardEntries,reconcileCityLayout} from './living-board-state.js?v=pages30-production';
+import {CARD_NAMES,LOCATION_NAMES,LOCATION_TEXT,EVENT_NAMES,SEASONS} from './everdell/locale.js?v=pages30-production';
+import {cityWorkerMarker,zoneBadge,storedResources} from './living-ui.js?v=pages30-production';
+import {workerSeatPosition} from './production-props.js?v=pages30-production';
 const key=w=>w.location?'l:'+w.location:w.event?'e:'+w.event:'c:'+w.playedCard?.cardOwnerId+':'+w.playedCard?.cardName;
 // Reads only a private-per-seat public projection. No engine restore and no invented cards
 export function onlineDrawing(view,layout={},previous=null){
  const state=createMovementWorld({seed:4811}),g=view.game,viewer=g.players.findIndex(p=>p.playerId===view.playerId);
  const cards=p=>Object.values(p.playedCards).flat();
  const game={players:g.players.map(p=>({...p,getPlayedCards:()=>cards(p)}))};
- const result=reconcileCityLayout(game,layout);layout=result.positions;
+ const result=reconcileCityLayout(game,view.layout??layout);layout=result.positions;
  Object.assign(state,{mode:'placement',livingBoard:true,livingTree:LIVING_TREE,livingObjects:[],buildings:[],sources:[],sandbox:false,seed:481114,season:String(view.shared.season).toUpperCase(),round:view.revision+1,serial:g.gameStateId,lastMove:null,locations:[],units:[],currentPlayer:viewer,worldHeight:70});
  for(let z=WORLD.height;z<70;z++)for(let x=0;x<WORLD.width;x++)state.tiles.push({x,z,type:'meadow',h:0});
  state.players=g.players.map((p,id)=>({id,level:1,workers:0,gifts:[],explored:Array(WORLD.width*70).fill(true)}));

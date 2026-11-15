@@ -1,4 +1,4 @@
-import {LIVING_CITIES,CITY_FOREST_GATEWAYS} from './living-board-state.js?v=pages29-cozy';
+import {LIVING_CITIES,CITY_FOREST_GATEWAYS} from './living-board-state.js?v=pages30-production';
 // Renderer-owned scenery, outside the shared action clearings
 export const CITY_GATEWAY_DECOR={
  forest:[{x:17,z:22.2,radius:2.4},{x:44,z:22.2,radius:2.4}],
