@@ -1,4 +1,4 @@
-import {mountGame} from './everdell-main.js?v=pages38-dark-ui';
+import {mountGame} from './everdell-main.js?v=pages39-event-portraits';
 const node=document.querySelector('[data-game-host]');
 if(node&&!node.dataset.mounted){
  node.dataset.mounted='true';

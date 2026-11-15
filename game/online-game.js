@@ -1,21 +1,22 @@
-import {eventDescription,requiredCardLabel} from './event-ui.js?v=pages38-dark-ui';
-import {cityCameraBounds,CITY_CAMERA_PADDING,productionCameraBounds,PRODUCTION_CAMERA_PADDING} from './camera-framing.js?v=pages38-dark-ui';
-import {placementObstacles} from './online-placement.js?v=pages38-dark-ui';
-import {seasonConfirmation} from './season-confirmation.js?v=pages38-dark-ui';
-import {Event,Card,gameTextToDebugStr} from './everdell/engine.js?v=pages38-dark-ui';
-import {validCityPosition,freeCityPosition} from './living-board-state.js?v=pages38-dark-ui';
-import {cityRailMarkup,bindCityRail} from './city-icon-rail.js?v=pages38-dark-ui';
-import {supplyStatus,zoneDetail} from './living-ui.js?v=pages38-dark-ui';
-import {renderIcon} from './original-icons.js?v=pages38-dark-ui';
-import {choiceSpec,pendingCommand,choiceCardName} from './online-choices.js?v=pages38-dark-ui';
-import {OnlineClient} from './online-client.js?v=pages38-dark-ui';
-import {onlineDrawing} from './online-view-adapter.js?v=pages38-dark-ui';
-import {WorldView} from './world.js?v=pages38-dark-ui';
-import {applyCityScene} from './city-scene.js?v=pages38-dark-ui';
-import {gameCardFace,prepareGameCard} from './game-source-cards.js?v=pages38-dark-ui';
-import {CARD_NAMES,LOCATION_NAMES,EVENT_NAMES,EVENT_TEXT,RESOURCE_NAMES,SEASONS,translateText} from './everdell/locale.js?v=pages38-dark-ui';
-import {SOURCE_CARD_NAMES} from './source-card-map.js?v=pages38-dark-ui';
-import {resourceChoiceModel} from './decision-ui.js?v=pages38-dark-ui';
+import {resourceText} from './resource-text.js?v=pages39-event-portraits';
+import {eventDescription,requiredCardLabel,eventLock} from './event-ui.js?v=pages39-event-portraits';
+import {cityCameraBounds,CITY_CAMERA_PADDING,productionCameraBounds,PRODUCTION_CAMERA_PADDING} from './camera-framing.js?v=pages39-event-portraits';
+import {placementObstacles} from './online-placement.js?v=pages39-event-portraits';
+import {seasonConfirmation} from './season-confirmation.js?v=pages39-event-portraits';
+import {Event,Card,gameTextToDebugStr} from './everdell/engine.js?v=pages39-event-portraits';
+import {validCityPosition,freeCityPosition} from './living-board-state.js?v=pages39-event-portraits';
+import {cityRailMarkup,bindCityRail} from './city-icon-rail.js?v=pages39-event-portraits';
+import {supplyStatus,zoneDetail} from './living-ui.js?v=pages39-event-portraits';
+import {renderIcon} from './original-icons.js?v=pages39-event-portraits';
+import {choiceSpec,pendingCommand,choiceCardName} from './online-choices.js?v=pages39-event-portraits';
+import {OnlineClient} from './online-client.js?v=pages39-event-portraits';
+import {onlineDrawing} from './online-view-adapter.js?v=pages39-event-portraits';
+import {WorldView} from './world.js?v=pages39-event-portraits';
+import {applyCityScene} from './city-scene.js?v=pages39-event-portraits';
+import {gameCardFace,prepareGameCard} from './game-source-cards.js?v=pages39-event-portraits';
+import {CARD_NAMES,LOCATION_NAMES,EVENT_NAMES,EVENT_TEXT,RESOURCE_NAMES,SEASONS,translateText} from './everdell/locale.js?v=pages39-event-portraits';
+import {SOURCE_CARD_NAMES} from './source-card-map.js?v=pages39-event-portraits';
+import {resourceChoiceModel} from './decision-ui.js?v=pages39-event-portraits';
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const cn=name=>SOURCE_CARD_NAMES[name]??CARD_NAMES[name]??name;
 const CHOICE_TITLES={SELECT_CARDS:'Выберите карты',SELECT_CARDS_WITH_SOURCE:'Выберите карты',SELECT_PLAYED_CARDS:'Выберите карты города',DISCARD_CARDS:'Выберите карты для сброса',SELECT_PLAYER:'Выберите игрока',SELECT_RESOURCES:'Выберите ресурсы',SELECT_PAYMENT_FOR_CARD:'Выберите оплату карты',SELECT_OPTION_GENERIC:'Выберите действие',SELECT_WORKER_PLACEMENT:'Выберите работника',SELECT_LOCATION:'Выберите место работы'};
@@ -90,7 +91,7 @@ export function mountOnlineGame(root){
    if(['SELECT_RESOURCES','SELECT_PAYMENT_FOR_CARD'].includes(input.inputType)){
     const player={getResources:()=>own.resources,validatePaidResources:()=>null};const model=resourceChoiceModel(input,player,{});
     body=`<p>${model.min===model.max?`Всего: ${model.max}`:`Можно выбрать: ${model.min}–${model.max}`}</p>`+model.rows.map(row=>`<div class="online-resource">${renderIcon(row.key.toLowerCase(),{size:24})}<label for="online-resource-${index}-${row.key}">${esc(RESOURCE_NAMES[row.key]??row.key)}</label><div class="online-stepper"><button type="button" data-adjust="-1" data-key="${row.key}" aria-label="Уменьшить: ${esc(RESOURCE_NAMES[row.key]??row.key)}">−</button><input id="online-resource-${index}-${row.key}" type="number" data-resource="${row.key}" min="0" max="${row.limit}" value="0"><button type="button" data-adjust="1" data-key="${row.key}" aria-label="Увеличить: ${esc(RESOURCE_NAMES[row.key]??row.key)}">+</button></div></div>`).join('');
-   }else if(spec)body=`<p>Выберите от ${spec.min} до ${spec.max}</p><div class="online-choice-options">`+spec.options.map((option,i)=>{const name=choiceCardName(input,option);if(name)prepareGameCard(name).then(refreshFaces).catch(()=>{});return `<label class="online-choice ${name?'online-card-choice':''}"><input name="choice-${index}" type="${spec.max===1?'radio':'checkbox'}" value="${i}">${name?`<span class="runtime-card"><span data-game-card-face="${esc(name)}">${gameCardFace(name)}</span></span>`:esc(optionLabel(option,input))}</label>`}).join('')+'</div>';
+   }else if(spec)body=`<p>Выберите от ${spec.min} до ${spec.max}</p><div class="online-choice-options">`+spec.options.map((option,i)=>{const name=choiceCardName(input,option);if(name)prepareGameCard(name).then(refreshFaces).catch(()=>{});return `<label class="online-choice ${name?'online-card-choice':''}"><input name="choice-${index}" type="${spec.max===1?'radio':'checkbox'}" value="${i}">${name?`<span class="runtime-card"><span data-game-card-face="${esc(name)}">${gameCardFace(name)}</span></span>`:input.inputType==='SELECT_OPTION_GENERIC'?resourceText(optionLabel(option,input)):esc(optionLabel(option,input))}</label>`}).join('')+'</div>';
    else body='<p>Неизвестный обязательный выбор — состояние сохранено</p>';
    return `<form data-pending="${index}"><p>${esc(translateText(input.label??(input.cardContext?cn(input.cardContext):CHOICE_TITLES[input.inputType]??'Завершите обязательный выбор')))}</p>${body}<button type="submit" ${spec||['SELECT_RESOURCES','SELECT_PAYMENT_FOR_CARD'].includes(input.inputType)?'':'disabled'}>Подтвердить</button></form>`;
   }).join('');
@@ -104,7 +105,7 @@ export function mountOnlineGame(root){
   const market=fieldPanel==='market',seasonCopy=seasonConfirmation(view.shared.season);let body;
   if(fieldPanel==='season')body=`<p>${esc(seasonCopy.message)}</p><button data-online="confirm-season">${esc(seasonCopy.action)}</button>`;
   else if(market)body='<div class="online-market-grid">'+view.game.meadowCards.map((name,index)=>{const ready=view.offers.some(o=>o.inputType==='PLAY_CARD'&&o.clientOptions.source==='MEADOW'&&o.clientOptions.sourceIdx===index);return `<button class="online-market-card ${ready?'is-ready':''}" data-market-card="${index}" ${ready?'':'disabled'} aria-label="${esc(cn(name))}"><span class="runtime-card"><span data-game-card-face="${esc(name)}">${gameCardFace(name)}</span></span></button>`}).join('')+'</div>';
-  else body='<div class="online-event-grid">'+Object.entries(view.game.eventsMap).map(([name,owner])=>{const ready=view.offers.some(o=>o.inputType==='CLAIM_EVENT'&&o.clientOptions.event===name),event=Event.fromName(name),met=view.eventConditions?.[name]??ready;return `<article class="online-event ${met?'is-ready':''}"><h3>${esc(EVENT_NAMES[name]??name)}</h3><p>${eventDescription((EVENT_TEXT[name]??translateText(gameTextToDebugStr(event.eventDescription??[]))).replace(event.requiredCards?/^[^·]* · /:/$^/,''))}</p>${met?'<p>Условия выполнены</p>':''}${event.requiredCards?`<p>${event.requiredCards.map(name=>requiredCardLabel(name,cn(name))).join(' + ')}</p>`:''}<button data-claim-event="${esc(name)}" ${ready?'':'disabled'}>${owner?'Получено: '+esc(view.game.players.find(p=>p.playerId===owner)?.name??'игрок'):ready?'Разместить рабочего':'Пока недоступно'}</button></article>`}).join('')+'</div>';
+  else body='<div class="online-event-grid">'+Object.entries(view.game.eventsMap).map(([name,owner])=>{const ready=view.offers.some(o=>o.inputType==='CLAIM_EVENT'&&o.clientOptions.event===name),event=Event.fromName(name),met=view.eventConditions?.[name]??ready;return `<article class="online-event ${met?'is-ready':''}"><h3>${esc(EVENT_NAMES[name]??name)}</h3><p>${eventDescription((EVENT_TEXT[name]??translateText(gameTextToDebugStr(event.eventDescription??[]))).replace(event.requiredCards?/^[^·]* · /:/$^/,''))}</p>${met?'<p>Условия выполнены</p>':''}${event.requiredCards?`<p>${event.requiredCards.map(name=>requiredCardLabel(name,cn(name))).join(' + ')}</p>`:''}${owner?'<p class="event-claimed">Получено: '+esc(view.game.players.find(p=>p.playerId===owner)?.name??'игрок')+'</p>':ready?`<button data-claim-event="${esc(name)}">Разместить рабочего</button>`:eventLock()}</article>`}).join('')+'</div>';
   host.innerHTML=`<section role="dialog" aria-modal="true" aria-label="${market?'Рынок':fieldPanel==='season'?esc(seasonCopy.title):'Задания'}"><header><h2>${market?'Рынок':fieldPanel==='season'?esc(seasonCopy.title):'Задания'}</h2><button data-online="close-field" aria-label="Закрыть">×</button></header>${body}</section>`;
   host.querySelector('[data-online="close-field"]')?.focus();
  }

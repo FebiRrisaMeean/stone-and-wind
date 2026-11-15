@@ -1,12 +1,12 @@
-import {createBerryProductionAsset,createProductionAsset,productionAssetKind} from './production-assets.js?v=pages38-dark-ui';
-import {createSeasonalWeather} from './seasonal-weather.js?v=pages38-dark-ui';
-import {createWorkerCharacter} from './local-sculpt/worker-characters.js?v=pages38-dark-ui';
-import {batchProductionSite} from './static-batching.js?v=pages38-dark-ui';
-import {addWoodlandAssets,addWoodlandPaths,createWoodlandAsset} from './woodland-assets.js?v=pages38-dark-ui';
-import {addProductionProps} from './production-props.js?v=pages38-dark-ui';
-import {seasonVisuals} from './seasonal-visuals.js?v=pages38-dark-ui';
+import {createBerryProductionAsset,createProductionAsset,productionAssetKind} from './production-assets.js?v=pages39-event-portraits';
+import {createSeasonalWeather} from './seasonal-weather.js?v=pages39-event-portraits';
+import {createWorkerCharacter} from './local-sculpt/worker-characters.js?v=pages39-event-portraits';
+import {batchProductionSite} from './static-batching.js?v=pages39-event-portraits';
+import {addWoodlandAssets,addWoodlandPaths,createWoodlandAsset} from './woodland-assets.js?v=pages39-event-portraits';
+import {addProductionProps} from './production-props.js?v=pages39-event-portraits';
+import {seasonVisuals} from './seasonal-visuals.js?v=pages39-event-portraits';
 import * as T from '../vendor/three.module.js';
-import {WORLD} from './data.js?v=pages38-dark-ui';
+import {WORLD} from './data.js?v=pages39-event-portraits';
 
 // All geometry is local to the miniature so world-space placement and picking stay unchanged
 const bark=0x765039,moss=0x587c43,cream=0xf2ddac,soil=0x77654b;

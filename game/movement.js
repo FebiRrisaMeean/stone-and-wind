@@ -1,4 +1,4 @@
-import {TROOPS,WORLD} from './data.js?v=pages38-dark-ui';
+import {TROOPS,WORLD} from './data.js?v=pages39-event-portraits';
 
 const WORKER=TROOPS.worker;
 const BASE_VISION=7.8;

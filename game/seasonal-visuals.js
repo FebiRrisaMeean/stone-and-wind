@@ -1,4 +1,4 @@
-import {woodlandPlacements} from './woodland-layout.js?v=pages38-dark-ui';
+import {woodlandPlacements} from './woodland-layout.js?v=pages39-event-portraits';
 import * as T from '../vendor/three.module.js';
 
 export const SEASON_VISUALS={

@@ -1,6 +1,8 @@
-import {SOURCE_CARD_IDS} from './source-card-map.js?v=pages38-dark-ui';
-import {renderIcon} from './original-icons.js?v=pages38-dark-ui';
+import {SOURCE_CARD_IDS} from './source-card-map.js?v=pages39-event-portraits';
+import {renderIcon} from './original-icons.js?v=pages39-event-portraits';
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+export function cityCardPortraitUrl(name){const id=SOURCE_CARD_IDS[name];return id?new URL(`./assets/cards64/illustrations/${id}.webp`,import.meta.url).href:null;}
 
 // One button per played instance, including residents sharing a city space
 export function cityRailEntries(objects,owner){return objects.filter(o=>o.type==='city-card'&&o.owner===owner).map(o=>({id:o.id,name:o.cardName,label:o.label,critter:o.critter,worker:o.workerDestination,available:o.workerInfo?.available,occupied:o.workerInfo?.workers?.length??0,capacity:o.workerInfo?.capacity??0,resources:o.played?.resources??{},pairId:o.played?.pairId??null,ariaLabel:o.ariaLabel??o.label}));}
@@ -8,7 +10,7 @@ export function cityRailMarkup(objects,owner,humanOwner){
  const entries=cityRailEntries(objects,owner);
  const tabs=`<div class="city-rail-tabs" role="group" aria-label="Показать карты города"><button type="button" data-city-rail-owner="${humanOwner}" aria-pressed="${owner===humanOwner}">Вы</button><button type="button" data-city-rail-owner="${1-humanOwner}" aria-pressed="${owner!==humanOwner}">Соперник</button></div>`;
  return tabs+`<div class="city-rail-list" aria-label="${owner===humanOwner?'Карты вашего города':'Карты города соперника'}">${entries.length?entries.map(entry=>{
-  const id=SOURCE_CARD_IDS[entry.name],image=id?new URL(`./assets/cards64/illustrations/${id}.webp`,import.meta.url).href:null;
+  const image=cityCardPortraitUrl(entry.name);
   const stored=Object.keys(entry.resources).filter(key=>entry.resources[key]>0),saved=stored.length>0;
   const coins=Number(entry.resources.VP??0),showCoins=entry.name==='Chapel'||coins>0;
   const storedIcon=stored.length===1?stored[0].toLowerCase():'resource';

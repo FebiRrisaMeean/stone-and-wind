@@ -668,3 +668,12 @@
 .living-shell .field-actions button:hover span,.living-shell .field-actions button:focus-visible span{opacity:1}
 .living-shell .field-actions .has-action:after{position:absolute;right:-3px;top:-3px;margin:0;width:8px;height:8px;background:#e17968;border:2px solid #253026}
 @media(max-height:650px){.living-shell .map-toolbar{gap:10px}.living-shell .map-toolbar button{width:38px;height:38px;min-width:38px;padding:7px}.living-shell .map-toolbar .camera-zone-controls,.living-shell .map-toolbar .field-actions{gap:5px}}
+
+.event-required-card{gap:7px}.event-card-portrait{width:34px;height:34px;flex:none;border:1px solid var(--ui-edge,#abb68c55);background-color:var(--ui-inner,#343c32);box-sizing:border-box}
+
+.event-lock{display:flex;justify-content:flex-end;color:var(--ui-muted);margin-top:7px}.event-lock svg{width:21px;height:21px}
+
+.living-shell .decision-modal .supply-totals{background:var(--ui-inner);border-color:var(--ui-edge);color:var(--ui-text)!important;box-shadow:none}
+.keyboard-settings{margin-top:14px;border-top:1px solid var(--ui-edge);padding-top:8px}.keyboard-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:6px 0;font:14px/1.25 var(--card-body)}.keyboard-row button{min-width:52px;min-height:30px;padding:5px 10px}.keyboard-row button[aria-pressed=true]{outline:2px solid #a0bd72}.keyboard-settings [data-key-message]:empty{display:none}
+
+.resource-word{display:inline-flex;align-items:center;gap:5px;vertical-align:middle;white-space:nowrap}

@@ -1,4 +1,4 @@
-import {getFieldLayout,setFieldLayout,saveFieldLayout} from './living-board-state.js?v=pages38-dark-ui';
+import {getFieldLayout,setFieldLayout,saveFieldLayout} from './living-board-state.js?v=pages39-event-portraits';
 export function createFieldLayoutEditor({root,world,onChange,onExit}){
  let active=false,before=null,selected=null,drag=null;
  const shell=root.querySelector('.living-shell'),panel=document.createElement('section');

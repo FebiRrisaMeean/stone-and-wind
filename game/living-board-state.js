@@ -1,4 +1,4 @@
-import {footprintAt,hullsOverlap,footprintFitsBounds,isBuildingFootprint,navigationFootprint,navigationPassageClear,normalizeCityRotation} from './city-footprints.js?v=pages38-dark-ui';
+import {footprintAt,hullsOverlap,footprintFitsBounds,isBuildingFootprint,navigationFootprint,navigationPassageClear,normalizeCityRotation} from './city-footprints.js?v=pages39-event-portraits';
 // Presentation positions never change engine costs, turns, city capacity or card effects
 const FIELD_LAYOUT_KEY='stone-wind-field-layout-v1';
 let fieldLayout={};
@@ -37,7 +37,7 @@ export function productionLocationCoords(basics,forests){
  const coords=new Map(names.map((name,i)=>[name,slots[order[i]]]));
  for(const [name,pos]of Object.entries(COMMON_POSITIONS))coords.set(name,pos);
  for(const [name,p]of Object.entries(fieldLayout))if(coords.has(name))coords.set(name,[p.x,p.z]);
- return coords;
+ return clearTreeSightline(coords,fieldTreePosition());
 }
 export const PRODUCTION_CLEARING={x:30.5,z:22,radius:13.8,scaleX:1,scaleZ:.85};
 export function inCity(owner,x,z){const c=LIVING_CITIES[owner];return !!c&&Number.isFinite(x)&&Number.isFinite(z)&&x>=c.bounds.minX&&x<=c.bounds.maxX&&z>=c.bounds.minZ&&z<=c.bounds.maxZ;}
@@ -131,4 +131,25 @@ export function migrateCityLayout(game,positions={},version=1){
  }
  const result=reconcileCityLayout(game,candidate);
  return {...result,version:CITY_LAYOUT_VERSION,migrated:version!==CITY_LAYOUT_VERSION||JSON.stringify(result.positions)!==JSON.stringify(original)};
+}
+
+// At the production preset (yaw 0, pitch 1.18), the crown projects toward negative Z
+export function productionHiddenByTree(x,z,tree){return Math.abs(x-tree.x)<6.5&&z>tree.z-9&&z<tree.z+4.5;}
+let treeSightlineCache=null;
+export function clearTreeSightline(coords,tree){
+ const key=JSON.stringify([tree,[...coords]]);if(treeSightlineCache?.key===key)return new Map(treeSightlineCache.value);
+ const result=new Map(coords);
+ for(const [name,[x,z]]of coords){
+  if(!productionHiddenByTree(x,z,tree))continue;
+  let best=null,cost=Infinity;
+  for(let nz=5;nz<=37;nz+=.5)for(let nx=5;nx<=55;nx+=.5){
+   if(productionHiddenByTree(nx,nz,tree))continue;
+   if([...result].some(([other,p])=>other!==name&&Math.hypot(nx-p[0],nz-p[1])<4.5))continue;
+   const distance=(nx-x)**2+(nz-z)**2;
+   if(distance<cost){cost=distance;best=[nx,nz];}
+  }
+  if(best)result.set(name,best);
+ }
+ treeSightlineCache={key,value:[...result]};
+ return result;
 }

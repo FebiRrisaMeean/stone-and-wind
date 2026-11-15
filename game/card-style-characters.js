@@ -1,4 +1,4 @@
-import {T,random,material,mesh,ell,box,cyl,rod,curve,torus,group,motion,mergeStaticScenery} from './card-style-primitives.js?v=pages38-dark-ui'
+import {T,random,material,mesh,ell,box,cyl,rod,curve,torus,group,motion,mergeStaticScenery} from './card-style-primitives.js?v=pages39-event-portraits'
 
 // Fur is rooted on each sculpted surface, tapered along its growth direction
 // Small grouped ribbons carry the silhouette; they are not detached rods

@@ -1,0 +1,4 @@
+import {renderIcon} from './original-icons.js?v=pages39-event-portraits';
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const icons={ягода:'berry',ягоды:'berry',ягод:'berry',ягоду:'berry',ягодами:'berry',ветка:'twig',ветки:'twig',веток:'twig',ветку:'twig',ветками:'twig',смола:'resin',смолы:'resin',смолу:'resin',смолой:'resin',камушек:'pebble',камушки:'pebble',камушков:'pebble',камушками:'pebble',карта:'card',карты:'card',карт:'card',карту:'card',очко:'point',очка:'point',очков:'point',очку:'point'};
+export function resourceText(text){return String(text??'').split(/([А-Яа-яЁё]+)/u).map(part=>{const icon=icons[part.toLowerCase()];return icon?`<span class="resource-word">${renderIcon(icon,{size:24,label:''})}${esc(part)}</span>`:esc(part)}).join('');}
