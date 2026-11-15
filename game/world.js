@@ -1,17 +1,17 @@
-import {forestLayoutKey,woodlandRelief} from './woodland-layout.js?v=pages40-season-world';
-import {optimizationSettings} from './optimization-settings.js?v=pages40-season-world';
-import {createPerformanceProbe,performanceProbeEnabled,installPerformancePanel} from './performance-probe.js?v=pages40-season-world';
-import {animateWorkerCharacter} from './local-sculpt/worker-characters.js?v=pages40-season-world';
-import {RenderLoop,renderBudgetEnabled} from './render-budget.js?v=pages40-season-world';
-import {stepNavigation} from './city-navigation.js?v=pages40-season-world';
-import {fitLivingZone,constrainPresetFrame,livingCameraLimits,constrainLivingTarget} from './camera-framing.js?v=pages40-season-world';
-import {seasonVisuals,addSeasonGroundDetails} from './seasonal-visuals.js?v=pages40-season-world';
+import {forestLayoutKey,woodlandRelief} from './woodland-layout.js?v=pages41-production-overhead';
+import {optimizationSettings} from './optimization-settings.js?v=pages41-production-overhead';
+import {createPerformanceProbe,performanceProbeEnabled,installPerformancePanel} from './performance-probe.js?v=pages41-production-overhead';
+import {animateWorkerCharacter} from './local-sculpt/worker-characters.js?v=pages41-production-overhead';
+import {RenderLoop,renderBudgetEnabled} from './render-budget.js?v=pages41-production-overhead';
+import {stepNavigation} from './city-navigation.js?v=pages41-production-overhead';
+import {fitLivingZone,constrainPresetFrame,livingCameraLimits,constrainLivingTarget} from './camera-framing.js?v=pages41-production-overhead';
+import {seasonVisuals,addSeasonGroundDetails} from './seasonal-visuals.js?v=pages41-production-overhead';
 import * as T from '../vendor/three.module.js';
-import {renderLivingBoard,updateLivingLabels,animateLivingBoard,refreshLivingHover,renderLivingPlacementPreview} from './living-world.js?v=pages40-season-world';
-import {resourceIcon} from './everdell/art.js?v=pages40-season-world';
-import {FACTIONS,TROOPS,WORLD,BUILDINGS} from './data.js?v=pages40-season-world';
-import {count,visible,known,moveRange} from './movement.js?v=pages40-season-world';
-import {woodlandCottage,ancientTree,woodlandFigure,woodlandSource,woodlandLocation,addWoodlandTerrain,animateWoodland} from './woodland-world.js?v=pages40-season-world';
+import {renderLivingBoard,updateLivingLabels,animateLivingBoard,refreshLivingHover,renderLivingPlacementPreview} from './living-world.js?v=pages41-production-overhead';
+import {resourceIcon} from './everdell/art.js?v=pages41-production-overhead';
+import {FACTIONS,TROOPS,WORLD,BUILDINGS} from './data.js?v=pages41-production-overhead';
+import {count,visible,known,moveRange} from './movement.js?v=pages41-production-overhead';
+import {woodlandCottage,ancientTree,woodlandFigure,woodlandSource,woodlandLocation,addWoodlandTerrain,animateWoodland} from './woodland-world.js?v=pages41-production-overhead';
 
 const PALETTE={plain:0x7f9857,meadow:0x9eae69,forest:0x617d48,road:0xc7b589,rock:0x9da186,water:0x79b2a7,mist:0x506d59};
 const TEAM=[0x617baf,0x4f8c73,0x9b8058,0x977e9d];
@@ -133,7 +133,7 @@ export class WorldView{
   this.onDown=e=>{if(this.inputPaused||e.button!==0&&e.button!==1&&e.button!==2)return;this.releaseCameraPreset();this.cancelFollow();this.canvas.focus({preventScroll:true});this.canvas.setPointerCapture(e.pointerId);this.pointers.set(e.pointerId,{x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY,moved:false,button:e.button});this.canvas.style.cursor='grabbing';this.hoverMarker.visible=false;};
   this.onMove=e=>{this.notePointerMove(e);const tracked=this.pointers.get(e.pointerId);if(tracked){const dx=e.clientX-tracked.x,dy=e.clientY-tracked.y;tracked.moved||=Math.hypot(e.clientX-tracked.startX,e.clientY-tracked.startY)>5;
     if(this.pointers.size===2){const all=[...this.pointers.entries()];const other=all.find(([id])=>id!==e.pointerId)?.[1];if(other){const oldDist=Math.hypot(tracked.x-other.x,tracked.y-other.y),newDist=Math.hypot(e.clientX-other.x,e.clientY-other.y);this.desiredZoom=clamp(this.desiredZoom*(newDist/Math.max(oldDist,1)),.35,3.2);const oldAngle=Math.atan2(tracked.y-other.y,tracked.x-other.x),newAngle=Math.atan2(e.clientY-other.y,e.clientX-other.x);this.desiredYaw-=shortest(oldAngle,newAngle);this.panPixels(dx*.5,dy*.5);other.moved=true;tracked.moved=true;}}
-    else if(tracked.button===2||e.shiftKey){this.cancelFollow();this.desiredYaw-=dx*.006;this.desiredPitch=clamp(this.desiredPitch+dy*.004,.35,1.28);this.boundTarget();}
+    else if(tracked.button===2||e.shiftKey){this.cancelFollow();this.desiredYaw-=dx*.006;this.desiredPitch=clamp(this.desiredPitch+dy*.004,.35,Math.PI/2);this.boundTarget();}
     else if(tracked.moved)this.panPixels(dx,dy);
     tracked.x=e.clientX;tracked.y=e.clientY;return;}
    const obj=this.pickAt(e);this.setHoveredUnit(obj?.type==='unit'?obj.id:null);this.hoverMarker.visible=this.state?.mode!=='placement'&&!!obj&&obj.type==='ground'&&obj.x>=0&&obj.z>=0&&obj.x<WORLD.width&&obj.z<WORLD.height&&!this.menu&&!this.inputPaused;if(this.hoverMarker.visible){this.hoverMarker.position.set(obj.x,this.heightAt(obj.x,obj.z)+.12,obj.z);this.hoverMarker.material.color.setHex(this.build&&!this.canBuildAt(obj.x,obj.z)?0xc88c7a:0xffe7b1);}this.onHover?.(obj);};
@@ -181,7 +181,7 @@ export class WorldView{
  }
  focusAt(x,z){if(!Number.isFinite(x)||!Number.isFinite(z))return;this.releaseCameraPreset();this.cancelFollow();this.desiredTarget.set(x,0,z);this.boundTarget();}
  rotateCamera(delta){this.releaseCameraPreset();this.cancelFollow();this.desiredYaw+=delta;this.boundTarget();}
- tiltCamera(delta){this.releaseCameraPreset();this.cancelFollow();this.desiredPitch=clamp(this.desiredPitch+delta,.35,1.28);this.boundTarget();}
+ tiltCamera(delta){this.releaseCameraPreset();this.cancelFollow();this.desiredPitch=clamp(this.desiredPitch+delta,.35,Math.PI/2);this.boundTarget();}
  setZoom(delta){this.releaseCameraPreset();this.cancelFollow();this.desiredZoom=clamp(this.desiredZoom*Math.exp(delta),.35,3.2);this.boundTarget();}
  resetCamera(){const b=this.menu?WORLD.center:WORLD.bases[this.p]??WORLD.center;this.focusAt(b.x,b.z);this.desiredZoom=this.menu?.62:1.55;this.desiredYaw=this.p===1?-Math.PI*.22:Math.PI*.22;this.desiredPitch=.82;}
  followUnit(id){if(this.state?.livingBoard){this.cancelFollow();return false;}const entity=this.entities.get('unit:'+id);if(!entity?.unit||!entity.moving){this.cancelFollow();return false;}this.followId=id;this.followHold=false;this.desiredTarget.set(entity.group.position.x,0,entity.group.position.z);this.boundTarget();return true;}

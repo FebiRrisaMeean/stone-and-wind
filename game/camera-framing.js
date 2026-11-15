@@ -1,4 +1,4 @@
-import {navigationFootprint} from './city-footprints.js?v=pages40-season-world';
+import {navigationFootprint} from './city-footprints.js?v=pages41-production-overhead';
 // Orthographic camera calculations shared by zone presets and free-camera bounds
 // All world positions are on the XZ ground plane, elevation is Y
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -8,7 +8,7 @@ export const LIVING_CAMERA_BOUNDS={minX:-.5,maxX:60.5,minZ:-.5,maxZ:70.5};
 export function fitLivingZone(bounds,viewport,padding={}){
  if(!bounds||!['minX','maxX','minZ','maxZ'].every(k=>Number.isFinite(bounds[k]))||bounds.maxX<bounds.minX||bounds.maxZ<bounds.minZ)return null;
  const width=Math.max(1,finite(viewport.width,1)),height=Math.max(1,finite(viewport.height,1));
- const yaw=finite(viewport.yaw,0),pitch=clamp(finite(viewport.pitch,.95),.35,1.28),s=Math.sin(pitch),c=Math.cos(pitch),sy=Math.sin(yaw),cy=Math.cos(yaw);
+ const yaw=finite(viewport.yaw,0),pitch=clamp(finite(viewport.pitch,.95),.35,Math.PI/2),s=Math.sin(pitch),c=Math.cos(pitch),sy=Math.sin(yaw),cy=Math.cos(yaw);
  const left=clamp(finite(padding.left,32),0,width*.35),right=clamp(finite(padding.right,32),0,width*.35),top=clamp(finite(padding.top,100),0,height*.35),bottom=clamp(finite(padding.bottom,230),0,height*.4);
  const xs=[],ys=[];
  for(const x of [bounds.minX,bounds.maxX])for(const y of [finite(bounds.minY,0),finite(bounds.maxY,3)])for(const z of [bounds.minZ,bounds.maxZ]){
@@ -38,6 +38,8 @@ function targetLimits(camera,bounds){
 }
 
 export function constrainPresetFrame(frame,viewport,bounds=LIVING_CAMERA_BOUNDS){
+ // Overhead production needs its UI-safe framing, including the small outer forest margin
+ if(Math.abs(frame.pitch-Math.PI/2)<1e-9)return frame;
  const limits=targetLimits({...viewport,zoom:frame.zoom,yaw:frame.yaw,pitch:frame.pitch},bounds);
  // Horizontal centring prevents edge-city presets pointing mostly beyond the map
  // Preserve UI-aware composition when an overview exceeds a map dimension
@@ -64,7 +66,7 @@ export function productionCameraBounds(locations=[]){
  if(!points.length)return null;
  return{minX:Math.min(...points.map(p=>p.x))-2.3,maxX:Math.max(...points.map(p=>p.x))+2.3,minZ:Math.min(...points.map(p=>p.z))-2.3,maxZ:Math.max(...points.map(p=>p.z))+2.3,minY:0,maxY:3.8};
 }
-export const PRODUCTION_CAMERA_PADDING={top:120,bottom:230,left:140,right:200,pitch:1.18};
+export const PRODUCTION_CAMERA_PADDING={top:120,bottom:230,left:140,right:200,pitch:Math.PI/2};
 
 // Frame the settled neighbourhood; full territory is reserved for building placement
 export function cityCameraBounds(city,homes=[],fullCity=false){

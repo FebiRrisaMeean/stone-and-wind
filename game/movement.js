@@ -1,4 +1,4 @@
-import {TROOPS,WORLD} from './data.js?v=pages40-season-world';
+import {TROOPS,WORLD} from './data.js?v=pages41-production-overhead';
 
 const WORKER=TROOPS.worker;
 const BASE_VISION=7.8;

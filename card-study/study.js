@@ -1,4 +1,4 @@
-import {componentGroups,loadDeck,loadSourceCard,sourceReference,sourceCardComponent,loadCardFonts,preloadCardAssets} from '../game/source-card-components.js?v=pages40-season-world'
+import {componentGroups,loadDeck,loadSourceCard,sourceReference,sourceCardComponent,loadCardFonts,preloadCardAssets} from '../game/source-card-components.js?v=pages41-production-overhead'
 const $=id=>document.getElementById(id)
 let deck,selected,width=344,part='title',filter='all',card,revision=0
 const hidden=new Set()

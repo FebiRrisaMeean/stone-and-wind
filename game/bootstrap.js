@@ -1,4 +1,4 @@
-import {mountGame} from './everdell-main.js?v=pages40-season-world';
+import {mountGame} from './everdell-main.js?v=pages41-production-overhead';
 const node=document.querySelector('[data-game-host]');
 if(node&&!node.dataset.mounted){
  node.dataset.mounted='true';

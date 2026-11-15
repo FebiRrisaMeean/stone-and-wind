@@ -1,4 +1,4 @@
-import {BUILDING_FOOTPRINTS} from './city-footprint-data.js?v=pages40-season-world'
+import {BUILDING_FOOTPRINTS} from './city-footprint-data.js?v=pages41-production-overhead'
 export const BUILDING_CLEARANCE=1.8
 export function isBuildingFootprint(name){return Object.hasOwn(BUILDING_FOOTPRINTS,name)}
 // Lower model hull excludes roofs and hanging branches; navigation keeps its own taller envelope

@@ -1,6 +1,8 @@
-import {footprintAt,hullsOverlap,footprintFitsBounds,isBuildingFootprint,navigationFootprint,navigationPassageClear,normalizeCityRotation} from './city-footprints.js?v=pages40-season-world';
+import {footprintAt,hullsOverlap,footprintFitsBounds,isBuildingFootprint,navigationFootprint,navigationPassageClear,normalizeCityRotation} from './city-footprints.js?v=pages41-production-overhead';
 // Presentation positions never change engine costs, turns, city capacity or card effects
-const FIELD_LAYOUT_KEY='stone-wind-field-layout-v1';
+// v2 starts the compact ring composition; the untouched v1 key is the rollback copy
+// Saved v2 coordinates are authoritative, including deliberate overlap with the crown
+export const FIELD_LAYOUT_KEY='stone-wind-field-layout-v2';
 let fieldLayout={};
 try{fieldLayout=JSON.parse(globalThis.localStorage?.getItem(FIELD_LAYOUT_KEY)??'{}')??{};}catch{}
 export function getFieldLayout(){return structuredClone(fieldLayout);}
@@ -12,18 +14,24 @@ export const CITY_LAYOUT_VERSION=2;
 // Cities are independent canonical spaces, shown one at a time by applyCityScene
 export const LIVING_CITIES=[0,1].map(owner=>({owner,x:30.5,z:55.5,camp:{x:30.5,z:43.7},radius:22.5,scaleX:1,scaleZ:.6,bounds:{minX:8,maxX:53,minZ:42,maxZ:69}}));
 export const CITY_CAMPS=LIVING_CITIES.map(c=>({x:c.x,z:43.7}));
-export const LIVING_TREE={x:30,z:8};
+export const LIVING_TREE={x:30,z:20};
 export const MARKET_POSITIONS=Array.from({length:8},(_,i)=>({x:22.5+(i%4)*5,z:25.3+Math.floor(i/4)*5}));
-// Two staggered collecting groves, with an opening toward the elder tree
-export const BASIC_POSITIONS=[[20.2,14.2],[25.5,13.5],[35.2,13.8],[40.7,14.6],[22,19.3],[27.2,18.6],[33,19.1],[38.6,19.8]];
-// Changing forest actions form a small arc below the permanent gathering sites
-export const FOREST_POSITIONS=[[19.9,24.3],[25.7,23.7],[35,24.2],[40.9,24.8]];
-// Shared clearings stay in the central corridor, outside both saved city areas
+// Seventeen compact perimeter slots leave a clear central crown, grouped by resource family
 export const LOCATION_FOOTPRINT_RADIUS=1.95;
-// Haven and journeys meet the outgoing path, not a separate row near the city
-export const COMMON_POSITIONS={HAVEN:[20.3,29.7],JOURNEY_TWO:[25.5,29.1],JOURNEY_THREE:[30.7,28.4],JOURNEY_FOUR:[36,29.5],JOURNEY_FIVE:[41.2,30]};
+const RING_RADIUS=12.5,RING_SLOTS=17;
+function ringPositions(tree){
+ const cx=Math.max(17.5,Math.min(42.5,tree.x)),cz=Math.max(17.5,Math.min(26.5,tree.z));
+ return Array.from({length:RING_SLOTS},(_,i)=>{const angle=-Math.PI/2+i*Math.PI*2/RING_SLOTS;return [cx+Math.cos(angle)*RING_RADIUS,cz+Math.sin(angle)*RING_RADIUS];});
+}
+const defaultRing=ringPositions(LIVING_TREE);
+export const BASIC_POSITIONS=defaultRing.slice(0,8);
+export const FOREST_POSITIONS=defaultRing.slice(8,12);
+export const COMMON_POSITIONS=Object.fromEntries(['HAVEN','JOURNEY_TWO','JOURNEY_THREE','JOURNEY_FOUR','JOURNEY_FIVE'].map((name,i)=>[name,defaultRing[12+i]]));
+let productionCoordsCache=null;
 // Group the actual forest draw together with permanent sites, not by deck order
 export function productionLocationCoords(basics,forests){
+ const cacheKey=JSON.stringify([basics,forests,fieldLayout]);
+ if(productionCoordsCache?.key===cacheKey)return clearTreeSightline(productionCoordsCache.coords);
  const family=name=>{
   if(['TWO_WILD','ONE_TWIG_RESIN_BERRY','DISCARD_UP_TO_THREE_CARDS_TO_GAIN_WILD_PER_CARD','DRAW_TWO_MEADOW_PLAY_ONE_FOR_ONE_LESS'].includes(name))return 3;
   if(/PEBBLE|STONE/.test(name))return 4;
@@ -32,14 +40,28 @@ export function productionLocationCoords(basics,forests){
   if(/TWIG/.test(name))return 1;
   return 2;
  };
- const slots=[...BASIC_POSITIONS,...FOREST_POSITIONS],order=[0,1,2,3,7,6,5,4,8,9,10,11];
  const names=[...basics,...forests].sort((a,b)=>family(a)-family(b)||a.localeCompare(b));
- const coords=new Map(names.map((name,i)=>[name,slots[order[i]]]));
- for(const [name,pos]of Object.entries(COMMON_POSITIONS))coords.set(name,pos);
- for(const [name,p]of Object.entries(fieldLayout))if(coords.has(name))coords.set(name,[p.x,p.z]);
- return clearTreeSightline(coords,fieldTreePosition());
+ names.push(...Object.keys(COMMON_POSITIONS));
+ const tree=fieldTreePosition(),coords=new Map(),occupied=[];
+ // Reserve every explicit position first, so default sites cannot silently occupy it
+ for(const name of names){const p=fieldLayout[name];if(p){coords.set(name,[p.x,p.z]);occupied.push([p.x,p.z]);}}
+ const ring=ringPositions(tree);let candidates=null;
+ // Build the fallback grid only if the compact default ring actually needs repair
+ const usable=p=>!productionHiddenByTree(...p,tree,LOCATION_FOOTPRINT_RADIUS)&&occupied.every(q=>Math.hypot(p[0]-q[0],p[1]-q[1])>=4.5);
+ for(const [i,name]of names.entries()){
+  if(coords.has(name))continue;
+  const preferred=ring[i%ring.length];
+  let point=usable(preferred)?preferred:null;
+  if(!point){if(!candidates){candidates=[...ring];for(let z=5;z<=39;z+=.5)for(let x=5;x<=55;x+=.5)candidates.push([x,z]);}let cost=Infinity;for(const p of candidates){if(!usable(p))continue;const d=(p[0]-preferred[0])**2+(p[1]-preferred[1])**2;if(d<cost){cost=d;point=p;}}}
+  // The supported 17-site set fits even with the tree at a boundary
+  if(!point)throw new Error('Production layout has no free default position for '+name);
+  coords.set(name,point);occupied.push(point);
+ }
+ const ordered=new Map(names.map(name=>[name,coords.get(name)]));
+ productionCoordsCache={key:cacheKey,coords:ordered};
+ return clearTreeSightline(ordered);
 }
-export const PRODUCTION_CLEARING={x:30.5,z:22,radius:13.8,scaleX:1,scaleZ:.85};
+export const PRODUCTION_CLEARING={x:30,z:20,radius:14.5,scaleX:1,scaleZ:1};
 export function inCity(owner,x,z){const c=LIVING_CITIES[owner];return !!c&&Number.isFinite(x)&&Number.isFinite(z)&&x>=c.bounds.minX&&x<=c.bounds.maxX&&z>=c.bounds.minZ&&z<=c.bounds.maxZ;}
 export function cityCardEntries(player){const counts={},entries=player.getPlayedCards().map(played=>{const ordinal=counts[played.cardName]??0;counts[played.cardName]=ordinal+1;return{key:player.playerId+'|'+played.cardName+'|'+ordinal,played,cardName:played.cardName};});for(const entry of entries)entry.pairedWith=entry.played.pairId?entries.find(other=>other.key!==entry.key&&other.played.pairId===entry.played.pairId)?.key??null:null;return entries;}
 export function cityCampHull(owner){const c=CITY_CAMPS[owner],z=c.z;return [[c.x-1.5,z-1.2],[c.x+1.5,z-1.2],[c.x+1.5,z+1.2],[c.x-1.5,z+1.2]];}
@@ -133,23 +155,7 @@ export function migrateCityLayout(game,positions={},version=1){
  return {...result,version:CITY_LAYOUT_VERSION,migrated:version!==CITY_LAYOUT_VERSION||JSON.stringify(result.positions)!==JSON.stringify(original)};
 }
 
-// At the production preset (yaw 0, pitch 1.18), the crown projects toward negative Z
-export function productionHiddenByTree(x,z,tree){return Math.abs(x-tree.x)<6.5&&z>tree.z-9&&z<tree.z+4.5;}
-let treeSightlineCache=null;
-export function clearTreeSightline(coords,tree){
- const key=JSON.stringify([tree,[...coords]]);if(treeSightlineCache?.key===key)return new Map(treeSightlineCache.value);
- const result=new Map(coords);
- for(const [name,[x,z]]of coords){
-  if(!productionHiddenByTree(x,z,tree))continue;
-  let best=null,cost=Infinity;
-  for(let nz=5;nz<=37;nz+=.5)for(let nx=5;nx<=55;nx+=.5){
-   if(productionHiddenByTree(nx,nz,tree))continue;
-   if([...result].some(([other,p])=>other!==name&&Math.hypot(nx-p[0],nz-p[1])<4.5))continue;
-   const distance=(nx-x)**2+(nz-z)**2;
-   if(distance<cost){cost=distance;best=[nx,nz];}
-  }
-  if(best)result.set(name,best);
- }
- treeSightlineCache={key,value:[...result]};
- return result;
-}
+// Conservative top-down crown footprint, with optional building clearance
+export function productionHiddenByTree(x,z,tree,padding=0){return Math.abs(x-tree.x)<6.5+padding&&Math.abs(z-tree.z)<6.5+padding;}
+// Compatibility helper: presentation must never rewrite an explicit editor position
+export function clearTreeSightline(coords){return new Map([...coords].map(([name,p])=>[name,[...p]]));}
