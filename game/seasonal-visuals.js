@@ -1,4 +1,4 @@
-import {woodlandPlacements} from './woodland-layout.js?v=pages35-production-groups';
+import {woodlandPlacements} from './woodland-layout.js?v=pages36-field-editor';
 import * as T from '../vendor/three.module.js';
 
 export const SEASON_VISUALS={

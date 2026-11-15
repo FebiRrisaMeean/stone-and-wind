@@ -1,5 +1,5 @@
-import {Card} from './everdell/engine.js?v=pages35-production-groups';
-import {renderIcon} from './original-icons.js?v=pages35-production-groups';
+import {Card} from './everdell/engine.js?v=pages36-field-editor';
+import {renderIcon} from './original-icons.js?v=pages36-field-editor';
 export const RESOURCE_KEYS=['TWIG','RESIN','PEBBLE','BERRY'];
 const NAMES={TWIG:'Ветки',RESIN:'Смола',PEBBLE:'Камушки',BERRY:'Ягоды'};
 export const escapeHTML=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

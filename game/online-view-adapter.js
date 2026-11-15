@@ -1,10 +1,10 @@
-import {createMovementWorld} from './movement.js?v=pages35-production-groups';
-import {WORLD} from './data.js?v=pages35-production-groups';
-import {Card,Location} from './everdell/engine.js?v=pages35-production-groups';
-import {productionLocationCoords,PRODUCTION_CLEARING,LIVING_CITIES,LIVING_TREE,MARKET_POSITIONS,BASIC_POSITIONS,FOREST_POSITIONS,COMMON_POSITIONS,CITY_CAMPS,CITY_FOREST_GATEWAYS,cityCardEntries,reconcileCityLayout} from './living-board-state.js?v=pages35-production-groups';
-import {CARD_NAMES,LOCATION_NAMES,LOCATION_TEXT,EVENT_NAMES,SEASONS} from './everdell/locale.js?v=pages35-production-groups';
-import {cityWorkerMarker,zoneBadge,storedResources} from './living-ui.js?v=pages35-production-groups';
-import {workerSeatPosition} from './production-props.js?v=pages35-production-groups';
+import {createMovementWorld} from './movement.js?v=pages36-field-editor';
+import {WORLD} from './data.js?v=pages36-field-editor';
+import {Card,Location} from './everdell/engine.js?v=pages36-field-editor';
+import {fieldTreePosition,productionLocationCoords,PRODUCTION_CLEARING,LIVING_CITIES,LIVING_TREE,MARKET_POSITIONS,BASIC_POSITIONS,FOREST_POSITIONS,COMMON_POSITIONS,CITY_CAMPS,CITY_FOREST_GATEWAYS,cityCardEntries,reconcileCityLayout} from './living-board-state.js?v=pages36-field-editor';
+import {CARD_NAMES,LOCATION_NAMES,LOCATION_TEXT,EVENT_NAMES,SEASONS} from './everdell/locale.js?v=pages36-field-editor';
+import {cityWorkerMarker,zoneBadge,storedResources} from './living-ui.js?v=pages36-field-editor';
+import {workerSeatPosition} from './production-props.js?v=pages36-field-editor';
 const key=w=>w.location?'l:'+w.location:w.event?'e:'+w.event:'c:'+w.playedCard?.cardOwnerId+':'+w.playedCard?.cardName;
 // Reads only a private-per-seat public projection. No engine restore and no invented cards
 export function onlineDrawing(view,layout={},previous=null){
@@ -12,7 +12,7 @@ export function onlineDrawing(view,layout={},previous=null){
  const cards=p=>Object.values(p.playedCards).flat();
  const game={players:g.players.map(p=>({...p,getPlayedCards:()=>cards(p)}))};
  const result=reconcileCityLayout(game,view.layout??layout);layout=result.positions;
- Object.assign(state,{mode:'placement',livingBoard:true,livingTree:LIVING_TREE,livingObjects:[],buildings:[],sources:[],sandbox:false,seed:481114,season:String(view.shared.season).toUpperCase(),round:view.revision+1,serial:g.gameStateId,lastMove:null,locations:[],units:[],currentPlayer:viewer,worldHeight:70});
+ Object.assign(state,{mode:'placement',livingBoard:true,livingTree:fieldTreePosition(),livingObjects:[],buildings:[],sources:[],sandbox:false,seed:481114,season:String(view.shared.season).toUpperCase(),round:view.revision+1,serial:g.gameStateId,lastMove:null,locations:[],units:[],currentPlayer:viewer,worldHeight:70});
  for(let z=WORLD.height;z<70;z++)for(let x=0;x<WORLD.width;x++)state.tiles.push({x,z,type:'meadow',h:0});
  state.players=g.players.map((p,id)=>({id,level:1,workers:0,gifts:[],explored:Array(WORLD.width*70).fill(true)}));
  const offered=type=>view.offers.filter(o=>o.inputType===type),places=new Set(offered('PLACE_WORKER').map(o=>o.clientOptions.location));

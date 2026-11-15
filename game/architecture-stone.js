@@ -1,5 +1,5 @@
-import {T,random,mesh,box,cyl,rod,curve,torus,group,motion,leaf} from './card-style-primitives.js?v=pages35-production-groups'
-import {skin,branch,timber,rock,nail} from './card-style-buildings.js?v=pages35-production-groups'
+import {T,random,mesh,box,cyl,rod,curve,torus,group,motion,leaf} from './card-style-primitives.js?v=pages36-field-editor'
+import {skin,branch,timber,rock,nail} from './card-style-buildings.js?v=pages36-field-editor'
 
 // Exact card sources: 17, 22, 24, 28, 30, 34, 36, 38, 44 and 46
 // These are wooden woodland structures, including the cards named Castle and Palace

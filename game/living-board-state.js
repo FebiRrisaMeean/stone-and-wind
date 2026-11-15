@@ -1,5 +1,13 @@
-import {footprintAt,hullsOverlap,footprintFitsBounds,isBuildingFootprint,navigationFootprint,navigationPassageClear,normalizeCityRotation} from './city-footprints.js?v=pages35-production-groups';
+import {footprintAt,hullsOverlap,footprintFitsBounds,isBuildingFootprint,navigationFootprint,navigationPassageClear,normalizeCityRotation} from './city-footprints.js?v=pages36-field-editor';
 // Presentation positions never change engine costs, turns, city capacity or card effects
+const FIELD_LAYOUT_KEY='stone-wind-field-layout-v1';
+let fieldLayout={};
+try{fieldLayout=JSON.parse(globalThis.localStorage?.getItem(FIELD_LAYOUT_KEY)??'{}')??{};}catch{}
+export function getFieldLayout(){return structuredClone(fieldLayout);}
+export function setFieldLayout(value){fieldLayout={};for(const [key,p]of Object.entries(value??{}))if(p&&Number.isFinite(p.x)&&Number.isFinite(p.z)&&p.x>=5&&p.x<=55&&p.z>=5&&p.z<=39)fieldLayout[key]={x:p.x,z:p.z};}
+setFieldLayout(fieldLayout);
+export function saveFieldLayout(){localStorage.setItem(FIELD_LAYOUT_KEY,JSON.stringify(fieldLayout));}
+export function fieldTreePosition(){return fieldLayout.tree??LIVING_TREE;}
 export const CITY_LAYOUT_VERSION=2;
 // Cities are independent canonical spaces, shown one at a time by applyCityScene
 export const LIVING_CITIES=[0,1].map(owner=>({owner,x:30.5,z:55.5,camp:{x:30.5,z:43.7},radius:22.5,scaleX:1,scaleZ:.6,bounds:{minX:8,maxX:53,minZ:42,maxZ:69}}));
@@ -28,6 +36,7 @@ export function productionLocationCoords(basics,forests){
  const names=[...basics,...forests].sort((a,b)=>family(a)-family(b)||a.localeCompare(b));
  const coords=new Map(names.map((name,i)=>[name,slots[order[i]]]));
  for(const [name,pos]of Object.entries(COMMON_POSITIONS))coords.set(name,pos);
+ for(const [name,p]of Object.entries(fieldLayout))if(coords.has(name))coords.set(name,[p.x,p.z]);
  return coords;
 }
 export const PRODUCTION_CLEARING={x:30.5,z:22,radius:13.8,scaleX:1,scaleZ:.85};

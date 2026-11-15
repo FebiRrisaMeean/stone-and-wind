@@ -1,5 +1,5 @@
-import {T,P,random,material,mesh,ell,box,cyl,rod,curve,torus,group,motion,leaf} from './card-style-primitives.js?v=pages35-production-groups'
-import {skin,branch,timber,rock,nail,grain,plankedRoof,bracket} from './card-style-buildings.js?v=pages35-production-groups'
+import {T,P,random,material,mesh,ell,box,cyl,rod,curve,torus,group,motion,leaf} from './card-style-primitives.js?v=pages36-field-editor'
+import {skin,branch,timber,rock,nail,grain,plankedRoof,bracket} from './card-style-buildings.js?v=pages36-field-editor'
 
 // Connected construction derived from the eleven numbered card references
 // Front is -Z, all foundations sit on Y=0, hidden backs are restrained reconstructions

@@ -1,5 +1,5 @@
-import {loadSourceCard,loadCardFonts,preloadCardAssets,sourceCardComponent} from './source-card-components.js?v=pages35-production-groups';
-import {SOURCE_CARD_IDS} from './source-card-map.js?v=pages35-production-groups';
+import {loadSourceCard,loadCardFonts,preloadCardAssets,sourceCardComponent} from './source-card-components.js?v=pages36-field-editor';
+import {SOURCE_CARD_IDS} from './source-card-map.js?v=pages36-field-editor';
 
 const ready=new Map(),pending=new Map();
 // Bound the initial hand + meadow fan-out and retry temporary network/decode failures
