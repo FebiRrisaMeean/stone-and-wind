@@ -1,17 +1,17 @@
-import {woodlandRelief} from './woodland-layout.js?v=pages36-field-editor';
-import {optimizationSettings} from './optimization-settings.js?v=pages36-field-editor';
-import {createPerformanceProbe,performanceProbeEnabled,installPerformancePanel} from './performance-probe.js?v=pages36-field-editor';
-import {animateWorkerCharacter} from './local-sculpt/worker-characters.js?v=pages36-field-editor';
-import {RenderLoop,renderBudgetEnabled} from './render-budget.js?v=pages36-field-editor';
-import {stepNavigation} from './city-navigation.js?v=pages36-field-editor';
-import {fitLivingZone,constrainPresetFrame,livingCameraLimits,constrainLivingTarget} from './camera-framing.js?v=pages36-field-editor';
-import {seasonVisuals,addSeasonGroundDetails} from './seasonal-visuals.js?v=pages36-field-editor';
+import {forestLayoutKey,woodlandRelief} from './woodland-layout.js?v=pages37-dense-forest';
+import {optimizationSettings} from './optimization-settings.js?v=pages37-dense-forest';
+import {createPerformanceProbe,performanceProbeEnabled,installPerformancePanel} from './performance-probe.js?v=pages37-dense-forest';
+import {animateWorkerCharacter} from './local-sculpt/worker-characters.js?v=pages37-dense-forest';
+import {RenderLoop,renderBudgetEnabled} from './render-budget.js?v=pages37-dense-forest';
+import {stepNavigation} from './city-navigation.js?v=pages37-dense-forest';
+import {fitLivingZone,constrainPresetFrame,livingCameraLimits,constrainLivingTarget} from './camera-framing.js?v=pages37-dense-forest';
+import {seasonVisuals,addSeasonGroundDetails} from './seasonal-visuals.js?v=pages37-dense-forest';
 import * as T from '../vendor/three.module.js';
-import {renderLivingBoard,updateLivingLabels,animateLivingBoard,refreshLivingHover,renderLivingPlacementPreview} from './living-world.js?v=pages36-field-editor';
-import {resourceIcon} from './everdell/art.js?v=pages36-field-editor';
-import {FACTIONS,TROOPS,WORLD,BUILDINGS} from './data.js?v=pages36-field-editor';
-import {count,visible,known,moveRange} from './movement.js?v=pages36-field-editor';
-import {woodlandCottage,ancientTree,woodlandFigure,woodlandSource,woodlandLocation,addWoodlandTerrain,animateWoodland} from './woodland-world.js?v=pages36-field-editor';
+import {renderLivingBoard,updateLivingLabels,animateLivingBoard,refreshLivingHover,renderLivingPlacementPreview} from './living-world.js?v=pages37-dense-forest';
+import {resourceIcon} from './everdell/art.js?v=pages37-dense-forest';
+import {FACTIONS,TROOPS,WORLD,BUILDINGS} from './data.js?v=pages37-dense-forest';
+import {count,visible,known,moveRange} from './movement.js?v=pages37-dense-forest';
+import {woodlandCottage,ancientTree,woodlandFigure,woodlandSource,woodlandLocation,addWoodlandTerrain,animateWoodland} from './woodland-world.js?v=pages37-dense-forest';
 
 const PALETTE={plain:0x7f9857,meadow:0x9eae69,forest:0x617d48,road:0xc7b589,rock:0x9da186,water:0x79b2a7,mist:0x506d59};
 const TEAM=[0x617baf,0x4f8c73,0x9b8058,0x977e9d];
@@ -339,7 +339,7 @@ export class WorldView{
   if(newWorld){this.completedLivingArrivals=new Set();for(const entity of this.entities.values())this.disposeObject(entity.group);this.entities.clear();this.labelLayer.innerHTML='';this.labelMap=new Map();this.staticKey='';this.lastBattleKey=null;this.gameSeed=s.seed;this.releaseCameraPreset();this.cancelFollow();this.setHoveredUnit(null);}
   if((newWorld||enteringGame||changedPlayer&&!placement)&&!s.livingBoard){this.resetCamera();if(newWorld){this.target.copy(this.desiredTarget);this.zoom=this.desiredZoom;this.yaw=this.desiredYaw;this.pitch=this.desiredPitch;}this.lastViewer=p;}
   if(s.livingBoard)this.lastViewer=p;
-  const explored=menu?'all':s.players[p].explored.reduce((a,b,i)=>b?(a+i*13+1)%2147483647:a,0),staticKey=`${s.cityScene?.key??''}:${s.seed}:${s.livingBoard?s.season:''}:${s.livingBoard?'all':p}:${menu}:${explored}:${s.buildings.length}:${placement?s.locations?.map(l=>l.id).join(','):''}`;if(this.staticKey!==staticKey){this.rebuildTerrain(s,p,menu);this.staticKey=staticKey;}
+  const explored=menu?'all':s.players[p].explored.reduce((a,b,i)=>b?(a+i*13+1)%2147483647:a,0),staticKey=`${s.livingBoard?forestLayoutKey(s):''}:${s.cityScene?.key??''}:${s.seed}:${s.livingBoard?s.season:''}:${s.livingBoard?'all':p}:${menu}:${explored}:${s.buildings.length}:${placement?s.locations?.map(l=>l.id).join(','):''}`;if(this.staticKey!==staticKey){this.rebuildTerrain(s,p,menu);this.staticKey=staticKey;}
   for(const entity of this.entities.values())entity.seen=false;for(const label of this.labelMap?.values()??[])label.seen=false;
   if(s.livingBoard&&!menu)renderLivingBoard(this,s);else if(placement&&!menu)this.renderPlacementLocations(s);
   for(const m of s.sources){if(!menu&&!known(s,p,m))continue;this.syncEntity('source:'+m.id,`${m.owner}:${m.workers?.length}`,()=>this.source(m));if(!menu)this.addLabel('source:'+m.id,m.x,m.z,`<span class="source-symbol">${{gold:'◈',wood:'♣',stone:'◆'}[m.resource]}</span><span class="source-label-name">${{gold:'Золотая жила',wood:'Лесная делянка',stone:'Каменоломня'}[m.resource]}</span><span>${m.workers?.length??0}/${m.slots}</span>`,m.owner===p?'owned':'',()=>this.onPick({type:'source',id:m.id}),.98);}

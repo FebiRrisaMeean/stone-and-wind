@@ -1,5 +1,5 @@
-import {Card,Event,Location,getScores} from './everdell/engine.js?v=pages36-field-editor';
-import {cityCardEntries} from './living-board-state.js?v=pages36-field-editor';
+import {Card,Event,Location,getScores} from './everdell/engine.js?v=pages37-dense-forest';
+import {cityCardEntries} from './living-board-state.js?v=pages37-dense-forest';
 
 const sum=steps=>steps.reduce((total,step)=>total+step.points,0);
 const categories=['cards','events','journey','tokens'];

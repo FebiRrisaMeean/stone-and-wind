@@ -1,4 +1,4 @@
-import {mountGame} from './everdell-main.js?v=pages36-field-editor';
+import {mountGame} from './everdell-main.js?v=pages37-dense-forest';
 const node=document.querySelector('[data-game-host]');
 if(node&&!node.dataset.mounted){
  node.dataset.mounted='true';

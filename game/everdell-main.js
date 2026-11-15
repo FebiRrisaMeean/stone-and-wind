@@ -1,29 +1,29 @@
-import {createFieldLayoutEditor} from './field-layout-editor.js?v=pages36-field-editor';
-import {productionCameraBounds,PRODUCTION_CAMERA_PADDING} from './camera-framing.js?v=pages36-field-editor';
-import {seasonConfirmation} from './season-confirmation.js?v=pages36-field-editor';
-import {mountOnlineGame} from './online-game.js?v=pages36-field-editor';
-import {applyCityScene} from './city-scene.js?v=pages36-field-editor';
-import {cityRailMarkup,bindCityRail} from './city-icon-rail.js?v=pages36-field-editor';
-import {finalScoringPlan,createFinalScoring} from './final-scoring.js?v=pages36-field-editor';
-import {chooseBotCommand,paymentFitsCity} from './bot-policy.js?v=pages36-field-editor';
-import {BOT_SAVE_KEYS,chooseInitialPlayer,createBotSession,decisionPlayerId,humanCanAct,humanOwnsDecision,applySessionCommand} from './bot-session.js?v=pages36-field-editor';
-import {cameraControls,cardPreviewPlacement} from './field-ui.js?v=pages36-field-editor';
-import {renderIcon} from './original-icons.js?v=pages36-field-editor';
-import {captureAction,bindAction,isActionForGame,restoreAction,recoverPendingAction} from './action-checkpoint.js?v=pages36-field-editor';
-import {resourceChoiceModel,changeResourceChoice,resourceChoiceMarkup,decisionResources,decisionValue,closeIcon} from './decision-ui.js?v=pages36-field-editor';
-import {prepareGameCard,gameCardReady,gameCardFace} from './game-source-cards.js?v=pages36-field-editor';
-import {workerSeatPosition} from './production-props.js?v=pages36-field-editor';
-import {SOURCE_CARD_NAMES} from './source-card-map.js?v=pages36-field-editor';
-import {createHandInteraction} from './hand-interaction.js?v=pages36-field-editor';
-import {createSharedSeasonState,normalizeSharedGame,stepSharedGame,requestSharedSeason,sharedSeason,canActShared,forecastNextSeason} from './shared-seasons.js?v=pages36-field-editor';
-import {zoneBadge,zoneDetail,supplyStatus,storedResources,cityWorkerMarker,cityWorkerDetail,lockIcon,SPECIES} from './living-ui.js?v=pages36-field-editor';
-import {fieldTreePosition,productionLocationCoords,PRODUCTION_CLEARING,LIVING_CITIES,CITY_CAMPS,CITY_LAYOUT_VERSION,migrateCityLayout,LIVING_TREE,MARKET_POSITIONS,BASIC_POSITIONS,FOREST_POSITIONS,COMMON_POSITIONS,inCity,cityCardEntries,queuedCityPlacements,validCityPosition,reconcileCityLayout,freeCityPosition} from './living-board-state.js?v=pages36-field-editor';
-import {cardArt,portraitStyle,placeArt,resourceIcon,cardTypeIcon} from './everdell/art.js?v=pages36-field-editor';
-import {createGame,stepGame,serializeGame,restoreGame,getPaymentOptions as enginePaymentOptions,getScores,Card,Location,Event,CardName,LocationOccupancy,GameInputType,Season,CardType,PlayerStatus} from './everdell/engine.js?v=pages36-field-editor';
-import {CARD_NAMES,CARD_TEXT,LOCATION_NAMES,LOCATION_TEXT,EVENT_NAMES,EVENT_TEXT,SEASONS,CARD_TYPES,RESOURCE_NAMES,translateText} from './everdell/locale.js?v=pages36-field-editor';
-import {createMovementWorld,moveWorker} from './movement.js?v=pages36-field-editor';
-import {WORLD} from './data.js?v=pages36-field-editor';
-import {WorldView} from './world.js?v=pages36-field-editor';
+import {createFieldLayoutEditor} from './field-layout-editor.js?v=pages37-dense-forest';
+import {productionCameraBounds,PRODUCTION_CAMERA_PADDING} from './camera-framing.js?v=pages37-dense-forest';
+import {seasonConfirmation} from './season-confirmation.js?v=pages37-dense-forest';
+import {mountOnlineGame} from './online-game.js?v=pages37-dense-forest';
+import {applyCityScene} from './city-scene.js?v=pages37-dense-forest';
+import {cityRailMarkup,bindCityRail} from './city-icon-rail.js?v=pages37-dense-forest';
+import {finalScoringPlan,createFinalScoring} from './final-scoring.js?v=pages37-dense-forest';
+import {chooseBotCommand,paymentFitsCity} from './bot-policy.js?v=pages37-dense-forest';
+import {BOT_SAVE_KEYS,chooseInitialPlayer,createBotSession,decisionPlayerId,humanCanAct,humanOwnsDecision,applySessionCommand} from './bot-session.js?v=pages37-dense-forest';
+import {cameraControls,cardPreviewPlacement} from './field-ui.js?v=pages37-dense-forest';
+import {renderIcon} from './original-icons.js?v=pages37-dense-forest';
+import {captureAction,bindAction,isActionForGame,restoreAction,recoverPendingAction} from './action-checkpoint.js?v=pages37-dense-forest';
+import {resourceChoiceModel,changeResourceChoice,resourceChoiceMarkup,decisionResources,decisionValue,closeIcon} from './decision-ui.js?v=pages37-dense-forest';
+import {prepareGameCard,gameCardReady,gameCardFace} from './game-source-cards.js?v=pages37-dense-forest';
+import {workerSeatPosition} from './production-props.js?v=pages37-dense-forest';
+import {SOURCE_CARD_NAMES} from './source-card-map.js?v=pages37-dense-forest';
+import {createHandInteraction} from './hand-interaction.js?v=pages37-dense-forest';
+import {createSharedSeasonState,normalizeSharedGame,stepSharedGame,requestSharedSeason,sharedSeason,canActShared,forecastNextSeason} from './shared-seasons.js?v=pages37-dense-forest';
+import {zoneBadge,zoneDetail,supplyStatus,storedResources,cityWorkerMarker,cityWorkerDetail,lockIcon,SPECIES} from './living-ui.js?v=pages37-dense-forest';
+import {fieldTreePosition,productionLocationCoords,PRODUCTION_CLEARING,LIVING_CITIES,CITY_CAMPS,CITY_LAYOUT_VERSION,migrateCityLayout,LIVING_TREE,MARKET_POSITIONS,BASIC_POSITIONS,FOREST_POSITIONS,COMMON_POSITIONS,inCity,cityCardEntries,queuedCityPlacements,validCityPosition,reconcileCityLayout,freeCityPosition} from './living-board-state.js?v=pages37-dense-forest';
+import {cardArt,portraitStyle,placeArt,resourceIcon,cardTypeIcon} from './everdell/art.js?v=pages37-dense-forest';
+import {createGame,stepGame,serializeGame,restoreGame,getPaymentOptions as enginePaymentOptions,getScores,Card,Location,Event,CardName,LocationOccupancy,GameInputType,Season,CardType,PlayerStatus} from './everdell/engine.js?v=pages37-dense-forest';
+import {CARD_NAMES,CARD_TEXT,LOCATION_NAMES,LOCATION_TEXT,EVENT_NAMES,EVENT_TEXT,SEASONS,CARD_TYPES,RESOURCE_NAMES,translateText} from './everdell/locale.js?v=pages37-dense-forest';
+import {createMovementWorld,moveWorker} from './movement.js?v=pages37-dense-forest';
+import {WORLD} from './data.js?v=pages37-dense-forest';
+import {WorldView} from './world.js?v=pages37-dense-forest';
 
 const getPaymentOptions=(game,name,source,index)=>enginePaymentOptions(game,name,source,index).filter(p=>paymentFitsCity(game,name,p));
 const {game:SAVE,layout:LAYOUT_SAVE,shared:SHARED_SAVE,teams:TEAMS_SAVE,action:ACTION_SAVE,session:SESSION_SAVE}=BOT_SAVE_KEYS;
@@ -327,7 +327,7 @@ export function mountGame(root){
   else if(object?.type==='season'){html=`<div class="world-note"><h2>${esc(SEASONS[sharedSeason(game,sharedMeta)])}</h2><p>${esc(object.reason)}</p><p>${sharedSeason(game,sharedMeta)===Season.AUTUMN?'Подсчёт очков начнётся, когда оба игрока закончат действия':'Следующий сезон начнётся, когда оба игрока закончат действия'}</p></div>`;}
   else if(location)html=zoneDetail(location);
 
-  if(!html){hideDetail();return;}clearTimeout(hoverTimer);hoverTimer=null;hoverKey=key;d.innerHTML=html;d.hidden=false;const x=obj.clientX??world.windowPointer?.x??innerWidth/2,y=obj.clientY??world.windowPointer?.y??innerHeight/2;d.style.width=(object?.type==='supplies'?344:location?280:Math.min(320,(innerHeight-180)*.708))+'px';const width=d.offsetWidth;d.style.left=Math.max(12,Math.min(innerWidth-width-12,x>innerWidth*.6?x-width-24:x+24))+'px';d.style.top=(y-100)+'px';detailOrigin={type:obj.type,id:obj.id,x,y,anchorRect:obj.anchorRect,card:['market','city-card'].includes(object?.type)};clampDetail();
+  if(!html){hideDetail();return;}clearTimeout(hoverTimer);hoverTimer=null;hoverKey=key;d.innerHTML=html;d.hidden=false;const x=obj.clientX??world.windowPointer?.x??innerWidth/2,y=obj.clientY??world.windowPointer?.y??innerHeight/2;d.style.width=(object?.type==='supplies'?344:location?230:Math.min(320,(innerHeight-180)*.708))+'px';const width=d.offsetWidth;d.style.left=Math.max(12,Math.min(innerWidth-width-12,x>innerWidth*.6?x-width-24:x+24))+'px';d.style.top=(y-100)+'px';detailOrigin={type:obj.type,id:obj.id,x,y,anchorRect:obj.anchorRect,card:['market','city-card'].includes(object?.type)};clampDetail();
  }
  function render(){
   actions=new Map();root.querySelector('.living-shell').dataset.player=playerIndex();root.querySelector('.living-shell').dataset.season=drawing.season;world.render(applyCityScene(drawing,playerIndex(),viewedCityOwner??playerIndex()),playerIndex(),{selected,menu:false});

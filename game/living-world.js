@@ -1,18 +1,18 @@
-import {productionAssetRevision} from './production-assets.js?v=pages36-field-editor';
-import {cityRoadSurface} from './city-road-surface.js?v=pages36-field-editor';
-import {buildCityRoads} from './city-roads.js?v=pages36-field-editor';
-import {nightAssetRevision} from './local-sculpt/lazy-assets.js?v=pages36-field-editor';
-import {animateWorkerCharacter} from './local-sculpt/worker-characters.js?v=pages36-field-editor';
-import {navigationFootprint} from './city-footprints.js?v=pages36-field-editor';
-import {createWoodlandAsset} from './woodland-assets.js?v=pages36-field-editor';
-import {cityFootprint} from './city-footprints.js?v=pages36-field-editor';
-import {createNavigation,stepNavigation} from './city-navigation.js?v=pages36-field-editor';
-import {findCityHabitat,stepHabitatWalk} from './city-habitats.js?v=pages36-field-editor';
-import {applyObjectSeason} from './seasonal-visuals.js?v=pages36-field-editor';
+import {productionAssetRevision} from './production-assets.js?v=pages37-dense-forest';
+import {cityRoadSurface} from './city-road-surface.js?v=pages37-dense-forest';
+import {buildCityRoads} from './city-roads.js?v=pages37-dense-forest';
+import {nightAssetRevision} from './local-sculpt/lazy-assets.js?v=pages37-dense-forest';
+import {animateWorkerCharacter} from './local-sculpt/worker-characters.js?v=pages37-dense-forest';
+import {navigationFootprint} from './city-footprints.js?v=pages37-dense-forest';
+import {createWoodlandAsset} from './woodland-assets.js?v=pages37-dense-forest';
+import {cityFootprint} from './city-footprints.js?v=pages37-dense-forest';
+import {createNavigation,stepNavigation} from './city-navigation.js?v=pages37-dense-forest';
+import {findCityHabitat,stepHabitatWalk} from './city-habitats.js?v=pages37-dense-forest';
+import {applyObjectSeason} from './seasonal-visuals.js?v=pages37-dense-forest';
 import * as T from '../vendor/three.module.js';
-import {createCardMiniature,animateCardMiniature} from './living-models.js?v=pages36-field-editor';
-import {woodlandCottage,ancientTree,woodlandFigure} from './woodland-world.js?v=pages36-field-editor';
-import {resourceIcon} from './everdell/art.js?v=pages36-field-editor';
+import {createCardMiniature,animateCardMiniature} from './living-models.js?v=pages37-dense-forest';
+import {woodlandCottage,ancientTree,woodlandFigure} from './woodland-world.js?v=pages37-dense-forest';
+import {resourceIcon} from './everdell/art.js?v=pages37-dense-forest';
 
 const team=[0x719bb6,0xd7a073,0x97b485,0xb99ac7];
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -67,7 +67,7 @@ function objectLabel(view,item){
 }
 export function renderLivingBoard(view,state){
  const tree=state.livingTree??{x:30,z:13};
- view.syncEntity('living-tree',`${tree.x}:${tree.z}:${state.season}`,()=>{const g=createWoodlandAsset('elder',state.season,7.8);if(g){g.position.set(tree.x,view.heightAt(tree.x,tree.z),tree.z);view.tagged(g,{type:'tree',id:'living-tree'});return g;}const fallback=ancientTree(view,{...tree,id:'living-elder',kind:'point'});fallback.scale.setScalar(1.35);view.tagged(fallback,{type:'tree',id:'living-tree'});return fallback;});
+ view.syncEntity('living-tree',`${tree.x}:${tree.z}:${state.season}`,()=>{const g=createWoodlandAsset('elder',state.season,11.2);if(g){g.position.set(tree.x,view.heightAt(tree.x,tree.z),tree.z);view.tagged(g,{type:'tree',id:'living-tree'});return g;}const fallback=ancientTree(view,{...tree,id:'living-elder',kind:'point'});fallback.scale.setScalar(1.35);view.tagged(fallback,{type:'tree',id:'living-tree'});return fallback;});
  const elder=view.entities.get('living-tree');if(elder)applyObjectSeason(elder.group,state.season);
  for(const location of state.locations??[]){
   view.syncEntity('location:'+location.id,`${location.x}:${location.z}:${location.workers?.join(',')}:${state.season}:${productionAssetRevision()}`,()=>view.placementLocation(location));
@@ -118,7 +118,7 @@ export function updateLivingLabels(view){
   if(!label.living){label.el.style.visibility='hidden';continue;}
   const p=label.pos.clone();p.y=view.heightAt(p.x,p.z)+(label.pos.y??.15);p.project(view.camera);const x=(p.x*.5+.5)*w;let y=(-p.y*.5+.5)*h;
   const cardLabel=['market','city-card'].includes(label.item?.type),hovered=view.hoveredLiving?.id===label.item?.id||label.el.matches(':hover,:focus-visible');
-  if(cardLabel)label.el.classList.toggle('is-hovered',hovered);
+  if(cardLabel||label.livingZone)label.el.classList.toggle('is-hovered',hovered);
   const cardVisible=label.item?.type==='city-card'?(hovered||label.item?.workerDestination===true):!cardLabel||view.zoom>=.48||hovered;
   const eventVisible=label.item?.type!=='event'||view.zoom>.83||view.hoveredLiving?.id===label.item.id;
   const visible=cardVisible&&eventVisible&&p.z>-1&&p.z<1&&x>0&&x<w&&y>0&&y<h-12;

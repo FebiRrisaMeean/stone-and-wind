@@ -1,16 +1,16 @@
 import * as T from '../vendor/three.module.js'
 import {GLTFLoader} from '../vendor/addons/loaders/GLTFLoader.js'
-import {WOODLAND_PATHS,woodlandPlacements} from './woodland-layout.js?v=pages36-field-editor'
+import {WOODLAND_PATHS,woodlandPlacements} from './woodland-layout.js?v=pages37-dense-forest'
 const templates=new Map(),materials=new Map()
 await Promise.all(['elder','oak','spruce','shrub'].map(async name=>{
- try{const gltf=await new GLTFLoader().loadAsync(new URL(`./assets/night-environment/${name}.glb`,import.meta.url).href)
+ try{const file=name!=='elder'&&new URLSearchParams(globalThis.location?.search??'').get('forestDensity')!=='classic'?name+'-dense':name;const gltf=await new GLTFLoader().loadAsync(new URL(`./assets/night-environment/${file}.glb`,import.meta.url).href)
   const scene=gltf.scene;scene.updateMatrixWorld(true);const box=new T.Box3().setFromObject(scene),size=box.getSize(new T.Vector3()),center=box.getCenter(new T.Vector3()),normalizer=new T.Matrix4().makeScale(1/size.y,1/size.y,1/size.y).multiply(new T.Matrix4().makeTranslation(-center.x,-box.min.y,-center.z)),parts=[]
   scene.traverse(o=>{if(!o.isMesh)return;const geo=o.geometry.clone();geo.applyMatrix4(normalizer.clone().multiply(o.matrixWorld));geo.userData.sharedAsset=true;parts.push({geometry:geo,material:o.material})});templates.set(name,parts)
  }catch(e){console.warn('Woodland asset unavailable: '+name,e)}
 }))
 function seasonalMaterial(base,kind,season){
  const key=base.uuid+':'+kind+':'+season;if(materials.has(key))return materials.get(key)
- const m=base.clone();m.roughness=.95;m.metalness=0;m.userData.sharedAsset=true;m.userData.seasonInvariant=true
+ const m=base.clone();m.roughness=.95;m.metalness=0;if(m.map)m.map.anisotropy=4;m.userData.sharedAsset=true;m.userData.seasonInvariant=true
  const autumn=season==='AUTUMN'&&kind!=='spruce',winter=season==='WINTER',spring=season==='SPRING'
  m.onBeforeCompile=shader=>{
   shader.vertexShader='varying float forestUp;\n'+shader.vertexShader.replace('#include <beginnormal_vertex>','#include <beginnormal_vertex>\nforestUp=objectNormal.y;')
@@ -26,7 +26,7 @@ function seasonalMaterial(base,kind,season){
 export function createWoodlandAsset(kind,season='SUMMER',height=1){
  const parts=templates.get(kind);if(!parts)return null
  const g=new T.Group();g.name=`woodland-${kind}`;g.userData.woodlandAsset=true
- for(const p of parts){const m=new T.Mesh(p.geometry,seasonalMaterial(p.material,kind,season));m.castShadow=true;m.receiveShadow=true;g.add(m)}g.scale.setScalar(height);if(kind==='elder')g.scale.multiply(new T.Vector3(1.05,1.23,1.05));return g
+ for(const p of parts){const m=new T.Mesh(p.geometry,seasonalMaterial(p.material,kind,season));m.castShadow=true;m.receiveShadow=true;g.add(m)}g.scale.setScalar(height);if(kind==='elder')g.scale.multiply(new T.Vector3(.78,1.23,.78));return g
 }
 export function addWoodlandAssets(view,state){
  if(!templates.has('oak')||!templates.has('spruce'))return false

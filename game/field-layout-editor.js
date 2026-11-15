@@ -1,4 +1,4 @@
-import {getFieldLayout,setFieldLayout,saveFieldLayout} from './living-board-state.js?v=pages36-field-editor';
+import {getFieldLayout,setFieldLayout,saveFieldLayout} from './living-board-state.js?v=pages37-dense-forest';
 export function createFieldLayoutEditor({root,world,onChange,onExit}){
  let active=false,before=null,selected=null,drag=null;
  const shell=root.querySelector('.living-shell'),panel=document.createElement('section');

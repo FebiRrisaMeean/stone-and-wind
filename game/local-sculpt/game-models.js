@@ -1,13 +1,13 @@
-import {createNightCharacter,animateNightCharacter} from './night-characters.js?v=pages36-field-editor'
-import {createNightBuilding} from './night-buildings.js?v=pages36-field-editor'
-import {createMeshyPilot,animateMeshyPilot} from './meshy-pilots.js?v=pages36-field-editor'
-import {createMeshyBuilding,animateMeshyBuilding} from './meshy-buildings.js?v=pages36-field-editor'
-import {createHybridCrane,animateHybridCrane} from './hybrid-crane.js?v=pages36-field-editor'
+import {createNightCharacter,animateNightCharacter} from './night-characters.js?v=pages37-dense-forest'
+import {createNightBuilding} from './night-buildings.js?v=pages37-dense-forest'
+import {createMeshyPilot,animateMeshyPilot} from './meshy-pilots.js?v=pages37-dense-forest'
+import {createMeshyBuilding,animateMeshyBuilding} from './meshy-buildings.js?v=pages37-dense-forest'
+import {createHybridCrane,animateHybridCrane} from './hybrid-crane.js?v=pages37-dense-forest'
 import * as T from '../../vendor/three.module.js'
-import {createMeshyScholar,animateMeshyScholar} from './meshy-scholar.js?v=pages36-field-editor'
-import {createLocalScholar,animateLocalScholar} from './scholar.js?v=pages36-field-editor'
-import {createLocalCharacter,animateLocalCharacter} from './characters.js?v=pages36-field-editor'
-import {ARCHITECTURE_NAMES,createArchitecture,animateArchitecture} from '../architecture-models.js?v=pages36-field-editor'
+import {createMeshyScholar,animateMeshyScholar} from './meshy-scholar.js?v=pages37-dense-forest'
+import {createLocalScholar,animateLocalScholar} from './scholar.js?v=pages37-dense-forest'
+import {createLocalCharacter,animateLocalCharacter} from './characters.js?v=pages37-dense-forest'
+import {ARCHITECTURE_NAMES,createArchitecture,animateArchitecture} from '../architecture-models.js?v=pages37-dense-forest'
 
 const acceptedBuildings=new Set(ARCHITECTURE_NAMES)
 export function hasLocalBuilding(name){return acceptedBuildings.has(name)}

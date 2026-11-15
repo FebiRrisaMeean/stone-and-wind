@@ -1,4 +1,4 @@
-import {stepGame,serializeGame,restoreGame,Season,GameInputType,PlayerStatus,Card,CardType,Location} from './everdell/engine.js?v=pages36-field-editor';
+import {stepGame,serializeGame,restoreGame,Season,GameInputType,PlayerStatus,Card,CardType,Location} from './everdell/engine.js?v=pages37-dense-forest';
 
 // The controller keeps the base rules intact while holding normal turns behind a shared season barrier
 const SEASON_ORDER=[Season.WINTER,Season.SPRING,Season.SUMMER,Season.AUTUMN];

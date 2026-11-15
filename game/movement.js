@@ -1,4 +1,4 @@
-import {TROOPS,WORLD} from './data.js?v=pages36-field-editor';
+import {TROOPS,WORLD} from './data.js?v=pages37-dense-forest';
 
 const WORKER=TROOPS.worker;
 const BASE_VISION=7.8;

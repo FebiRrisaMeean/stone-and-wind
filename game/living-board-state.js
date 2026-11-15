@@ -1,4 +1,4 @@
-import {footprintAt,hullsOverlap,footprintFitsBounds,isBuildingFootprint,navigationFootprint,navigationPassageClear,normalizeCityRotation} from './city-footprints.js?v=pages36-field-editor';
+import {footprintAt,hullsOverlap,footprintFitsBounds,isBuildingFootprint,navigationFootprint,navigationPassageClear,normalizeCityRotation} from './city-footprints.js?v=pages37-dense-forest';
 // Presentation positions never change engine costs, turns, city capacity or card effects
 const FIELD_LAYOUT_KEY='stone-wind-field-layout-v1';
 let fieldLayout={};
