@@ -1,13 +1,13 @@
-import {createNightCharacter,animateNightCharacter} from './night-characters.js?v=pages33-production-ui'
-import {createNightBuilding} from './night-buildings.js?v=pages33-production-ui'
-import {createMeshyPilot,animateMeshyPilot} from './meshy-pilots.js?v=pages33-production-ui'
-import {createMeshyBuilding,animateMeshyBuilding} from './meshy-buildings.js?v=pages33-production-ui'
-import {createHybridCrane,animateHybridCrane} from './hybrid-crane.js?v=pages33-production-ui'
+import {createNightCharacter,animateNightCharacter} from './night-characters.js?v=pages34-production-models'
+import {createNightBuilding} from './night-buildings.js?v=pages34-production-models'
+import {createMeshyPilot,animateMeshyPilot} from './meshy-pilots.js?v=pages34-production-models'
+import {createMeshyBuilding,animateMeshyBuilding} from './meshy-buildings.js?v=pages34-production-models'
+import {createHybridCrane,animateHybridCrane} from './hybrid-crane.js?v=pages34-production-models'
 import * as T from '../../vendor/three.module.js'
-import {createMeshyScholar,animateMeshyScholar} from './meshy-scholar.js?v=pages33-production-ui'
-import {createLocalScholar,animateLocalScholar} from './scholar.js?v=pages33-production-ui'
-import {createLocalCharacter,animateLocalCharacter} from './characters.js?v=pages33-production-ui'
-import {ARCHITECTURE_NAMES,createArchitecture,animateArchitecture} from '../architecture-models.js?v=pages33-production-ui'
+import {createMeshyScholar,animateMeshyScholar} from './meshy-scholar.js?v=pages34-production-models'
+import {createLocalScholar,animateLocalScholar} from './scholar.js?v=pages34-production-models'
+import {createLocalCharacter,animateLocalCharacter} from './characters.js?v=pages34-production-models'
+import {ARCHITECTURE_NAMES,createArchitecture,animateArchitecture} from '../architecture-models.js?v=pages34-production-models'
 
 const acceptedBuildings=new Set(ARCHITECTURE_NAMES)
 export function hasLocalBuilding(name){return acceptedBuildings.has(name)}

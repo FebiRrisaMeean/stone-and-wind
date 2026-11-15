@@ -1,18 +1,18 @@
-import {productionAssetRevision} from './production-assets.js?v=pages33-production-ui';
-import {cityRoadSurface} from './city-road-surface.js?v=pages33-production-ui';
-import {buildCityRoads} from './city-roads.js?v=pages33-production-ui';
-import {nightAssetRevision} from './local-sculpt/lazy-assets.js?v=pages33-production-ui';
-import {animateWorkerCharacter} from './local-sculpt/worker-characters.js?v=pages33-production-ui';
-import {navigationFootprint} from './city-footprints.js?v=pages33-production-ui';
-import {createWoodlandAsset} from './woodland-assets.js?v=pages33-production-ui';
-import {cityFootprint} from './city-footprints.js?v=pages33-production-ui';
-import {createNavigation,stepNavigation} from './city-navigation.js?v=pages33-production-ui';
-import {findCityHabitat,stepHabitatWalk} from './city-habitats.js?v=pages33-production-ui';
-import {applyObjectSeason} from './seasonal-visuals.js?v=pages33-production-ui';
+import {productionAssetRevision} from './production-assets.js?v=pages34-production-models';
+import {cityRoadSurface} from './city-road-surface.js?v=pages34-production-models';
+import {buildCityRoads} from './city-roads.js?v=pages34-production-models';
+import {nightAssetRevision} from './local-sculpt/lazy-assets.js?v=pages34-production-models';
+import {animateWorkerCharacter} from './local-sculpt/worker-characters.js?v=pages34-production-models';
+import {navigationFootprint} from './city-footprints.js?v=pages34-production-models';
+import {createWoodlandAsset} from './woodland-assets.js?v=pages34-production-models';
+import {cityFootprint} from './city-footprints.js?v=pages34-production-models';
+import {createNavigation,stepNavigation} from './city-navigation.js?v=pages34-production-models';
+import {findCityHabitat,stepHabitatWalk} from './city-habitats.js?v=pages34-production-models';
+import {applyObjectSeason} from './seasonal-visuals.js?v=pages34-production-models';
 import * as T from '../vendor/three.module.js';
-import {createCardMiniature,animateCardMiniature} from './living-models.js?v=pages33-production-ui';
-import {woodlandCottage,ancientTree,woodlandFigure} from './woodland-world.js?v=pages33-production-ui';
-import {resourceIcon} from './everdell/art.js?v=pages33-production-ui';
+import {createCardMiniature,animateCardMiniature} from './living-models.js?v=pages34-production-models';
+import {woodlandCottage,ancientTree,woodlandFigure} from './woodland-world.js?v=pages34-production-models';
+import {resourceIcon} from './everdell/art.js?v=pages34-production-models';
 
 const team=[0x719bb6,0xd7a073,0x97b485,0xb99ac7];
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -72,7 +72,7 @@ export function renderLivingBoard(view,state){
  for(const location of state.locations??[]){
   view.syncEntity('location:'+location.id,`${location.x}:${location.z}:${location.workers?.join(',')}:${state.season}:${productionAssetRevision()}`,()=>view.placementLocation(location));
   const fallback='';
-  const label=view.addLabel('location:'+location.id,location.x,location.z+.15,location.badgeHtml??fallback,'living-object-label living-location-label living-zone-badge',()=>view.onPick?.({type:'location',id:location.id}),.20);
+  const label=view.addLabel('location:'+location.id,location.x,location.z+(location.actualName==='HAVEN'||location.actualName?.includes('JOURNEY')?1.0:.15),location.badgeHtml??fallback,'living-object-label living-location-label living-zone-badge',()=>view.onPick?.({type:'location',id:location.id}),.20);
   label.living=true;label.livingZone=true;label.item=location;label.hoverOnly=false;label.el.removeAttribute('title');label.el.setAttribute('aria-label',location.ariaLabel??location.name);label.el.dataset.available=String(location.available!==false);label.el.dataset.locked=String(location.locked===true);labelHover(view,label,{type:'location',id:location.id});
   const entity=view.entities.get('location:'+location.id);
   if(entity){

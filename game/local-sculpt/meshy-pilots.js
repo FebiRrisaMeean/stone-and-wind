@@ -1,4 +1,4 @@
-import {sampleGroundFloor} from './ground-contact.js?v=pages33-production-ui'
+import {sampleGroundFloor} from './ground-contact.js?v=pages34-production-models'
 import * as T from '../../vendor/three.module.js'
 import {GLTFLoader} from '../../vendor/addons/loaders/GLTFLoader.js'
 import {clone as cloneSkeleton} from '../../vendor/addons/utils/SkeletonUtils.js'

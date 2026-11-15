@@ -1,5 +1,5 @@
 import * as T from '../vendor/three.module.js'
-import {createNightBuilding,preloadNightBuildings} from '../game/local-sculpt/night-buildings.js?v=pages33-production-ui'
+import {createNightBuilding,preloadNightBuildings} from '../game/local-sculpt/night-buildings.js?v=pages34-production-models'
 const catalog=await (await fetch('./catalog.json')).json()
 await preloadNightBuildings(catalog.map(c=>c.name))
 let selected='Mine'

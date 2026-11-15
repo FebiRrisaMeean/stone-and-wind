@@ -1,10 +1,10 @@
-import {createMovementWorld} from './movement.js?v=pages33-production-ui';
-import {WORLD} from './data.js?v=pages33-production-ui';
-import {Card,Location} from './everdell/engine.js?v=pages33-production-ui';
-import {PRODUCTION_CLEARING,LIVING_CITIES,LIVING_TREE,MARKET_POSITIONS,BASIC_POSITIONS,FOREST_POSITIONS,COMMON_POSITIONS,CITY_CAMPS,CITY_FOREST_GATEWAYS,cityCardEntries,reconcileCityLayout} from './living-board-state.js?v=pages33-production-ui';
-import {CARD_NAMES,LOCATION_NAMES,LOCATION_TEXT,EVENT_NAMES,SEASONS} from './everdell/locale.js?v=pages33-production-ui';
-import {cityWorkerMarker,zoneBadge,storedResources} from './living-ui.js?v=pages33-production-ui';
-import {workerSeatPosition} from './production-props.js?v=pages33-production-ui';
+import {createMovementWorld} from './movement.js?v=pages34-production-models';
+import {WORLD} from './data.js?v=pages34-production-models';
+import {Card,Location} from './everdell/engine.js?v=pages34-production-models';
+import {PRODUCTION_CLEARING,LIVING_CITIES,LIVING_TREE,MARKET_POSITIONS,BASIC_POSITIONS,FOREST_POSITIONS,COMMON_POSITIONS,CITY_CAMPS,CITY_FOREST_GATEWAYS,cityCardEntries,reconcileCityLayout} from './living-board-state.js?v=pages34-production-models';
+import {CARD_NAMES,LOCATION_NAMES,LOCATION_TEXT,EVENT_NAMES,SEASONS} from './everdell/locale.js?v=pages34-production-models';
+import {cityWorkerMarker,zoneBadge,storedResources} from './living-ui.js?v=pages34-production-models';
+import {workerSeatPosition} from './production-props.js?v=pages34-production-models';
 const key=w=>w.location?'l:'+w.location:w.event?'e:'+w.event:'c:'+w.playedCard?.cardOwnerId+':'+w.playedCard?.cardName;
 // Reads only a private-per-seat public projection. No engine restore and no invented cards
 export function onlineDrawing(view,layout={},previous=null){

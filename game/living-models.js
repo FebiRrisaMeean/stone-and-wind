@@ -1,7 +1,7 @@
 import * as T from '../vendor/three.module.js';
-import {LOCAL_CHARACTER_RECIPES} from './local-sculpt/recipes.js?v=pages33-production-ui';
-import {ARCHITECTURE_PROFILES} from './architecture-models.js?v=pages33-production-ui';
-import {createGameSculpt,animateGameSculpt,hasLocalBuilding} from './local-sculpt/game-models.js?v=pages33-production-ui';
+import {LOCAL_CHARACTER_RECIPES} from './local-sculpt/recipes.js?v=pages34-production-models';
+import {ARCHITECTURE_PROFILES} from './architecture-models.js?v=pages34-production-models';
+import {createGameSculpt,animateGameSculpt,hasLocalBuilding} from './local-sculpt/game-models.js?v=pages34-production-models';
 
 // Every base-game card has its own silhouette and profession props
 // Models are local to the supplied group so their logical city cell never moves

@@ -1,8 +1,8 @@
-import {T} from './card-style-primitives.js?v=pages33-production-ui'
-import {createCardStyleSample,animateCardStyleSample} from './card-style-models.js?v=pages33-production-ui'
-import {TIMBER_BUILDERS} from './architecture-timber.js?v=pages33-production-ui'
-import {STONE_BUILDERS} from './architecture-stone.js?v=pages33-production-ui'
-import {batchStaticHierarchy} from './local-sculpt/mesh-optimizer.js?v=pages33-production-ui'
+import {T} from './card-style-primitives.js?v=pages34-production-models'
+import {createCardStyleSample,animateCardStyleSample} from './card-style-models.js?v=pages34-production-models'
+import {TIMBER_BUILDERS} from './architecture-timber.js?v=pages34-production-models'
+import {STONE_BUILDERS} from './architecture-stone.js?v=pages34-production-models'
+import {batchStaticHierarchy} from './local-sculpt/mesh-optimizer.js?v=pages34-production-models'
 
 const approved=new Set(['Crane','Resin Refinery','Clock Tower'])
 const builders={...TIMBER_BUILDERS,...STONE_BUILDERS}
