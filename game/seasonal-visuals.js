@@ -1,4 +1,4 @@
-import {woodlandPlacements} from './woodland-layout.js?v=pages37-dense-forest';
+import {woodlandPlacements} from './woodland-layout.js?v=pages38-dark-ui';
 import * as T from '../vendor/three.module.js';
 
 export const SEASON_VISUALS={

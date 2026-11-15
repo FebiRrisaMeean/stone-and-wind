@@ -1,4 +1,4 @@
-import {TROOPS,WORLD} from './data.js?v=pages37-dense-forest';
+import {TROOPS,WORLD} from './data.js?v=pages38-dark-ui';
 
 const WORKER=TROOPS.worker;
 const BASE_VISION=7.8;

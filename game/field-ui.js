@@ -30,3 +30,5 @@ const symbols={
 };
 export const CAMERA_ZONES=[['own','Мой город'],['production','Производство'],['market','Рынок'],['opponent','Город соперника']];
 export function cameraControls(){return `<nav class="camera-zone-controls" data-camera-ui aria-label="Области поля">${CAMERA_ZONES.map(([id,name])=>`<button type="button" data-camera-zone="${id}" aria-label="${name}" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${symbols[id]}</svg><span>${name}</span></button>`).join('')}</nav>`;}
+
+export function fieldActionIcon(kind){const paths={events:'<path d="M6 3h12v18H6zM9 7h6M9 11h6M9 15h3"/><path d="m15 17 2 2 4-5"/>',season:'<path d="M7 3h10M7 21h10M8 3v4l8 10v4M16 3v4L8 17v4M8 7h8M8 17h8"/>',stock:'<path d="M5 8h14l2 13H3zM8 8V6a4 4 0 0 1 8 0v2M9 13h6"/>'};return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+paths[kind]+'</svg>';}

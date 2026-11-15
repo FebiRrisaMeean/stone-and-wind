@@ -1,6 +1,6 @@
 import * as T from '../vendor/three.module.js'
 import {GLTFLoader} from '../vendor/addons/loaders/GLTFLoader.js'
-import {WOODLAND_PATHS,woodlandPlacements} from './woodland-layout.js?v=pages37-dense-forest'
+import {WOODLAND_PATHS,woodlandPlacements} from './woodland-layout.js?v=pages38-dark-ui'
 const templates=new Map(),materials=new Map()
 await Promise.all(['elder','oak','spruce','shrub'].map(async name=>{
  try{const file=name!=='elder'&&new URLSearchParams(globalThis.location?.search??'').get('forestDensity')!=='classic'?name+'-dense':name;const gltf=await new GLTFLoader().loadAsync(new URL(`./assets/night-environment/${file}.glb`,import.meta.url).href)

@@ -616,3 +616,55 @@
 .field-layout-editor[hidden]{display:none}.field-layout-editor p{margin:8px 0;font-size:14px}.field-layout-editor select{max-width:100%;padding:6px;background:#fff6df;color:#433520}.field-layout-editor button{padding:8px 10px;margin:8px 5px 8px 0;background:#e8d6aa;color:#433520;border:1px solid #ac9770;border-radius:7px;cursor:pointer}.field-layout-editor small{display:block}.field-layout-editor textarea{width:100%;height:100px;box-sizing:border-box}.field-editing .hand-fan,.field-editing .field-actions,.field-editing .system-menu-toggle,.field-editing .city-icon-rail,.field-editing .bot-status{visibility:hidden!important}
 
 .field-editing [data-camera-zone="market"]{display:none}
+
+/* Event cards: explicit rhythm instead of large default heading/paragraph margins */
+.living-shell .event-menu-grid{gap:10px}
+.living-shell .event-menu-card{padding:12px 16px}
+.living-shell .event-menu-card h3{margin:0 0 6px;line-height:1.1}
+.living-shell .event-menu-card p{margin:5px 0;line-height:1.25}
+.living-shell .event-menu-card button{margin-top:5px;padding:8px 12px;line-height:1.2}
+
+/* Shared UI surfaces only — original printed card faces keep their colours */
+.living-shell{--ui-panel:rgba(25,32,28,.88);--ui-inner:rgba(52,60,50,.68);--ui-text:#f1ead7;--ui-muted:#c6c6b6;--ui-edge:#abb68c55}
+.living-shell :is(.decision-modal,.player-stock,.bot-status,.system-menu-toggle,.camera-zone-controls button,.city-rail-tabs button,.city-rail-owner button,.city-rail-empty,.field-actions button,.world-note,.zone-detail,.supply-tooltip,.city-worker-detail,.chapel-coins,.city-rail-coins,.placement-caption,.toast,.field-layout-editor,.online-panel,.online-field>section,.online-inspect,.final-scoring-panel>section){background:var(--ui-panel)!important;color:var(--ui-text)!important;border-color:var(--ui-edge)!important;box-shadow:0 4px 16px #0b110c35!important}
+.living-shell :is(.decision-heading,.decision-footer,.resource-tile,.payment-option,.choice-item,.event-menu-card,.online-event,.resource-stepper,.final-scoring-totals>div){background:var(--ui-inner)!important;color:var(--ui-text)!important;border-color:var(--ui-edge)!important;box-shadow:none}
+.living-shell .decision-modal :is(h2,h3,p,label,summary,dt,dd,small,strong,output,.payment-method,.decision-progress,.decision-resource,.decision-discount,.resource-stock,.choice-meta),.living-shell :is(.supply-total strong,.supply-total small,.player-space-status,.supply-spaces,.supply-spaces strong,.world-note p,.world-note h2,.supply-tooltip h2,.city-worker-detail p,.city-worker-detail small,.final-scoring-heading h2,.final-scoring-source,.final-scoring-totals strong,.online-panel,.online-field){color:var(--ui-text)!important}
+.living-shell :is(.decision-modal,.field-layout-editor,.online-panel,.online-field) :is(button,select,textarea,input:not([type=checkbox]):not([type=radio])),.living-shell :is(.placement-actions button,.final-scoring-heading button,.final-results-actions button){background:rgba(76,87,68,.55)!important;color:var(--ui-text)!important;border-color:var(--ui-edge)!important}
+.living-shell :is(.decision-modal,.field-layout-editor,.online-panel,.online-field) button:disabled{background:rgba(65,71,62,.45)!important;color:#b8baac!important;opacity:1!important;border-color:#929b7440!important;cursor:default}
+.living-shell :is(.decision-modal,.field-layout-editor,.online-panel,.online-field) button:not(:disabled):hover,.living-shell .camera-zone-controls button[aria-pressed=true]{background:rgba(95,114,70,.85)!important}
+.living-shell .decision-modal .primary,.living-shell .city-rail-tabs button[aria-pressed=true]{background:rgba(83,108,57,.85)!important;color:#fff7dd!important}
+.living-shell .decision-content{scrollbar-color:#899676 #222c2580!important}
+.living-shell .decision-modal{box-shadow:0 15px 45px #07100bb0!important;overflow:auto}
+.living-shell .decision-modal p{font-family:var(--card-body);line-height:1.3}
+.living-shell .decision-modal h2,.living-shell .decision-modal h3{font-family:var(--card-title);font-weight:400;line-height:1.12}
+.living-shell .system-menu{padding:22px 24px}
+.living-shell .system-menu h2{margin:3px 42px 12px 0;font-size:30px}
+.living-shell .system-menu p{margin:8px 0;font:14px/1.3 var(--card-body)}
+.living-shell .system-menu .system-eyebrow{font:12px/1.2 var(--card-body);letter-spacing:.04em;margin:0 0 4px;color:var(--ui-muted)!important}
+.living-shell .system-actions{gap:8px;margin:14px 0}
+.living-shell .system-actions button{min-height:40px;padding:9px 12px;font:14px/1.2 var(--card-body)}
+.living-shell .system-menu>button:not(.system-close){font:13px/1.2 var(--card-body);padding:8px 10px}
+.living-shell .system-help{padding-top:8px;margin-top:12px;border-color:var(--ui-edge)}
+.living-shell .system-help summary{font:22px/1.15 var(--card-title);padding:4px 0}
+.living-shell .system-help dl{margin:8px 0 0;font:13px/1.3 var(--card-body)}
+.living-shell .system-help dt{margin-top:8px}.living-shell .system-help dd{margin:2px 0 0}
+.living-shell .event-menu-card h3,.living-shell .online-event h3{margin:0 0 6px;line-height:1.1}
+.living-shell .event-menu-card p,.living-shell .online-event p{margin:5px 0;line-height:1.25}
+.living-shell .event-menu-card,.living-shell .online-event{padding:12px 16px}
+.living-shell .event-menu-card.is-ready,.living-shell .online-event.is-ready{border-color:#a0bd72!important;box-shadow:0 0 0 1px #a0bd7280}
+.event-points,.event-required-card{display:inline-flex;align-items:center;gap:4px;vertical-align:middle}.event-points{white-space:nowrap;font-weight:700}.event-kind-icon{width:19px;height:19px;flex:none;color:#dfd6b9}.event-required-card{gap:5px}
+.living-shell .production-tooltip{background:var(--ui-panel)!important;color:var(--ui-text)!important;border-color:var(--ui-edge)!important}
+.living-shell .production-tooltip :is(h2,p,b,span,i,.zone-reward,.zone-capacity,.zone-unavailable,.zone-discount){color:var(--ui-text)!important;border-color:var(--ui-edge)!important}
+.living-shell .production-tooltip .original-icon{background:transparent!important}
+.living-shell .living-zone-badge .zone-summary{background:var(--ui-panel)!important;color:var(--ui-text)!important;border-color:var(--ui-edge)!important}
+.living-shell .living-zone-badge :is(.zone-value b,.zone-operator,.zone-reward,.zone-lock){color:var(--ui-text)!important}
+.living-shell .living-zone-badge:not(.is-hovered):not(:focus-visible)[data-locked=true] .zone-summary{background:transparent!important}
+.living-shell .camera-zone-controls button span,.living-shell .field-actions button span{background:var(--ui-panel)!important;color:var(--ui-text)!important;border-color:var(--ui-edge)!important}
+.living-shell .map-toolbar{position:absolute;right:18px;top:50%;transform:translateY(-50%);z-index:115;display:flex;flex-direction:column;gap:16px;width:44px}
+.living-shell .map-toolbar .camera-zone-controls,.living-shell .map-toolbar .field-actions{position:static;transform:none;display:flex;flex-direction:column;gap:8px;width:44px}
+.living-shell .map-toolbar button{position:relative;display:grid;place-items:center;width:44px;height:44px;min-width:44px;padding:10px;border-radius:11px}
+.living-shell .map-toolbar button svg{width:24px;height:24px}
+.living-shell .field-actions button span{position:absolute;right:calc(100% + 10px);top:50%;transform:translateY(-50%);padding:7px 10px;white-space:nowrap;border:1px solid var(--ui-edge);border-radius:6px;font:14px/1.25 var(--card-body);opacity:0;pointer-events:none}
+.living-shell .field-actions button:hover span,.living-shell .field-actions button:focus-visible span{opacity:1}
+.living-shell .field-actions .has-action:after{position:absolute;right:-3px;top:-3px;margin:0;width:8px;height:8px;background:#e17968;border:2px solid #253026}
+@media(max-height:650px){.living-shell .map-toolbar{gap:10px}.living-shell .map-toolbar button{width:38px;height:38px;min-width:38px;padding:7px}.living-shell .map-toolbar .camera-zone-controls,.living-shell .map-toolbar .field-actions{gap:5px}}

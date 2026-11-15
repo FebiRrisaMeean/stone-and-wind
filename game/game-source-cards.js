@@ -1,5 +1,5 @@
-import {loadSourceCard,loadCardFonts,preloadCardAssets,sourceCardComponent} from './source-card-components.js?v=pages37-dense-forest';
-import {SOURCE_CARD_IDS} from './source-card-map.js?v=pages37-dense-forest';
+import {loadSourceCard,loadCardFonts,preloadCardAssets,sourceCardComponent} from './source-card-components.js?v=pages38-dark-ui';
+import {SOURCE_CARD_IDS} from './source-card-map.js?v=pages38-dark-ui';
 
 const ready=new Map(),pending=new Map();
 // Bound the initial hand + meadow fan-out and retry temporary network/decode failures

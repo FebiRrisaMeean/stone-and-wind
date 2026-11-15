@@ -1,3 +1,4 @@
+import {navigationFootprint} from './city-footprints.js?v=pages38-dark-ui';
 // Orthographic camera calculations shared by zone presets and free-camera bounds
 // All world positions are on the XZ ground plane, elevation is Y
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -64,3 +65,16 @@ export function productionCameraBounds(locations=[]){
  return{minX:Math.min(...points.map(p=>p.x))-2.3,maxX:Math.max(...points.map(p=>p.x))+2.3,minZ:Math.min(...points.map(p=>p.z))-2.3,maxZ:Math.max(...points.map(p=>p.z))+2.3,minY:0,maxY:3.8};
 }
 export const PRODUCTION_CAMERA_PADDING={top:120,bottom:230,left:140,right:200,pitch:1.18};
+
+// Frame the settled neighbourhood; full territory is reserved for building placement
+export function cityCameraBounds(city,homes=[],fullCity=false){
+ if(fullCity)return {...city,minY:0,maxY:5};
+ const envelopes=homes.filter(o=>Number.isFinite(o.x)&&Number.isFinite(o.z)).map(o=>navigationFootprint(o.cardName??o.name,o.x,o.z,1,o.rotation??0)??{minX:o.x-1.5,maxX:o.x+1.5,minZ:o.z-1.5,maxZ:o.z+1.5});
+ const cx=envelopes.length?(Math.min(...envelopes.map(b=>b.minX))+Math.max(...envelopes.map(b=>b.maxX)))/2:(city.minX+city.maxX)/2;
+ const cz=envelopes.length?(Math.min(...envelopes.map(b=>b.minZ))+Math.max(...envelopes.map(b=>b.maxZ)))/2:(city.minZ+city.maxZ)/2;
+ const halfX=Math.min((city.maxX-city.minX)/2,Math.max(7,envelopes.length?Math.max(...envelopes.map(b=>b.maxX))-cx+1.5:7));
+ const halfZ=Math.min((city.maxZ-city.minZ)/2,Math.max(5.5,envelopes.length?Math.max(...envelopes.map(b=>b.maxZ))-cz+1.5:5.5));
+ const x=clamp(cx,city.minX+halfX,city.maxX-halfX),z=clamp(cz,city.minZ+halfZ,city.maxZ-halfZ);
+ return{minX:x-halfX,maxX:x+halfX,minZ:z-halfZ,maxZ:z+halfZ,minY:0,maxY:5};
+}
+export const CITY_CAMERA_PADDING={top:100,bottom:190,left:120,right:75,pitch:1.12};

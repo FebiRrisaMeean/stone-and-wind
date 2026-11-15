@@ -1,5 +1,5 @@
-import {SOURCE_CARD_IDS} from './source-card-map.js?v=pages37-dense-forest';
-import {renderIcon} from './original-icons.js?v=pages37-dense-forest';
+import {SOURCE_CARD_IDS} from './source-card-map.js?v=pages38-dark-ui';
+import {renderIcon} from './original-icons.js?v=pages38-dark-ui';
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 // One button per played instance, including residents sharing a city space

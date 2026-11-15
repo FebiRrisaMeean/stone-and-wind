@@ -1,6 +1,6 @@
 import * as T from '../../vendor/three.module.js'
-import {part, add, ell, tube, leaf, sculpt, surface, batch} from './geometry.js?v=pages37-dense-forest'
-import {LOCAL_CHARACTER_RECIPES, LOCAL_CHARACTER_NAMES} from './recipes.js?v=pages37-dense-forest'
+import {part, add, ell, tube, leaf, sculpt, surface, batch} from './geometry.js?v=pages38-dark-ui'
+import {LOCAL_CHARACTER_RECIPES, LOCAL_CHARACTER_NAMES} from './recipes.js?v=pages38-dark-ui'
 export {LOCAL_CHARACTER_RECIPES, LOCAL_CHARACTER_NAMES}
 
 const C={dark:'#262924', pink:'#b67a69', cream:'#d9cba8', wood:'#755332', gold:'#b68d37', page:'#d5caa5'}

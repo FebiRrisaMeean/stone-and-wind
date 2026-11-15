@@ -1,4 +1,4 @@
-import {optimizationSettings} from './optimization-settings.js?v=pages37-dense-forest'
+import {optimizationSettings} from './optimization-settings.js?v=pages38-dark-ui'
 import * as T from '../vendor/three.module.js'
 import {mergeGeometries} from '../vendor/addons/utils/BufferGeometryUtils.js'
 // Batch only an explicitly static production-site subtree, retaining its semantic groups
