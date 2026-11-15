@@ -1,10 +1,10 @@
-import {createMovementWorld} from './movement.js?v=pages43-forest-trails';
-import {WORLD} from './data.js?v=pages43-forest-trails';
-import {Card,Location} from './everdell/engine.js?v=pages43-forest-trails';
-import {fieldTreePosition,productionLocationCoords,PRODUCTION_CLEARING,LIVING_CITIES,LIVING_TREE,MARKET_POSITIONS,BASIC_POSITIONS,FOREST_POSITIONS,COMMON_POSITIONS,CITY_CAMPS,CITY_FOREST_GATEWAYS,cityCardEntries,reconcileCityLayout} from './living-board-state.js?v=pages43-forest-trails';
-import {CARD_NAMES,LOCATION_NAMES,LOCATION_TEXT,EVENT_NAMES,SEASONS} from './everdell/locale.js?v=pages43-forest-trails';
-import {cityWorkerMarker,zoneBadge,storedResources} from './living-ui.js?v=pages43-forest-trails';
-import {workerSeatPosition} from './production-props.js?v=pages43-forest-trails';
+import {createMovementWorld} from './movement.js?v=pages44-elder';
+import {WORLD} from './data.js?v=pages44-elder';
+import {Card,Location} from './everdell/engine.js?v=pages44-elder';
+import {fieldTreePosition,productionLocationCoords,PRODUCTION_CLEARING,LIVING_CITIES,LIVING_TREE,MARKET_POSITIONS,BASIC_POSITIONS,FOREST_POSITIONS,COMMON_POSITIONS,CITY_CAMPS,CITY_FOREST_GATEWAYS,cityCardEntries,reconcileCityLayout} from './living-board-state.js?v=pages44-elder';
+import {CARD_NAMES,LOCATION_NAMES,LOCATION_TEXT,EVENT_NAMES,SEASONS} from './everdell/locale.js?v=pages44-elder';
+import {cityWorkerMarker,zoneBadge,storedResources} from './living-ui.js?v=pages44-elder';
+import {workerSeatPosition} from './production-props.js?v=pages44-elder';
 const key=w=>w.location?'l:'+w.location:w.event?'e:'+w.event:'c:'+w.playedCard?.cardOwnerId+':'+w.playedCard?.cardName;
 // Reads only a private-per-seat public projection. No engine restore and no invented cards
 export function onlineDrawing(view,layout={},previous=null){

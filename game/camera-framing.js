@@ -1,4 +1,4 @@
-import {navigationFootprint} from './city-footprints.js?v=pages43-forest-trails';
+import {navigationFootprint} from './city-footprints.js?v=pages44-elder';
 // Orthographic camera calculations shared by zone presets and free-camera bounds
 // All world positions are on the XZ ground plane, elevation is Y
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));

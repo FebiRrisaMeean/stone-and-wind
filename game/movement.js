@@ -1,4 +1,4 @@
-import {TROOPS,WORLD} from './data.js?v=pages43-forest-trails';
+import {TROOPS,WORLD} from './data.js?v=pages44-elder';
 
 const WORKER=TROOPS.worker;
 const BASE_VISION=7.8;

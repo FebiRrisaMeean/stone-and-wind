@@ -1,4 +1,4 @@
-import {renderIcon} from './original-icons.js?v=pages43-forest-trails';
+import {renderIcon} from './original-icons.js?v=pages44-elder';
 const resourceIcon=key=>renderIcon(String(key).toLowerCase(),{size:24});
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const names={TWIG:'Ветки',RESIN:'Смола',PEBBLE:'Камушки',BERRY:'Ягоды',VP:'Очки',CARD:'Карты'};

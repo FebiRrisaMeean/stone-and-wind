@@ -1,4 +1,4 @@
-import {mountGame} from './everdell-main.js?v=pages43-forest-trails';
+import {mountGame} from './everdell-main.js?v=pages44-elder';
 const node=document.querySelector('[data-game-host]');
 if(node&&!node.dataset.mounted){
  node.dataset.mounted='true';

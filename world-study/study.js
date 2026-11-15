@@ -1,7 +1,7 @@
 import * as T from '../vendor/three.module.js'
-import {CARD_STYLE_SAMPLE_NAMES,createCardStyleSample,animateCardStyleSample,createCardStyleClearing} from '../game/card-style-models.js?v=pages43-forest-trails'
-import {prepareGameCard,gameCardFace} from '../game/game-source-cards.js?v=pages43-forest-trails'
-import {SOURCE_CARD_NAMES} from '../game/source-card-map.js?v=pages43-forest-trails'
+import {CARD_STYLE_SAMPLE_NAMES,createCardStyleSample,animateCardStyleSample,createCardStyleClearing} from '../game/card-style-models.js?v=pages44-elder'
+import {prepareGameCard,gameCardFace} from '../game/game-source-cards.js?v=pages44-elder'
+import {SOURCE_CARD_NAMES} from '../game/source-card-map.js?v=pages44-elder'
 
 const descriptions={Architect:'Бобр, фиолетовый берет, светлая морда, чертёж и свитки',Bard:'Жёлтая птица, тёмные перья, лютня и движение крыла',Doctor:'Колючий учёный, очки, зелёный шарф, перо и синяя ягода',Crane:'Деревянная кабина, решётчатая стрела, блок и подвешенный груз','Resin Refinery':'Живой ствол, сросшиеся корни, грибные полки и янтарная смола','Clock Tower':'Каменная башня, щепяная крыша, часы и водяное колесо'}
 const host=document.querySelector('#scene'),scene=new T.Scene();scene.background=new T.Color('#536158');scene.fog=new T.FogExp2('#536158',.055)

@@ -1,4 +1,4 @@
-import {footprintAt,hullsOverlap,footprintFitsBounds,isBuildingFootprint,navigationFootprint,navigationPassageClear,normalizeCityRotation} from './city-footprints.js?v=pages43-forest-trails';
+import {footprintAt,hullsOverlap,footprintFitsBounds,isBuildingFootprint,navigationFootprint,navigationPassageClear,normalizeCityRotation} from './city-footprints.js?v=pages44-elder';
 // Presentation positions never change engine costs, turns, city capacity or card effects
 // v2 keeps the accepted single-ring composition and its saved editor positions
 // Saved v2 coordinates are authoritative, including deliberate overlap with the crown

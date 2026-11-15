@@ -1,8 +1,8 @@
-import {T} from './card-style-primitives.js?v=pages43-forest-trails'
-import {createCardStyleSample,animateCardStyleSample} from './card-style-models.js?v=pages43-forest-trails'
-import {TIMBER_BUILDERS} from './architecture-timber.js?v=pages43-forest-trails'
-import {STONE_BUILDERS} from './architecture-stone.js?v=pages43-forest-trails'
-import {batchStaticHierarchy} from './local-sculpt/mesh-optimizer.js?v=pages43-forest-trails'
+import {T} from './card-style-primitives.js?v=pages44-elder'
+import {createCardStyleSample,animateCardStyleSample} from './card-style-models.js?v=pages44-elder'
+import {TIMBER_BUILDERS} from './architecture-timber.js?v=pages44-elder'
+import {STONE_BUILDERS} from './architecture-stone.js?v=pages44-elder'
+import {batchStaticHierarchy} from './local-sculpt/mesh-optimizer.js?v=pages44-elder'
 
 const approved=new Set(['Crane','Resin Refinery','Clock Tower'])
 const builders={...TIMBER_BUILDERS,...STONE_BUILDERS}

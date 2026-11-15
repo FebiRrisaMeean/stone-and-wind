@@ -1,10 +1,11 @@
 import * as T from '../vendor/three.module.js'
 import {GLTFLoader} from '../vendor/addons/loaders/GLTFLoader.js'
-import {WOODLAND_PATHS,woodlandPlacements,productionRoadSegments} from './woodland-layout.js?v=pages43-forest-trails'
-import {forestCullingEnabled,woodlandCells,woodlandInstanceCells,FOREST_CELL_SIZE} from './woodland-cells.js?v=pages43-forest-trails'
+import {WOODLAND_PATHS,woodlandPlacements,productionRoadSegments} from './woodland-layout.js?v=pages44-elder'
+import {forestCullingEnabled,woodlandCells,woodlandInstanceCells,FOREST_CELL_SIZE} from './woodland-cells.js?v=pages44-elder'
 const templates=new Map(),materials=new Map()
+const elderV2=new URLSearchParams(globalThis.location?.search??'').get('elderModel')!=='classic'
 await Promise.all(['elder','oak','spruce','shrub'].map(async name=>{
- try{const file=name!=='elder'&&new URLSearchParams(globalThis.location?.search??'').get('forestDensity')!=='classic'?name+'-dense':name;const gltf=await new GLTFLoader().loadAsync(new URL(`./assets/night-environment/${file}.glb`,import.meta.url).href)
+ try{const file=name==='elder'&&elderV2?'elder-v2':name!=='elder'&&new URLSearchParams(globalThis.location?.search??'').get('forestDensity')!=='classic'?name+'-dense':name;const gltf=await new GLTFLoader().loadAsync(new URL(`./assets/night-environment/${file}.glb`,import.meta.url).href)
   const scene=gltf.scene;scene.updateMatrixWorld(true);const box=new T.Box3().setFromObject(scene),size=box.getSize(new T.Vector3()),center=box.getCenter(new T.Vector3()),normalizer=new T.Matrix4().makeScale(1/size.y,1/size.y,1/size.y).multiply(new T.Matrix4().makeTranslation(-center.x,-box.min.y,-center.z)),parts=[]
   scene.traverse(o=>{if(!o.isMesh)return;const geo=o.geometry.clone();geo.applyMatrix4(normalizer.clone().multiply(o.matrixWorld));geo.userData.sharedAsset=true;parts.push({geometry:geo,material:o.material})});templates.set(name,parts)
  }catch(e){console.warn('Woodland asset unavailable: '+name,e)}
@@ -21,7 +22,7 @@ function seasonalMaterial(base,kind,season){
   }
   shader.vertexShader='varying float forestUp;\n'+shader.vertexShader.replace('#include <beginnormal_vertex>','#include <beginnormal_vertex>\nforestUp=objectNormal.y;')
   shader.fragmentShader='varying float forestUp;\n'+shader.fragmentShader.replace('#include <map_fragment>',`#include <map_fragment>
-   ${hero?`
+   ${hero&&!elderV2?`
    float crown=smoothstep(.30,.53,elderPosition.y);
    float neutral=1.0-smoothstep(.08,.24,max(max(diffuseColor.r,diffuseColor.g),diffuseColor.b)-min(min(diffuseColor.r,diffuseColor.g),diffuseColor.b));
    float notBark=1.0-smoothstep(1.13,1.48,diffuseColor.r/max(diffuseColor.g,.001));
@@ -35,7 +36,7 @@ function seasonalMaterial(base,kind,season){
    ${winter&&hero?`float snowCrown=smoothstep(.40,.64,elderPosition.y);float drift=.78+.08*sin(elderPosition.x*12.0+elderPosition.z*8.0);diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.79,.86,.85),snowCrown*drift*foliageMask);`:winter?'diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.79,.86,.85),smoothstep(.18,.8,forestUp)*.88);':''}
   `)
  }
- m.customProgramCacheKey=()=>`forest-${kind}-${season}-${hero}`;materials.set(key,m);return m
+ m.customProgramCacheKey=()=>`forest-${kind}-${season}-${hero}-${elderV2}`;materials.set(key,m);return m
 }
 export function createWoodlandAsset(kind,season='SUMMER',height=1){
  const parts=templates.get(kind);if(!parts)return null
