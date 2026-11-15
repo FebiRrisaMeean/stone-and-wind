@@ -1,27 +1,27 @@
-import {seasonConfirmation} from './season-confirmation.js?v=pages30-production';
-import {mountOnlineGame} from './online-game.js?v=pages30-production';
-import {applyCityScene} from './city-scene.js?v=pages30-production';
-import {cityRailMarkup,bindCityRail} from './city-icon-rail.js?v=pages30-production';
-import {finalScoringPlan,createFinalScoring} from './final-scoring.js?v=pages30-production';
-import {chooseBotCommand,paymentFitsCity} from './bot-policy.js?v=pages30-production';
-import {BOT_SAVE_KEYS,chooseInitialPlayer,createBotSession,decisionPlayerId,humanCanAct,humanOwnsDecision,applySessionCommand} from './bot-session.js?v=pages30-production';
-import {cameraControls,cardPreviewPlacement} from './field-ui.js?v=pages30-production';
-import {renderIcon} from './original-icons.js?v=pages30-production';
-import {captureAction,bindAction,isActionForGame,restoreAction,recoverPendingAction} from './action-checkpoint.js?v=pages30-production';
-import {resourceChoiceModel,changeResourceChoice,resourceChoiceMarkup,decisionResources,decisionValue,closeIcon} from './decision-ui.js?v=pages30-production';
-import {prepareGameCard,gameCardReady,gameCardFace} from './game-source-cards.js?v=pages30-production';
-import {workerSeatPosition} from './production-props.js?v=pages30-production';
-import {SOURCE_CARD_NAMES} from './source-card-map.js?v=pages30-production';
-import {createHandInteraction} from './hand-interaction.js?v=pages30-production';
-import {createSharedSeasonState,normalizeSharedGame,stepSharedGame,requestSharedSeason,sharedSeason,canActShared,forecastNextSeason} from './shared-seasons.js?v=pages30-production';
-import {zoneBadge,zoneDetail,supplyStatus,storedResources,cityWorkerMarker,cityWorkerDetail,lockIcon,SPECIES} from './living-ui.js?v=pages30-production';
-import {LIVING_CITIES,CITY_CAMPS,CITY_LAYOUT_VERSION,migrateCityLayout,LIVING_TREE,MARKET_POSITIONS,BASIC_POSITIONS,FOREST_POSITIONS,COMMON_POSITIONS,inCity,cityCardEntries,queuedCityPlacements,validCityPosition,reconcileCityLayout,freeCityPosition} from './living-board-state.js?v=pages30-production';
-import {cardArt,portraitStyle,placeArt,resourceIcon,cardTypeIcon} from './everdell/art.js?v=pages30-production';
-import {createGame,stepGame,serializeGame,restoreGame,getPaymentOptions as enginePaymentOptions,getScores,Card,Location,Event,CardName,LocationOccupancy,GameInputType,Season,CardType,PlayerStatus} from './everdell/engine.js?v=pages30-production';
-import {CARD_NAMES,CARD_TEXT,LOCATION_NAMES,LOCATION_TEXT,EVENT_NAMES,EVENT_TEXT,SEASONS,CARD_TYPES,RESOURCE_NAMES,translateText} from './everdell/locale.js?v=pages30-production';
-import {createMovementWorld,moveWorker} from './movement.js?v=pages30-production';
-import {WORLD} from './data.js?v=pages30-production';
-import {WorldView} from './world.js?v=pages30-production';
+import {seasonConfirmation} from './season-confirmation.js?v=pages31-wheel';
+import {mountOnlineGame} from './online-game.js?v=pages31-wheel';
+import {applyCityScene} from './city-scene.js?v=pages31-wheel';
+import {cityRailMarkup,bindCityRail} from './city-icon-rail.js?v=pages31-wheel';
+import {finalScoringPlan,createFinalScoring} from './final-scoring.js?v=pages31-wheel';
+import {chooseBotCommand,paymentFitsCity} from './bot-policy.js?v=pages31-wheel';
+import {BOT_SAVE_KEYS,chooseInitialPlayer,createBotSession,decisionPlayerId,humanCanAct,humanOwnsDecision,applySessionCommand} from './bot-session.js?v=pages31-wheel';
+import {cameraControls,cardPreviewPlacement} from './field-ui.js?v=pages31-wheel';
+import {renderIcon} from './original-icons.js?v=pages31-wheel';
+import {captureAction,bindAction,isActionForGame,restoreAction,recoverPendingAction} from './action-checkpoint.js?v=pages31-wheel';
+import {resourceChoiceModel,changeResourceChoice,resourceChoiceMarkup,decisionResources,decisionValue,closeIcon} from './decision-ui.js?v=pages31-wheel';
+import {prepareGameCard,gameCardReady,gameCardFace} from './game-source-cards.js?v=pages31-wheel';
+import {workerSeatPosition} from './production-props.js?v=pages31-wheel';
+import {SOURCE_CARD_NAMES} from './source-card-map.js?v=pages31-wheel';
+import {createHandInteraction} from './hand-interaction.js?v=pages31-wheel';
+import {createSharedSeasonState,normalizeSharedGame,stepSharedGame,requestSharedSeason,sharedSeason,canActShared,forecastNextSeason} from './shared-seasons.js?v=pages31-wheel';
+import {zoneBadge,zoneDetail,supplyStatus,storedResources,cityWorkerMarker,cityWorkerDetail,lockIcon,SPECIES} from './living-ui.js?v=pages31-wheel';
+import {LIVING_CITIES,CITY_CAMPS,CITY_LAYOUT_VERSION,migrateCityLayout,LIVING_TREE,MARKET_POSITIONS,BASIC_POSITIONS,FOREST_POSITIONS,COMMON_POSITIONS,inCity,cityCardEntries,queuedCityPlacements,validCityPosition,reconcileCityLayout,freeCityPosition} from './living-board-state.js?v=pages31-wheel';
+import {cardArt,portraitStyle,placeArt,resourceIcon,cardTypeIcon} from './everdell/art.js?v=pages31-wheel';
+import {createGame,stepGame,serializeGame,restoreGame,getPaymentOptions as enginePaymentOptions,getScores,Card,Location,Event,CardName,LocationOccupancy,GameInputType,Season,CardType,PlayerStatus} from './everdell/engine.js?v=pages31-wheel';
+import {CARD_NAMES,CARD_TEXT,LOCATION_NAMES,LOCATION_TEXT,EVENT_NAMES,EVENT_TEXT,SEASONS,CARD_TYPES,RESOURCE_NAMES,translateText} from './everdell/locale.js?v=pages31-wheel';
+import {createMovementWorld,moveWorker} from './movement.js?v=pages31-wheel';
+import {WORLD} from './data.js?v=pages31-wheel';
+import {WorldView} from './world.js?v=pages31-wheel';
 
 const getPaymentOptions=(game,name,source,index)=>enginePaymentOptions(game,name,source,index).filter(p=>paymentFitsCity(game,name,p));
 const {game:SAVE,layout:LAYOUT_SAVE,shared:SHARED_SAVE,teams:TEAMS_SAVE,action:ACTION_SAVE,session:SESSION_SAVE}=BOT_SAVE_KEYS;
@@ -66,6 +66,7 @@ export function mountGame(root){
  root.innerHTML=`<div class="game-shell placement-shell everdell-shell living-shell"><div class="world-stage" id="world-stage" tabindex="-1" aria-label="Живой Эверделл"></div><aside id="player-stock" class="player-stock" data-camera-ui aria-label="Ваш запас"></aside><aside id="city-icon-rail" class="city-icon-rail" data-camera-ui aria-label="Карты города"></aside><div class="hand-fan" id="hand-fan" data-camera-ui aria-label="Карты в руке"></div><aside id="object-detail" class="object-detail" data-camera-ui hidden></aside><div id="placement-caption" class="placement-caption" data-camera-ui hidden></div>${cameraControls()}<nav class="field-actions" data-camera-ui aria-label="Действия партии"><button data-field="events">Задания</button><button data-field="season">Завершить сезон</button><button data-field="opponent-stock">Запас соперника</button></nav><button type="button" class="system-menu-toggle" data-system="open" data-camera-ui aria-label="Меню игры" aria-haspopup="dialog">☰ <span>Меню</span></button><div id="final-scoring-panel" class="final-scoring-panel" data-camera-ui hidden></div><div id="decision-layer"></div><aside id="bot-status" class="bot-status" data-camera-ui role="status" hidden></aside><div class="toast" id="toast" role="status"></div><span class="sr-only" id="turn-announcement" aria-live="polite"></span></div>`;
  const $=id=>root.querySelector('#'+id);
  const world=new WorldView($('world-stage'),pick,hover);
+ world.onPlacementWheel=e=>{if(!placement||!Card.fromName(placement.name).isConstruction)return false;if(e.deltaY)rotatePlacement(Math.sign(e.deltaY));return true;};
  const handInteraction=createHandInteraction($('hand-fan'),hideDetail);
  world.onCameraPresetChange=()=>{hideDetail();if(world.cameraPresetId==='own'||world.cameraPresetId==='opponent'){cityRailOwner=world.cameraPresetId==='own'?playerIndex():1-playerIndex();renderCityRail();}for(const button of root.querySelectorAll('[data-camera-zone]'))button.setAttribute('aria-pressed',String(button.dataset.cameraZone===world.cameraPresetId));};
  const player=()=>game.getPlayer(session.humanPlayerId);
@@ -233,7 +234,7 @@ export function mountGame(root){
  function renderPlacementControls(){
   const host=$('placement-caption');if(!placement){host.hidden=true;return;}
   const construction=Card.fromName(placement.name).isConstruction;
-  host.innerHTML='<strong>'+esc(cn(placement.name))+'</strong><span>'+ (placement.owner===playerIndex()?'Выберите место в своём городе':'Выберите место в городе соперника')+'</span><div class="placement-actions">'+(construction?'<button type="button" data-placement="left" aria-label="Повернуть влево" title="Shift+R">↶</button><output aria-label="Угол здания">'+Math.round((placement.rotation??0)*180/Math.PI)+'°</output><button type="button" data-placement="right" aria-label="Повернуть вправо" title="R">↷</button>':'')+'<button type="button" data-placement="cancel">Отмена</button></div>';
+  host.innerHTML='<strong>'+esc(cn(placement.name))+'</strong><span>'+ (placement.owner===playerIndex()?'Выберите место в своём городе':'Выберите место в городе соперника')+'</span><div class="placement-actions">'+(construction?'<span>Колесо мыши — поворот</span>':'')+'<button type="button" data-placement="cancel">Отмена</button></div>';
   host.hidden=false;
  }
  function rotatePlacement(direction){
@@ -473,7 +474,7 @@ export function mountGame(root){
   if(immediate){world.target.copy(world.desiredTarget);world.yaw=world.desiredYaw;world.pitch=world.desiredPitch;world.zoom=world.desiredZoom;world.updateCamera(1);}
  }
  function click(e){
-  const place=e.target.closest('[data-placement]')?.dataset.placement;if(place){if(place==='cancel')cancelAction();else rotatePlacement(place==='left'?-1:1);return;}
+  const place=e.target.closest('[data-placement]')?.dataset.placement;if(place){if(place==='cancel')cancelAction();return;}
   const field=e.target.closest('[data-field]')?.dataset.field;
   if(field){if(field==='close'){fieldPanel=null;render();return;}if(field==='confirm-season'){fieldPanel=null;passSeason(session.humanPlayerId);render();return;}if(placement||payment||humanDecision()||finalRun?.active)return;stopBot();fieldPanel=field;renderDecision();return;}
   const marketCard=e.target.closest('[data-market-card]');if(marketCard){const index=Number(marketCard.dataset.marketCard),name=game.meadowCards[index];fieldPanel=null;renderDecision();beginPlacement(name,'MEADOW',index);return;}

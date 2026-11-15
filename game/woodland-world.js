@@ -1,12 +1,12 @@
-import {createBerryProductionAsset} from './production-assets.js?v=pages30-production';
-import {createSeasonalWeather} from './seasonal-weather.js?v=pages30-production';
-import {createWorkerCharacter} from './local-sculpt/worker-characters.js?v=pages30-production';
-import {batchProductionSite} from './static-batching.js?v=pages30-production';
-import {addWoodlandAssets,addWoodlandPaths,createWoodlandAsset} from './woodland-assets.js?v=pages30-production';
-import {addProductionProps} from './production-props.js?v=pages30-production';
-import {seasonVisuals} from './seasonal-visuals.js?v=pages30-production';
+import {createBerryProductionAsset} from './production-assets.js?v=pages31-wheel';
+import {createSeasonalWeather} from './seasonal-weather.js?v=pages31-wheel';
+import {createWorkerCharacter} from './local-sculpt/worker-characters.js?v=pages31-wheel';
+import {batchProductionSite} from './static-batching.js?v=pages31-wheel';
+import {addWoodlandAssets,addWoodlandPaths,createWoodlandAsset} from './woodland-assets.js?v=pages31-wheel';
+import {addProductionProps} from './production-props.js?v=pages31-wheel';
+import {seasonVisuals} from './seasonal-visuals.js?v=pages31-wheel';
 import * as T from '../vendor/three.module.js';
-import {WORLD} from './data.js?v=pages30-production';
+import {WORLD} from './data.js?v=pages31-wheel';
 
 // All geometry is local to the miniature so world-space placement and picking stay unchanged
 const bark=0x765039,moss=0x587c43,cream=0xf2ddac,soil=0x77654b;

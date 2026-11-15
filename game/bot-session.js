@@ -1,5 +1,5 @@
-import {serializeGame,restoreGame} from './everdell/engine.js?v=pages30-production';
-import {canActShared,stepSharedGame,requestSharedSeason} from './shared-seasons.js?v=pages30-production';
+import {serializeGame,restoreGame} from './everdell/engine.js?v=pages31-wheel';
+import {canActShared,stepSharedGame,requestSharedSeason} from './shared-seasons.js?v=pages31-wheel';
 
 // A bot party never reads or overwrites the previous local two-player party
 export const BOT_SAVE_KEYS=Object.freeze({

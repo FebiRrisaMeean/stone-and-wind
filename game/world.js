@@ -1,17 +1,17 @@
-import {woodlandRelief} from './woodland-layout.js?v=pages30-production';
-import {optimizationSettings} from './optimization-settings.js?v=pages30-production';
-import {createPerformanceProbe,performanceProbeEnabled,installPerformancePanel} from './performance-probe.js?v=pages30-production';
-import {animateWorkerCharacter} from './local-sculpt/worker-characters.js?v=pages30-production';
-import {RenderLoop,renderBudgetEnabled} from './render-budget.js?v=pages30-production';
-import {stepNavigation} from './city-navigation.js?v=pages30-production';
-import {fitLivingZone,constrainPresetFrame,livingCameraLimits,constrainLivingTarget} from './camera-framing.js?v=pages30-production';
-import {seasonVisuals,addSeasonGroundDetails} from './seasonal-visuals.js?v=pages30-production';
+import {woodlandRelief} from './woodland-layout.js?v=pages31-wheel';
+import {optimizationSettings} from './optimization-settings.js?v=pages31-wheel';
+import {createPerformanceProbe,performanceProbeEnabled,installPerformancePanel} from './performance-probe.js?v=pages31-wheel';
+import {animateWorkerCharacter} from './local-sculpt/worker-characters.js?v=pages31-wheel';
+import {RenderLoop,renderBudgetEnabled} from './render-budget.js?v=pages31-wheel';
+import {stepNavigation} from './city-navigation.js?v=pages31-wheel';
+import {fitLivingZone,constrainPresetFrame,livingCameraLimits,constrainLivingTarget} from './camera-framing.js?v=pages31-wheel';
+import {seasonVisuals,addSeasonGroundDetails} from './seasonal-visuals.js?v=pages31-wheel';
 import * as T from '../vendor/three.module.js';
-import {renderLivingBoard,updateLivingLabels,animateLivingBoard,refreshLivingHover,renderLivingPlacementPreview} from './living-world.js?v=pages30-production';
-import {resourceIcon} from './everdell/art.js?v=pages30-production';
-import {FACTIONS,TROOPS,WORLD,BUILDINGS} from './data.js?v=pages30-production';
-import {count,visible,known,moveRange} from './movement.js?v=pages30-production';
-import {woodlandCottage,ancientTree,woodlandFigure,woodlandSource,woodlandLocation,addWoodlandTerrain,animateWoodland} from './woodland-world.js?v=pages30-production';
+import {renderLivingBoard,updateLivingLabels,animateLivingBoard,refreshLivingHover,renderLivingPlacementPreview} from './living-world.js?v=pages31-wheel';
+import {resourceIcon} from './everdell/art.js?v=pages31-wheel';
+import {FACTIONS,TROOPS,WORLD,BUILDINGS} from './data.js?v=pages31-wheel';
+import {count,visible,known,moveRange} from './movement.js?v=pages31-wheel';
+import {woodlandCottage,ancientTree,woodlandFigure,woodlandSource,woodlandLocation,addWoodlandTerrain,animateWoodland} from './woodland-world.js?v=pages31-wheel';
 
 const PALETTE={plain:0x7f9857,meadow:0x9eae69,forest:0x617d48,road:0xc7b589,rock:0x9da186,water:0x79b2a7,mist:0x506d59};
 const TEAM=[0x617baf,0x4f8c73,0x9b8058,0x977e9d];
@@ -139,11 +139,11 @@ export class WorldView{
    const obj=this.pickAt(e);this.setHoveredUnit(obj?.type==='unit'?obj.id:null);this.hoverMarker.visible=this.state?.mode!=='placement'&&!!obj&&obj.type==='ground'&&obj.x>=0&&obj.z>=0&&obj.x<WORLD.width&&obj.z<WORLD.height&&!this.menu&&!this.inputPaused;if(this.hoverMarker.visible){this.hoverMarker.position.set(obj.x,this.heightAt(obj.x,obj.z)+.12,obj.z);this.hoverMarker.material.color.setHex(this.build&&!this.canBuildAt(obj.x,obj.z)?0xc88c7a:0xffe7b1);}this.onHover?.(obj);};
   this.onUp=e=>{const tracked=this.pointers.get(e.pointerId);this.pointers.delete(e.pointerId);this.canvas.style.cursor='grab';if(!this.inputPaused&&tracked&&!tracked.moved&&tracked.button===0&&this.pointers.size===0){const obj=this.pickAt(e);if(obj)this.onPick?.(obj);}try{this.canvas.releasePointerCapture(e.pointerId);}catch{}};
   this.onCancel=e=>{this.pointers.delete(e.pointerId);this.canvas.style.cursor='grab';};
-  this.onWheel=e=>{if(this.inputPaused)return;e.preventDefault();this.setZoom(-e.deltaY*.0015);};this.onContext=e=>e.preventDefault();this.onWindowWheel=(e={})=>{if(!this.isCameraUI(e.target))this.releaseCameraPreset();this.cancelFollow();};
+  this.onWheel=e=>{if(this.inputPaused||e.defaultPrevented)return;e.preventDefault();this.setZoom(-e.deltaY*.0015);};this.onContext=e=>e.preventDefault();this.onWindowWheel=(e={})=>{if(!this.inputPaused&&!this.isCameraUI(e.target)&&this.pointerOverMap(e.target,e.clientX,e.clientY)&&this.onPlacementWheel?.(e)){e.preventDefault();return;}if(!this.isCameraUI(e.target))this.releaseCameraPreset();this.cancelFollow();};
   this.onKeyDown=e=>{if(this.menu||this.inputPaused||/INPUT|SELECT|TEXTAREA/.test(document.activeElement?.tagName??''))return;const key=e.key.toLowerCase();if(['w','a','s','d','q','e','arrowup','arrowdown','arrowleft','arrowright'].includes(key)){e.preventDefault();this.releaseCameraPreset();this.cancelFollow();this.keys.add(key);}};
   this.onKeyUp=e=>this.keys.delete(e.key.toLowerCase());this.onBlur=()=>{this.windowFocused=false;this.keys.clear();this.pointers.clear();this.onWindowLeave();if(this.optimizations.backgroundBudget)this.renderLoop?.setHidden(true);};this.onFocus=()=>{this.windowFocused=true;this.renderLoop?.setHidden(document.hidden);};this.onVisibility=()=>{if(document.hidden)this.onBlur();this.renderLoop?.setHidden(document.hidden);};
   for(const [name,fn]of [['pointerdown',this.onDown],['pointermove',this.onMove],['pointerup',this.onUp],['pointercancel',this.onCancel],['contextmenu',this.onContext]])this.canvas.addEventListener(name,fn);
-  this.canvas.addEventListener('wheel',this.onWheel,{passive:false});window.addEventListener('pointermove',this.onWindowMove,true);window.addEventListener('pointerout',this.onWindowOut);document.documentElement.addEventListener('mouseleave',this.onWindowLeave);window.addEventListener('wheel',this.onWindowWheel,{passive:true,capture:true});window.addEventListener('keydown',this.onKeyDown);window.addEventListener('keyup',this.onKeyUp);window.addEventListener('blur',this.onBlur);window.addEventListener('focus',this.onFocus);document.addEventListener('visibilitychange',this.onVisibility);
+  this.canvas.addEventListener('wheel',this.onWheel,{passive:false});window.addEventListener('pointermove',this.onWindowMove,true);window.addEventListener('pointerout',this.onWindowOut);document.documentElement.addEventListener('mouseleave',this.onWindowLeave);window.addEventListener('wheel',this.onWindowWheel,{passive:false,capture:true});window.addEventListener('keydown',this.onKeyDown);window.addEventListener('keyup',this.onKeyUp);window.addEventListener('blur',this.onBlur);window.addEventListener('focus',this.onFocus);document.addEventListener('visibilitychange',this.onVisibility);
  }
  panPixels(dx,dy){this.releaseCameraPreset();this.cancelFollow();const scale=26/(this.desiredZoom*Math.max(this.container.clientHeight,1)),right=new T.Vector3(Math.cos(this.yaw),0,-Math.sin(this.yaw)),forward=new T.Vector3(-Math.sin(this.yaw),0,-Math.cos(this.yaw));this.desiredTarget.addScaledVector(right,-dx*scale).addScaledVector(forward,dy*scale/Math.max(Math.sin(this.pitch),.4));this.boundTarget();}
  boundTarget(){

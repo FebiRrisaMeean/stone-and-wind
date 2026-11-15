@@ -1,6 +1,6 @@
 import * as T from '../vendor/three.module.js'
 import {GLTFLoader} from '../vendor/addons/loaders/GLTFLoader.js'
-import {WOODLAND_PATHS,woodlandPlacements} from './woodland-layout.js?v=pages30-production'
+import {WOODLAND_PATHS,woodlandPlacements} from './woodland-layout.js?v=pages31-wheel'
 const templates=new Map(),materials=new Map()
 await Promise.all(['elder','oak','spruce','shrub'].map(async name=>{
  try{const gltf=await new GLTFLoader().loadAsync(new URL(`./assets/night-environment/${name}.glb`,import.meta.url).href)
