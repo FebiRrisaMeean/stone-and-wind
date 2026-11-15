@@ -1,6 +1,6 @@
 import * as T from '../vendor/three.module.js'
-import {createLocalScholar,animateLocalScholar} from '../game/local-sculpt/scholar.js?v=pages32-wheel-slow'
-import {createLocalCharacter,animateLocalCharacter} from '../game/local-sculpt/characters.js?v=pages32-wheel-slow'
+import {createLocalScholar,animateLocalScholar} from '../game/local-sculpt/scholar.js?v=pages33-production-ui'
+import {createLocalCharacter,animateLocalCharacter} from '../game/local-sculpt/characters.js?v=pages33-production-ui'
 const catalog=await (await fetch('./catalog.json')).json()
 let selected='Doctor',walking=false
 const castLabels=[]

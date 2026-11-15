@@ -1,10 +1,10 @@
-import {createMovementWorld} from './movement.js?v=pages32-wheel-slow';
-import {WORLD} from './data.js?v=pages32-wheel-slow';
-import {Card,Location} from './everdell/engine.js?v=pages32-wheel-slow';
-import {LIVING_CITIES,LIVING_TREE,MARKET_POSITIONS,BASIC_POSITIONS,FOREST_POSITIONS,COMMON_POSITIONS,CITY_CAMPS,CITY_FOREST_GATEWAYS,cityCardEntries,reconcileCityLayout} from './living-board-state.js?v=pages32-wheel-slow';
-import {CARD_NAMES,LOCATION_NAMES,LOCATION_TEXT,EVENT_NAMES,SEASONS} from './everdell/locale.js?v=pages32-wheel-slow';
-import {cityWorkerMarker,zoneBadge,storedResources} from './living-ui.js?v=pages32-wheel-slow';
-import {workerSeatPosition} from './production-props.js?v=pages32-wheel-slow';
+import {createMovementWorld} from './movement.js?v=pages33-production-ui';
+import {WORLD} from './data.js?v=pages33-production-ui';
+import {Card,Location} from './everdell/engine.js?v=pages33-production-ui';
+import {PRODUCTION_CLEARING,LIVING_CITIES,LIVING_TREE,MARKET_POSITIONS,BASIC_POSITIONS,FOREST_POSITIONS,COMMON_POSITIONS,CITY_CAMPS,CITY_FOREST_GATEWAYS,cityCardEntries,reconcileCityLayout} from './living-board-state.js?v=pages33-production-ui';
+import {CARD_NAMES,LOCATION_NAMES,LOCATION_TEXT,EVENT_NAMES,SEASONS} from './everdell/locale.js?v=pages33-production-ui';
+import {cityWorkerMarker,zoneBadge,storedResources} from './living-ui.js?v=pages33-production-ui';
+import {workerSeatPosition} from './production-props.js?v=pages33-production-ui';
 const key=w=>w.location?'l:'+w.location:w.event?'e:'+w.event:'c:'+w.playedCard?.cardOwnerId+':'+w.playedCard?.cardName;
 // Reads only a private-per-seat public projection. No engine restore and no invented cards
 export function onlineDrawing(view,layout={},previous=null){
@@ -50,6 +50,6 @@ export function onlineDrawing(view,layout={},previous=null){
  }
  for(const location of state.locations){location.freeSpots=location.capacity===null?null:Math.max(0,location.capacity-location.workers.length);location.reason=location.capacity!==null&&location.freeSpots===0?'Все места заняты':location.locked?'Это место сейчас недоступно':'';location.ariaLabel=location.name+(location.capacity===null?' — без ограничения мест':` — ${location.workers.length} из ${location.capacity} занято`);location.badgeHtml=zoneBadge(location);}
  g.meadowCards.forEach((cardName,index)=>state.livingObjects.push({id:'market:'+index,type:'market',owner:0,...MARKET_POSITIONS[index],cardName,index,critter:Card.fromName(cardName).isCritter,label:CARD_NAMES[cardName]??cardName,available:offered('PLAY_CARD').some(o=>o.clientOptions.source==='MEADOW'&&o.clientOptions.sourceIdx===index)}));
- state.livingClearings=[...LIVING_CITIES,{x:30.5,z:27,radius:10.5},{...LIVING_TREE,radius:5},{x:30,z:3,radius:11}];
+ state.livingClearings=[...LIVING_CITIES,{...PRODUCTION_CLEARING},{...LIVING_TREE,radius:5},{x:30,z:3,radius:11}];
  return{drawing:state,layout,viewer};
 }

@@ -1,4 +1,4 @@
-import {woodlandPlacements} from './woodland-layout.js?v=pages32-wheel-slow';
+import {woodlandPlacements} from './woodland-layout.js?v=pages33-production-ui';
 import * as T from '../vendor/three.module.js';
 
 export const SEASON_VISUALS={

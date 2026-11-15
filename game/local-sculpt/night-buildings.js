@@ -1,6 +1,6 @@
 import * as T from '../../vendor/three.module.js'
 import {GLTFLoader} from '../../vendor/addons/loaders/GLTFLoader.js'
-import {createAssetLibrary,eagerAssetsRequested} from './lazy-assets.js?v=pages32-wheel-slow'
+import {createAssetLibrary,eagerAssetsRequested} from './lazy-assets.js?v=pages33-production-ui'
 
 const definitions={"Theatre": "theatre", "Twig Barge": "twig-barge", "Fairgrounds": "fairgrounds", "Evertree": "evertree", "Courthouse": "courthouse", "Castle": "castle", "Mine": "mine", "Monastery": "monastery", "Ruins": "ruins", "Post Office": "post-office", "Palace": "palace", "Dungeon": "dungeon", "Chapel": "chapel", "General Store": "general-store", "School": "school", "Cemetary": "cemetary", "Lookout": "lookout", "Storehouse": "storehouse"}
 const library=createAssetLibrary(definitions,async(name,file)=>{

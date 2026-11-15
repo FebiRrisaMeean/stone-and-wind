@@ -1,4 +1,4 @@
-import {renderIcon} from './original-icons.js?v=pages32-wheel-slow';
+import {renderIcon} from './original-icons.js?v=pages33-production-ui';
 const resourceIcon=key=>renderIcon(String(key).toLowerCase(),{size:24});
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const names={TWIG:'Ветки',RESIN:'Смола',PEBBLE:'Камушки',BERRY:'Ягоды',VP:'Очки',CARD:'Карты'};
@@ -17,7 +17,19 @@ export function zoneRecipe(name,gains={}){
  if(name==='DRAW_TWO_MEADOW_PLAY_ONE_FOR_ONE_LESS')return `<span class="zone-discount-steps"><span>${amount(2,'CARD')}<span>Возьмите 2 карты с поляны</span></span><span>${amount(1,'CARD')}<span>Разыграйте 1 из них</span></span><span class="zone-discount">${resourceIcon('ANY')}<span>Скидка: 1 любой ресурс</span></span></span>`;
  return Object.entries(gains).filter(([,n])=>n>0).map(([r,n])=>amount(n,r)).join('');
 }
-export function zoneBadge(location){return location.locked?`<span class="zone-lock" aria-hidden="true">${lockIcon}</span>`:'';}
+export function zoneCompactRecipe(name,gains={}){
+ if(name==='HAVEN'||name.startsWith('JOURNEY_')){
+  const n=name==='HAVEN'?2:{JOURNEY_TWO:2,JOURNEY_THREE:3,JOURNEY_FOUR:4,JOURNEY_FIVE:5}[name];
+  if(n)return '<span class="zone-exchange-recipe"><span class="zone-exchange-give">'+amount(n,'CARD')+'</span><i class="zone-exchange-arrow" aria-hidden="true">↓</i><span class="zone-exchange-gain">'+amount(name==='HAVEN'?1:n,name==='HAVEN'?'ANY':'VP')+'</span></span>';
+ }
+ if(name==='COPY_BASIC_ONE_CARD')return '<span class="zone-action-word">Копия</span>'+plus+amount(1,'CARD');
+ if(name==='DRAW_TWO_MEADOW_PLAY_ONE_FOR_ONE_LESS')return '<span class="zone-choice-recipe"><span>'+amount(2,'CARD')+arrow+amount(1,'CARD')+'</span><small>Скидка '+amount(1,'ANY')+'</small></span>';
+ return zoneRecipe(name,gains);
+}
+export function zoneBadge(location){
+ const recipe=zoneCompactRecipe(location.actualName??location.id??'',location.rewardIcons);
+ return `<span class="zone-summary${recipe.includes('zone-exchange-recipe')?' zone-summary--exchange':''}"><span class="zone-reward">${recipe||'<span class="zone-action-word">Действие</span>'}</span>${location.locked?`<span class="zone-lock" aria-hidden="true">${lockIcon}</span>`:''}</span>`;
+}
 export function zoneCapacity(location){
  if(location.capacity===null)return '';
  const occupied=location.workers?.length??0,total=location.capacity;

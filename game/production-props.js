@@ -91,9 +91,10 @@ function addSeat(view,g,location,index,position){
  g.add(seat);
 }
 
-export function addProductionProps(view,group,location){
+export function addProductionProps(view,group,location,{showRewards=false}={}){
  const props=new T.Group();props.name='production-props';props.userData.productionProps=true;
- const specs=rewardSpecs(location).slice(0,3);
+ // Quantities now belong to the stable UI badge; optional piles preserve the legacy study
+ const specs=showRewards?rewardSpecs(location).slice(0,3):[];
  const anchors=specs.length===1?[{x:-.76,z:.82}]:specs.length===2?[{x:-1.05,z:.69},{x:-.50,z:1.16}]:[{x:-1.20,z:.47},{x:-.92,z:1.04},{x:-.38,z:1.25}];
  for(let i=0;i<specs.length;i++){
   const spec=specs[i],pile=new T.Group(),count=spec.previewOnly?1:Math.max(1,Math.min(3,Math.floor(spec.amount)));

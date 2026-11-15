@@ -1,11 +1,11 @@
 // Visual layout only: never alters playable locations, city footprints or game state
 export const WOODLAND_PATHS=[
- [[22,36],[27,36],[33,36],[39,36]],
- [[30.5,37],[30.5,40],[30.5,43.7]],
- [[10,25],[13,23],[19,22],[25,22],[30.5,23]],
- [[51,25],[48,23],[43,23],[37,23],[30.5,23]],
- [[30.5,23],[30,25],[30.5,28],[30.5,33],[30.5,36]],
- [[18,21],[19,17],[20,11],[26,8],[34,8],[40,11],[42,17],[43,21]]
+ [[16,27],[21,26.5],[26,26],[31,26.6],[36,26.5],[43,27.5]],
+ [[30.5,29],[30,33],[31,37],[30.5,40],[30.5,43.7]],
+ [[18,17],[23,16.5],[29.5,16],[36,16.8],[43,17.5]],
+ [[17,17],[17,21],[18,26],[20,31]],
+ [[44,17.5],[44,22],[44,27.5],[42,32]],
+ [[29.5,16],[30,12],[30,8]]
 ]
 export const forestNoise=(x,z)=>{const v=Math.sin(x*127.1+z*311.7)*43758.5453;return v-Math.floor(v)}
 export function distanceToPath(x,z){let best=Infinity;for(const path of WOODLAND_PATHS)for(let i=1;i<path.length;i++){const[a,b]=[path[i-1],path[i]],dx=b[0]-a[0],dz=b[1]-a[1],t=Math.max(0,Math.min(1,((x-a[0])*dx+(z-a[1])*dz)/(dx*dx+dz*dz)));best=Math.min(best,Math.hypot(x-a[0]-dx*t,z-a[1]-dz*t))}return best}

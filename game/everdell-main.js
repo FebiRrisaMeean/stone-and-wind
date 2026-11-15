@@ -1,27 +1,28 @@
-import {seasonConfirmation} from './season-confirmation.js?v=pages32-wheel-slow';
-import {mountOnlineGame} from './online-game.js?v=pages32-wheel-slow';
-import {applyCityScene} from './city-scene.js?v=pages32-wheel-slow';
-import {cityRailMarkup,bindCityRail} from './city-icon-rail.js?v=pages32-wheel-slow';
-import {finalScoringPlan,createFinalScoring} from './final-scoring.js?v=pages32-wheel-slow';
-import {chooseBotCommand,paymentFitsCity} from './bot-policy.js?v=pages32-wheel-slow';
-import {BOT_SAVE_KEYS,chooseInitialPlayer,createBotSession,decisionPlayerId,humanCanAct,humanOwnsDecision,applySessionCommand} from './bot-session.js?v=pages32-wheel-slow';
-import {cameraControls,cardPreviewPlacement} from './field-ui.js?v=pages32-wheel-slow';
-import {renderIcon} from './original-icons.js?v=pages32-wheel-slow';
-import {captureAction,bindAction,isActionForGame,restoreAction,recoverPendingAction} from './action-checkpoint.js?v=pages32-wheel-slow';
-import {resourceChoiceModel,changeResourceChoice,resourceChoiceMarkup,decisionResources,decisionValue,closeIcon} from './decision-ui.js?v=pages32-wheel-slow';
-import {prepareGameCard,gameCardReady,gameCardFace} from './game-source-cards.js?v=pages32-wheel-slow';
-import {workerSeatPosition} from './production-props.js?v=pages32-wheel-slow';
-import {SOURCE_CARD_NAMES} from './source-card-map.js?v=pages32-wheel-slow';
-import {createHandInteraction} from './hand-interaction.js?v=pages32-wheel-slow';
-import {createSharedSeasonState,normalizeSharedGame,stepSharedGame,requestSharedSeason,sharedSeason,canActShared,forecastNextSeason} from './shared-seasons.js?v=pages32-wheel-slow';
-import {zoneBadge,zoneDetail,supplyStatus,storedResources,cityWorkerMarker,cityWorkerDetail,lockIcon,SPECIES} from './living-ui.js?v=pages32-wheel-slow';
-import {LIVING_CITIES,CITY_CAMPS,CITY_LAYOUT_VERSION,migrateCityLayout,LIVING_TREE,MARKET_POSITIONS,BASIC_POSITIONS,FOREST_POSITIONS,COMMON_POSITIONS,inCity,cityCardEntries,queuedCityPlacements,validCityPosition,reconcileCityLayout,freeCityPosition} from './living-board-state.js?v=pages32-wheel-slow';
-import {cardArt,portraitStyle,placeArt,resourceIcon,cardTypeIcon} from './everdell/art.js?v=pages32-wheel-slow';
-import {createGame,stepGame,serializeGame,restoreGame,getPaymentOptions as enginePaymentOptions,getScores,Card,Location,Event,CardName,LocationOccupancy,GameInputType,Season,CardType,PlayerStatus} from './everdell/engine.js?v=pages32-wheel-slow';
-import {CARD_NAMES,CARD_TEXT,LOCATION_NAMES,LOCATION_TEXT,EVENT_NAMES,EVENT_TEXT,SEASONS,CARD_TYPES,RESOURCE_NAMES,translateText} from './everdell/locale.js?v=pages32-wheel-slow';
-import {createMovementWorld,moveWorker} from './movement.js?v=pages32-wheel-slow';
-import {WORLD} from './data.js?v=pages32-wheel-slow';
-import {WorldView} from './world.js?v=pages32-wheel-slow';
+import {productionCameraBounds,PRODUCTION_CAMERA_PADDING} from './camera-framing.js?v=pages33-production-ui';
+import {seasonConfirmation} from './season-confirmation.js?v=pages33-production-ui';
+import {mountOnlineGame} from './online-game.js?v=pages33-production-ui';
+import {applyCityScene} from './city-scene.js?v=pages33-production-ui';
+import {cityRailMarkup,bindCityRail} from './city-icon-rail.js?v=pages33-production-ui';
+import {finalScoringPlan,createFinalScoring} from './final-scoring.js?v=pages33-production-ui';
+import {chooseBotCommand,paymentFitsCity} from './bot-policy.js?v=pages33-production-ui';
+import {BOT_SAVE_KEYS,chooseInitialPlayer,createBotSession,decisionPlayerId,humanCanAct,humanOwnsDecision,applySessionCommand} from './bot-session.js?v=pages33-production-ui';
+import {cameraControls,cardPreviewPlacement} from './field-ui.js?v=pages33-production-ui';
+import {renderIcon} from './original-icons.js?v=pages33-production-ui';
+import {captureAction,bindAction,isActionForGame,restoreAction,recoverPendingAction} from './action-checkpoint.js?v=pages33-production-ui';
+import {resourceChoiceModel,changeResourceChoice,resourceChoiceMarkup,decisionResources,decisionValue,closeIcon} from './decision-ui.js?v=pages33-production-ui';
+import {prepareGameCard,gameCardReady,gameCardFace} from './game-source-cards.js?v=pages33-production-ui';
+import {workerSeatPosition} from './production-props.js?v=pages33-production-ui';
+import {SOURCE_CARD_NAMES} from './source-card-map.js?v=pages33-production-ui';
+import {createHandInteraction} from './hand-interaction.js?v=pages33-production-ui';
+import {createSharedSeasonState,normalizeSharedGame,stepSharedGame,requestSharedSeason,sharedSeason,canActShared,forecastNextSeason} from './shared-seasons.js?v=pages33-production-ui';
+import {zoneBadge,zoneDetail,supplyStatus,storedResources,cityWorkerMarker,cityWorkerDetail,lockIcon,SPECIES} from './living-ui.js?v=pages33-production-ui';
+import {PRODUCTION_CLEARING,LIVING_CITIES,CITY_CAMPS,CITY_LAYOUT_VERSION,migrateCityLayout,LIVING_TREE,MARKET_POSITIONS,BASIC_POSITIONS,FOREST_POSITIONS,COMMON_POSITIONS,inCity,cityCardEntries,queuedCityPlacements,validCityPosition,reconcileCityLayout,freeCityPosition} from './living-board-state.js?v=pages33-production-ui';
+import {cardArt,portraitStyle,placeArt,resourceIcon,cardTypeIcon} from './everdell/art.js?v=pages33-production-ui';
+import {createGame,stepGame,serializeGame,restoreGame,getPaymentOptions as enginePaymentOptions,getScores,Card,Location,Event,CardName,LocationOccupancy,GameInputType,Season,CardType,PlayerStatus} from './everdell/engine.js?v=pages33-production-ui';
+import {CARD_NAMES,CARD_TEXT,LOCATION_NAMES,LOCATION_TEXT,EVENT_NAMES,EVENT_TEXT,SEASONS,CARD_TYPES,RESOURCE_NAMES,translateText} from './everdell/locale.js?v=pages33-production-ui';
+import {createMovementWorld,moveWorker} from './movement.js?v=pages33-production-ui';
+import {WORLD} from './data.js?v=pages33-production-ui';
+import {WorldView} from './world.js?v=pages33-production-ui';
 
 const getPaymentOptions=(game,name,source,index)=>enginePaymentOptions(game,name,source,index).filter(p=>paymentFitsCity(game,name,p));
 const {game:SAVE,layout:LAYOUT_SAVE,shared:SHARED_SAVE,teams:TEAMS_SAVE,action:ACTION_SAVE,session:SESSION_SAVE}=BOT_SAVE_KEYS;
@@ -158,8 +159,8 @@ export function mountGame(root){
   });
   game.meadowCards.forEach((name,index)=>{const c=Card.fromName(name);objects.push({id:'market:'+index,type:'market',...MARKET_POSITIONS[index],owner:0,cardName:name,critter:c.isCritter,label:cn(name),costHtml:stock(c.baseCost)||'0',index,available:isPlayable(name,'MEADOW',index),locked:!isPlayable(name,'MEADOW',index),lockHtml:'<span class="living-object-lock">'+lockIcon+'</span>' });});
   Object.entries(game.eventsMap).forEach(([name,owner],index)=>{objects.push({id:'event:'+name,type:'event',x:22+index%4*5.2,z:1.5+Math.floor(index/4)*2.7,label:en(name),costHtml:'',eventName:name,available:humanTurn()&&game.getClaimableEvents().includes(name),locked:!humanTurn()||!game.getClaimableEvents().includes(name),lockHtml:'<span class="living-object-lock">'+lockIcon+'</span>' ,owner:game.players.findIndex(p=>p.playerId===owner)});});
-  view.livingClearings=[...LIVING_CITIES.map(c=>({...c,radius:24,scaleX:.48,scaleZ:1})),{x:30.5,z:27,radius:10.5},{...LIVING_TREE,radius:5},{x:30,z:3,radius:11}];
-  for(const t of view.tiles){const clear=view.livingClearings.some(c=>c.bounds?t.x>c.bounds.minX-1&&t.x<c.bounds.maxX+1&&t.z>c.bounds.minZ-1&&t.z<c.bounds.maxZ+1:Math.hypot(t.x-c.x,t.z-c.z)<c.radius)||(t.x>13&&t.x<47&&t.z<37);if(clear)t.type='meadow';}
+  view.livingClearings=[...LIVING_CITIES.map(c=>({...c,radius:24,scaleX:.48,scaleZ:1})),{...PRODUCTION_CLEARING},{...LIVING_TREE,radius:5},{x:30,z:3,radius:11}];
+  for(const t of view.tiles){const clear=view.livingClearings.some(c=>c.bounds?t.x>c.bounds.minX-1&&t.x<c.bounds.maxX+1&&t.z>c.bounds.minZ-1&&t.z<c.bounds.maxZ+1:Math.hypot(t.x-c.x,t.z-c.z)<c.radius);if(clear)t.type='meadow';}
   // Worker identity is visual only; the rules engine owns every placement
   for(let pi=0;pi<game.players.length;pi++){
    const p=game.players[pi],pj=p.toJSON(true),previous=old?.units.filter(u=>u.owner===pi&&u.number<=pj.numWorkers)??[],used=new Set(),assignments=[];
@@ -470,8 +471,8 @@ export function mountGame(root){
   hideDetail();const nextOwner=zone==='opponent'?1-playerIndex():playerIndex();if(viewedCityOwner!==nextOwner){viewedCityOwner=nextOwner;cityRailOwner=nextOwner;render();}let bounds;
   if(zone==='own'||zone==='opponent'){const owner=zone==='own'?playerIndex():1-playerIndex(),c=LIVING_CITIES[owner];bounds={...(c.bounds??{minX:c.x-8.8,maxX:c.x+8.8,minZ:26.8,maxZ:41.2}),minY:0,maxY:5};const homes=drawing.livingObjects.filter(o=>o.type==='city-card'&&o.owner===owner&&!o.critter);if(!fullCity&&homes.length){const minX=Math.min(...homes.map(o=>o.x))-5,maxX=Math.max(...homes.map(o=>o.x))+5,minZ=Math.min(...homes.map(o=>o.z))-5,maxZ=Math.max(...homes.map(o=>o.z))+6;const cx=(minX+maxX)/2,cz=(minZ+maxZ)/2,rx=Math.max(9,(maxX-minX)/2),rz=Math.max(7,(maxZ-minZ)/2);bounds={minX:cx-rx,maxX:cx+rx,minZ:cz-rz,maxZ:cz+rz,minY:0,maxY:5};}}
   else if(zone==='market'){bounds={minX:19.7,maxX:41.3,minZ:23.7,maxZ:32,minY:0,maxY:3};}
-  else {const points=drawing.locations.filter(p=>p.actualName!=='HAVEN'&&!p.actualName.includes('JOURNEY'));bounds={minX:Math.min(...points.map(p=>p.x))-2.3,maxX:Math.max(...points.map(p=>p.x))+2.3,minZ:9,maxZ:Math.max(...points.map(p=>p.z))+2.3,minY:0,maxY:3.8};}
-  world.focusLivingZone(zone,bounds,{top:120,bottom:230,left:150,right:80});
+  else {bounds=productionCameraBounds(drawing.locations);}
+  world.focusLivingZone(zone,bounds,zone==='production'?PRODUCTION_CAMERA_PADDING:{top:120,bottom:230,left:150,right:80});
   if(immediate){world.target.copy(world.desiredTarget);world.yaw=world.desiredYaw;world.pitch=world.desiredPitch;world.zoom=world.desiredZoom;world.updateCamera(1);}
  }
  function click(e){

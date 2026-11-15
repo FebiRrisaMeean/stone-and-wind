@@ -1,5 +1,5 @@
-import {SOURCE_CARD_IDS} from './source-card-map.js?v=pages32-wheel-slow';
-import {renderIcon} from './original-icons.js?v=pages32-wheel-slow';
+import {SOURCE_CARD_IDS} from './source-card-map.js?v=pages33-production-ui';
+import {renderIcon} from './original-icons.js?v=pages33-production-ui';
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 // One button per played instance, including residents sharing a city space

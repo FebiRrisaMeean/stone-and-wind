@@ -1,18 +1,18 @@
-import {productionAssetRevision} from './production-assets.js?v=pages32-wheel-slow';
-import {cityRoadSurface} from './city-road-surface.js?v=pages32-wheel-slow';
-import {buildCityRoads} from './city-roads.js?v=pages32-wheel-slow';
-import {nightAssetRevision} from './local-sculpt/lazy-assets.js?v=pages32-wheel-slow';
-import {animateWorkerCharacter} from './local-sculpt/worker-characters.js?v=pages32-wheel-slow';
-import {navigationFootprint} from './city-footprints.js?v=pages32-wheel-slow';
-import {createWoodlandAsset} from './woodland-assets.js?v=pages32-wheel-slow';
-import {cityFootprint} from './city-footprints.js?v=pages32-wheel-slow';
-import {createNavigation,stepNavigation} from './city-navigation.js?v=pages32-wheel-slow';
-import {findCityHabitat,stepHabitatWalk} from './city-habitats.js?v=pages32-wheel-slow';
-import {applyObjectSeason} from './seasonal-visuals.js?v=pages32-wheel-slow';
+import {productionAssetRevision} from './production-assets.js?v=pages33-production-ui';
+import {cityRoadSurface} from './city-road-surface.js?v=pages33-production-ui';
+import {buildCityRoads} from './city-roads.js?v=pages33-production-ui';
+import {nightAssetRevision} from './local-sculpt/lazy-assets.js?v=pages33-production-ui';
+import {animateWorkerCharacter} from './local-sculpt/worker-characters.js?v=pages33-production-ui';
+import {navigationFootprint} from './city-footprints.js?v=pages33-production-ui';
+import {createWoodlandAsset} from './woodland-assets.js?v=pages33-production-ui';
+import {cityFootprint} from './city-footprints.js?v=pages33-production-ui';
+import {createNavigation,stepNavigation} from './city-navigation.js?v=pages33-production-ui';
+import {findCityHabitat,stepHabitatWalk} from './city-habitats.js?v=pages33-production-ui';
+import {applyObjectSeason} from './seasonal-visuals.js?v=pages33-production-ui';
 import * as T from '../vendor/three.module.js';
-import {createCardMiniature,animateCardMiniature} from './living-models.js?v=pages32-wheel-slow';
-import {woodlandCottage,ancientTree,woodlandFigure} from './woodland-world.js?v=pages32-wheel-slow';
-import {resourceIcon} from './everdell/art.js?v=pages32-wheel-slow';
+import {createCardMiniature,animateCardMiniature} from './living-models.js?v=pages33-production-ui';
+import {woodlandCottage,ancientTree,woodlandFigure} from './woodland-world.js?v=pages33-production-ui';
+import {resourceIcon} from './everdell/art.js?v=pages33-production-ui';
 
 const team=[0x719bb6,0xd7a073,0x97b485,0xb99ac7];
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -74,7 +74,13 @@ export function renderLivingBoard(view,state){
   const fallback='';
   const label=view.addLabel('location:'+location.id,location.x,location.z+.15,location.badgeHtml??fallback,'living-object-label living-location-label living-zone-badge',()=>view.onPick?.({type:'location',id:location.id}),.20);
   label.living=true;label.livingZone=true;label.item=location;label.hoverOnly=false;label.el.removeAttribute('title');label.el.setAttribute('aria-label',location.ariaLabel??location.name);label.el.dataset.available=String(location.available!==false);label.el.dataset.locked=String(location.locked===true);labelHover(view,label,{type:'location',id:location.id});
-  const entity=view.entities.get('location:'+location.id);if(entity)applyObjectSeason(entity.group,state.season);
+  const entity=view.entities.get('location:'+location.id);
+  if(entity){
+   let glow=entity.group.userData.productionAvailability;
+   if(!glow){glow=view.ring(1.83,1.98,0x78ad58,.78);glow.position.y=.205;glow.scale.z=.88;glow.userData.seasonInvariant=true;glow.material.userData.seasonInvariant=true;entity.group.add(glow);entity.group.userData.productionAvailability=glow;}
+   glow.visible=location.available===true&&!location.locked;
+   applyObjectSeason(entity.group,state.season);
+  }
 
  }
  for(const item of [...(state.livingObjects??[]),...(state.cityScene?.gatewayArrivals??[]).filter(item=>!view.completedLivingArrivals?.has(item.arrival.key))]){
@@ -120,7 +126,7 @@ export function updateLivingLabels(view){
   const eventVisible=label.item?.type!=='event'||view.zoom>.83||view.hoveredLiving?.id===label.item.id;
   const visible=cardVisible&&eventVisible&&p.z>-1&&p.z<1&&x>0&&x<w&&y>0&&y<h-12;
   const pixelsPerUnit=h*view.zoom/26,zone=label.livingZone,supply=label.item?.type==='supplies';
-  if(zone){label.el.style.setProperty('--zone-lock-scale',String(clamp(view.zoom/.7,.35,1)));label.el.style.width=(3.7*pixelsPerUnit)+'px';label.el.style.height=(3.1*pixelsPerUnit*Math.sin(view.pitch))+'px';}
+  if(zone){label.el.style.setProperty('--zone-summary-scale',String(clamp(view.zoom/.7,.72,1)));label.el.style.width=(3.7*pixelsPerUnit)+'px';label.el.style.height=(3.1*pixelsPerUnit*Math.sin(view.pitch))+'px';}
   label.el.style.transform=`translate(${x}px,${y}px) translate(-50%,${zone||supply?'-50%':'12px'})${cardLabel?` scale(${clamp(view.zoom/.7,.78,1)})`:supply?` scale(${clamp(view.zoom/.7,.5,1.5)})`:''}`;label.el.style.visibility=visible?'visible':'hidden';
   label.el.style.setProperty('--living-label-scale',String(clamp(view.zoom,.72,1)));
  }

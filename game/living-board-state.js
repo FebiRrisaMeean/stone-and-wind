@@ -1,4 +1,4 @@
-import {footprintAt,hullsOverlap,footprintFitsBounds,isBuildingFootprint,navigationFootprint,navigationPassageClear,normalizeCityRotation} from './city-footprints.js?v=pages32-wheel-slow';
+import {footprintAt,hullsOverlap,footprintFitsBounds,isBuildingFootprint,navigationFootprint,navigationPassageClear,normalizeCityRotation} from './city-footprints.js?v=pages33-production-ui';
 // Presentation positions never change engine costs, turns, city capacity or card effects
 export const CITY_LAYOUT_VERSION=2;
 // Cities are independent canonical spaces, shown one at a time by applyCityScene
@@ -6,11 +6,15 @@ export const LIVING_CITIES=[0,1].map(owner=>({owner,x:30.5,z:55.5,camp:{x:30.5,z
 export const CITY_CAMPS=LIVING_CITIES.map(c=>({x:c.x,z:43.7}));
 export const LIVING_TREE={x:30,z:8};
 export const MARKET_POSITIONS=Array.from({length:8},(_,i)=>({x:22.5+(i%4)*5,z:25.3+Math.floor(i/4)*5}));
-export const BASIC_POSITIONS=[[21,13.5],[27,13.5],[33,13.5],[39,13.5],[21,19.3],[27,19.3],[33,19.3],[39,19.3]];
-export const FOREST_POSITIONS=[[14,14],[14,20],[46,17],[46,22]];
+// Two staggered collecting groves, with an opening toward the elder tree
+export const BASIC_POSITIONS=[[20.2,14.2],[25.5,13.5],[35.2,13.8],[40.7,14.6],[22,19.3],[27.2,18.6],[33,19.1],[38.6,19.8]];
+// Changing forest actions form a small arc below the permanent gathering sites
+export const FOREST_POSITIONS=[[19.9,24.3],[25.7,23.7],[35,24.2],[40.9,24.8]];
 // Shared clearings stay in the central corridor, outside both saved city areas
 export const LOCATION_FOOTPRINT_RADIUS=1.95;
-export const COMMON_POSITIONS={HAVEN:[22,36],JOURNEY_TWO:[26.25,36],JOURNEY_THREE:[30.5,36],JOURNEY_FOUR:[34.75,36],JOURNEY_FIVE:[39,36]};
+// Haven and journeys meet the outgoing path, not a separate row near the city
+export const COMMON_POSITIONS={HAVEN:[20.3,29.7],JOURNEY_TWO:[25.5,29.1],JOURNEY_THREE:[30.7,28.4],JOURNEY_FOUR:[36,29.5],JOURNEY_FIVE:[41.2,30]};
+export const PRODUCTION_CLEARING={x:30.5,z:22,radius:13.8,scaleX:1,scaleZ:.85};
 export function inCity(owner,x,z){const c=LIVING_CITIES[owner];return !!c&&Number.isFinite(x)&&Number.isFinite(z)&&x>=c.bounds.minX&&x<=c.bounds.maxX&&z>=c.bounds.minZ&&z<=c.bounds.maxZ;}
 export function cityCardEntries(player){const counts={},entries=player.getPlayedCards().map(played=>{const ordinal=counts[played.cardName]??0;counts[played.cardName]=ordinal+1;return{key:player.playerId+'|'+played.cardName+'|'+ordinal,played,cardName:played.cardName};});for(const entry of entries)entry.pairedWith=entry.played.pairId?entries.find(other=>other.key!==entry.key&&other.played.pairId===entry.played.pairId)?.key??null:null;return entries;}
 export function cityCampHull(owner){const c=CITY_CAMPS[owner],z=c.z;return [[c.x-1.5,z-1.2],[c.x+1.5,z-1.2],[c.x+1.5,z+1.2],[c.x-1.5,z+1.2]];}

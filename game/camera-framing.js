@@ -56,3 +56,11 @@ export function livingCameraLimits(camera,bounds=LIVING_CAMERA_BOUNDS){
 export function constrainLivingTarget(target,limits,overshoot=0){
  return{x:clamp(target.x,limits.minX-overshoot,limits.maxX+overshoot),z:clamp(target.z,limits.minZ-overshoot,limits.maxZ+overshoot)};
 }
+
+// Include the complete shared action district, including Haven and journeys
+export function productionCameraBounds(locations=[]){
+ const points=locations.filter(p=>Number.isFinite(p.x)&&Number.isFinite(p.z));
+ if(!points.length)return null;
+ return{minX:Math.min(...points.map(p=>p.x))-2.3,maxX:Math.max(...points.map(p=>p.x))+2.3,minZ:Math.min(...points.map(p=>p.z))-2.3,maxZ:Math.max(...points.map(p=>p.z))+2.3,minY:0,maxY:3.8};
+}
+export const PRODUCTION_CAMERA_PADDING={top:120,bottom:230,left:140,right:200,pitch:1.18};

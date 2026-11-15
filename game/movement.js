@@ -1,4 +1,4 @@
-import {TROOPS,WORLD} from './data.js?v=pages32-wheel-slow';
+import {TROOPS,WORLD} from './data.js?v=pages33-production-ui';
 
 const WORKER=TROOPS.worker;
 const BASE_VISION=7.8;

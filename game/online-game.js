@@ -1,19 +1,20 @@
-import {placementObstacles} from './online-placement.js?v=pages32-wheel-slow';
-import {seasonConfirmation} from './season-confirmation.js?v=pages32-wheel-slow';
-import {Event,Card,gameTextToDebugStr} from './everdell/engine.js?v=pages32-wheel-slow';
-import {validCityPosition,freeCityPosition} from './living-board-state.js?v=pages32-wheel-slow';
-import {cityRailMarkup,bindCityRail} from './city-icon-rail.js?v=pages32-wheel-slow';
-import {supplyStatus,zoneDetail} from './living-ui.js?v=pages32-wheel-slow';
-import {renderIcon} from './original-icons.js?v=pages32-wheel-slow';
-import {choiceSpec,pendingCommand,choiceCardName} from './online-choices.js?v=pages32-wheel-slow';
-import {OnlineClient} from './online-client.js?v=pages32-wheel-slow';
-import {onlineDrawing} from './online-view-adapter.js?v=pages32-wheel-slow';
-import {WorldView} from './world.js?v=pages32-wheel-slow';
-import {applyCityScene} from './city-scene.js?v=pages32-wheel-slow';
-import {gameCardFace,prepareGameCard} from './game-source-cards.js?v=pages32-wheel-slow';
-import {CARD_NAMES,LOCATION_NAMES,EVENT_NAMES,EVENT_TEXT,RESOURCE_NAMES,SEASONS,translateText} from './everdell/locale.js?v=pages32-wheel-slow';
-import {SOURCE_CARD_NAMES} from './source-card-map.js?v=pages32-wheel-slow';
-import {resourceChoiceModel} from './decision-ui.js?v=pages32-wheel-slow';
+import {productionCameraBounds,PRODUCTION_CAMERA_PADDING} from './camera-framing.js?v=pages33-production-ui';
+import {placementObstacles} from './online-placement.js?v=pages33-production-ui';
+import {seasonConfirmation} from './season-confirmation.js?v=pages33-production-ui';
+import {Event,Card,gameTextToDebugStr} from './everdell/engine.js?v=pages33-production-ui';
+import {validCityPosition,freeCityPosition} from './living-board-state.js?v=pages33-production-ui';
+import {cityRailMarkup,bindCityRail} from './city-icon-rail.js?v=pages33-production-ui';
+import {supplyStatus,zoneDetail} from './living-ui.js?v=pages33-production-ui';
+import {renderIcon} from './original-icons.js?v=pages33-production-ui';
+import {choiceSpec,pendingCommand,choiceCardName} from './online-choices.js?v=pages33-production-ui';
+import {OnlineClient} from './online-client.js?v=pages33-production-ui';
+import {onlineDrawing} from './online-view-adapter.js?v=pages33-production-ui';
+import {WorldView} from './world.js?v=pages33-production-ui';
+import {applyCityScene} from './city-scene.js?v=pages33-production-ui';
+import {gameCardFace,prepareGameCard} from './game-source-cards.js?v=pages33-production-ui';
+import {CARD_NAMES,LOCATION_NAMES,EVENT_NAMES,EVENT_TEXT,RESOURCE_NAMES,SEASONS,translateText} from './everdell/locale.js?v=pages33-production-ui';
+import {SOURCE_CARD_NAMES} from './source-card-map.js?v=pages33-production-ui';
+import {resourceChoiceModel} from './decision-ui.js?v=pages33-production-ui';
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const cn=name=>SOURCE_CARD_NAMES[name]??CARD_NAMES[name]??name;
 const CHOICE_TITLES={SELECT_CARDS:'Выберите карты',SELECT_CARDS_WITH_SOURCE:'Выберите карты',SELECT_PLAYED_CARDS:'Выберите карты города',DISCARD_CARDS:'Выберите карты для сброса',SELECT_PLAYER:'Выберите игрока',SELECT_RESOURCES:'Выберите ресурсы',SELECT_PAYMENT_FOR_CARD:'Выберите оплату карты',SELECT_OPTION_GENERIC:'Выберите действие',SELECT_WORKER_PLACEMENT:'Выберите работника',SELECT_LOCATION:'Выберите место работы'};
@@ -113,7 +114,7 @@ export function mountOnlineGame(root){
  const click=event=>{const button=event.target.closest('button');if(!button)return;if(button.dataset.place){if(button.dataset.place==='cancel')cancelPlacement();else if(button.dataset.place==='confirm')confirmPlacement();return;}if(placement)return;if(button.dataset.adjust){const input=button.closest('form').querySelector('[data-resource="'+button.dataset.key+'"]');input.value=String(Math.max(0,Math.min(Number(input.max),Number(input.value)+Number(button.dataset.adjust))));return;}if(button.dataset.marketCard!=null)return choose(view.offers.filter(o=>o.inputType==='PLAY_CARD'&&o.clientOptions.source==='MEADOW'&&o.clientOptions.sourceIdx===Number(button.dataset.marketCard)));if(button.dataset.claimEvent!=null)return choose(view.offers.filter(o=>o.inputType==='CLAIM_EVENT'&&o.clientOptions.event===button.dataset.claimEvent));if(button.dataset.offer!=null)return submitOffer(view.offers[Number(button.dataset.offer)]);if(button.dataset.payment!=null)return submitOffer(modal[Number(button.dataset.payment)]);if(button.dataset.hand!=null)return choose(view.offers.filter(o=>o.inputType==='PLAY_CARD'&&o.clientOptions.source==='HAND'&&o.clientOptions.card===view.game.players[viewer].cardsInHand[Number(button.dataset.hand)]));switch(button.dataset.online){
  case 'create':if(view?.status==='playing'&&!confirm('Создать новую комнату? Чтобы вернуться в текущую, сохраните её в другой вкладке'))return;return run(async()=>{const result=await client.create();view=null;viewer=0;viewedOwner=0;accept(result.view);const url=new URL(location.href);url.hash=new URLSearchParams({room:result.roomId,invite:result.inviteToken});sessionStorage.setItem(INVITE,JSON.stringify({roomId:result.roomId,url:url.href}));$('online-invite').innerHTML=`<label>Приглашение<input class="online-invite" readonly value="${esc(url.href)}"></label><button data-online="copy">Копировать</button>`});
  case 'copy':{const input=root.querySelector('.online-invite');input.select();navigator.clipboard?.writeText(input.value).catch(()=>{});break}
- case 'cancel-action':return send({kind:'cancel'});case 'resume':return reconnect();case 'own':return focus(viewer);case 'opponent':return focus(1-viewer);case 'market':case 'events':if(!view)return;fieldPanel=button.dataset.online;return renderFieldPanel();case 'close-field':fieldPanel=null;return renderFieldPanel();case 'production':if(!view)return;viewedOwner=viewer;render();return world.focusLivingZone('production',{minX:11,maxX:49,minZ:9,maxZ:39,minY:0,maxY:4},{left:370,bottom:170});case 'pass':return confirmSeason();case 'confirm-season':fieldPanel=null;renderFieldPanel();return send({kind:'pass'});case 'cancel':modal=null;return renderChoice();
+ case 'cancel-action':return send({kind:'cancel'});case 'resume':return reconnect();case 'own':return focus(viewer);case 'opponent':return focus(1-viewer);case 'market':case 'events':if(!view)return;fieldPanel=button.dataset.online;return renderFieldPanel();case 'close-field':fieldPanel=null;return renderFieldPanel();case 'production':if(!view)return;viewedOwner=viewer;render();return world.focusLivingZone('production',productionCameraBounds(drawing.locations),{...PRODUCTION_CAMERA_PADDING,left:370,bottom:170});case 'pass':return confirmSeason();case 'confirm-season':fieldPanel=null;renderFieldPanel();return send({kind:'pass'});case 'cancel':modal=null;return renderChoice();
  }};
  const onKey=event=>{if(placement&&!event.target.closest('input,textarea,select')){if(event.key==='Escape'){event.preventDefault();event.stopPropagation();cancelPlacement();return;}if(event.key.toLowerCase()==='r'){event.preventDefault();event.stopPropagation();rotatePlacement(event.shiftKey?-1:1);return;}}if(event.key==='Escape'&&fieldPanel){event.preventDefault();fieldPanel=null;renderFieldPanel();return}if(event.key==='Tab'&&(fieldPanel||view?.pending||modal)){const host=fieldPanel?$('online-field'):$('online-choice'),nodes=[...host.querySelectorAll('button:not(:disabled),input:not(:disabled),[tabindex="0"]')];if(!nodes.length)return;const first=nodes[0],last=nodes.at(-1);if(event.shiftKey&&(document.activeElement===first||!host.contains(document.activeElement))){event.preventDefault();last.focus()}else if(!event.shiftKey&&(document.activeElement===last||!host.contains(document.activeElement))){event.preventDefault();first.focus()}}};window.addEventListener('keydown',onKey);
  const submit=event=>{const form=event.target.closest('[data-pending]');if(!form)return;event.preventDefault();try{const template=view.decision[Number(form.dataset.pending)],indices=[...form.querySelectorAll('input:checked')].map(i=>Number(i.value)),resources=Object.fromEntries([...form.querySelectorAll('[data-resource]')].map(i=>[i.dataset.resource,Number(i.value)]));send(pendingCommand(template,view.game.players[viewer],{indices,resources}))}catch(error){message(error)}};

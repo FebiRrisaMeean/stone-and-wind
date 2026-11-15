@@ -1,12 +1,12 @@
-import {createBerryProductionAsset} from './production-assets.js?v=pages32-wheel-slow';
-import {createSeasonalWeather} from './seasonal-weather.js?v=pages32-wheel-slow';
-import {createWorkerCharacter} from './local-sculpt/worker-characters.js?v=pages32-wheel-slow';
-import {batchProductionSite} from './static-batching.js?v=pages32-wheel-slow';
-import {addWoodlandAssets,addWoodlandPaths,createWoodlandAsset} from './woodland-assets.js?v=pages32-wheel-slow';
-import {addProductionProps} from './production-props.js?v=pages32-wheel-slow';
-import {seasonVisuals} from './seasonal-visuals.js?v=pages32-wheel-slow';
+import {createBerryProductionAsset,createProductionAsset,productionAssetKind} from './production-assets.js?v=pages33-production-ui';
+import {createSeasonalWeather} from './seasonal-weather.js?v=pages33-production-ui';
+import {createWorkerCharacter} from './local-sculpt/worker-characters.js?v=pages33-production-ui';
+import {batchProductionSite} from './static-batching.js?v=pages33-production-ui';
+import {addWoodlandAssets,addWoodlandPaths,createWoodlandAsset} from './woodland-assets.js?v=pages33-production-ui';
+import {addProductionProps} from './production-props.js?v=pages33-production-ui';
+import {seasonVisuals} from './seasonal-visuals.js?v=pages33-production-ui';
 import * as T from '../vendor/three.module.js';
-import {WORLD} from './data.js?v=pages32-wheel-slow';
+import {WORLD} from './data.js?v=pages33-production-ui';
 
 // All geometry is local to the miniature so world-space placement and picking stay unchanged
 const bark=0x765039,moss=0x587c43,cream=0xf2ddac,soil=0x77654b;
@@ -91,7 +91,9 @@ function livingProductionSite(view,l){
  const ring=view.ring(radius-.02,radius+.035,owner===undefined?0xead9ad:team[owner],.75);ring.position.y=.18;ring.scale.z=.88;g.add(ring);
  const resources=Object.entries(l.rewardIcons??{}).filter(([,n])=>n>0).map(([r])=>r);
  const token=type=>resources.includes(type);
- if(id==='HAVEN'){const house=woodlandCottage(view,{x:0,z:0,kind:'house',id:l.id},true);house.position.set(-.2,.18,-.50);house.scale.setScalar(.85);g.add(house);view.box(g,.94,.44,-.2,.38,.53,.35,bark);for(let j=0;j<3;j++)view.box(g,.94,.51+j*.07,-.01,.25,.04,.03,cream);}
+ const generated=createProductionAsset(productionAssetKind(id));
+ if(generated)g.add(generated);
+ else if(id==='HAVEN'){const house=woodlandCottage(view,{x:0,z:0,kind:'house',id:l.id},true);house.position.set(-.2,.18,-.50);house.scale.setScalar(.85);g.add(house);view.box(g,.94,.44,-.2,.38,.53,.35,bark);for(let j=0;j<3;j++)view.box(g,.94,.51+j*.07,-.01,.25,.04,.03,cream);}
  else if(id.includes('JOURNEY')){view.cylinder(g,-.45,.67,-.48,.045,1.15,bark,8);view.box(g,-.33,1.08,-.48,.82,.24,.10,0xad8858);view.cone(g,.19,1.08,-.48,.17,.25,0xad8858,3).rotation.z=-Math.PI/2;view.box(g,.42,.36,-.27,.35,.45,.26,0x9c7547);for(let j=0;j<3;j++)rounded(view,g,-.8+j*.62,.20,.20,.19,0xc1ad85,1,.20,.62);}
  else{
   if(token('PEBBLE')||/PEBBLE|STONE/.test(id)){for(let j=0;j<6;j++){const a=j*Math.PI/5;rounded(view,g,Math.cos(a)*.63,.51+Math.sin(a)*.39,-.62,.36,0x929d96,1,.92,.85);}view.box(g,0,.48,-.31,.66,.62,.10,0x293832);for(const x of [-.43,.43])view.box(g,x,.49,-.19,.10,.84,.13,bark);view.box(g,0,.94,-.19,.98,.13,.18,0xa37c50);for(const x of [-.22,.22])view.beam(g,v(x,.20,-.12),v(x,.20,.40),.028,0x777f78);view.box(g,.7,.37,.0,.38,.30,.41,bark);for(let j=0;j<3;j++)rounded(view,g,.61+j*.1,.57,.03,.12,0xa4afaa);}
@@ -100,8 +102,7 @@ function livingProductionSite(view,l){
   else if(token('TWIG')||/TWIG/.test(id)){const stump=view.cylinder(g,-.77,.4,-.44,.38,.43,bark,14);view.cylinder(g,-.77,.63,-.44,.33,.025,0xcaa26a,14);view.beam(g,v(-.77,.65,-.44),v(-.61,1.15,-.44),.035,bark);view.box(g,-.63,1.01,-.44,.28,.16,.045,0xa7aba0);for(let j=0;j<5;j++)log(view,g,.50,.29+Math.floor(j/3)*.21,-.73+j%3*.25,.95);}
   else if(token('CARD')||id.includes('DRAW')||id.includes('DISCARD')||id.includes('COPY')){view.box(g,0,.56,-.52,1.65,.78,.40,bark);for(let j=0;j<7;j++){const book=view.box(g,-.66+j*.22,.58,-.28,.15,.55,.20,[0x8f5543,0x577e88,0xa99559][j%3]);book.rotation.z=(j%3-1)*.06;}view.box(g,.93,.35,.10,.48,.08,.44,bark);view.box(g,.93,.43,.10,.35,.045,.30,cream);}
   else {const hut=woodlandCottage(view,{x:0,z:0,kind:'house',id:l.id},true);hut.position.set(0,.1,-.5);hut.scale.setScalar(.72);g.add(hut);}
-  if(token('CARD')&&(token('PEBBLE')||token('TWIG')||token('RESIN')||token('BERRY'))){view.cylinder(g,-1.1,.61,.15,.035,.90,bark,7);view.box(g,-1.1,.90,.15,.45,.52,.055,bark);view.box(g,-1.1,.90,.19,.34,.40,.035,cream);view.box(g,-1.1,.95,.22,.22,.025,.015,0x81744a);}
-  if(token('VP')){const medal=view.cylinder(g,1.13,.69,-.18,.24,.05,0xe2bb54,20);medal.rotation.x=Math.PI/2;view.cylinder(g,1.13,.39,-.18,.03,.65,bark,7);}
+
  }
  addProductionProps(view,g,l);view.tagged(g,{type:'location',id:l.id});g.userData.productionKind=id;return batchProductionSite(g);
 }
