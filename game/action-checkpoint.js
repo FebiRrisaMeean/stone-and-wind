@@ -1,4 +1,4 @@
-import {serializeGame,restoreGame,GameInputType,PlayerStatus} from './everdell/engine.js?v=pages31-wheel';
+import {serializeGame,restoreGame,GameInputType,PlayerStatus} from './everdell/engine.js?v=pages32-wheel-slow';
 
 const copy=value=>structuredClone(value);
 const JSON_ACTION_VERSION=1;

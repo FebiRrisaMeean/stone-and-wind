@@ -1,19 +1,19 @@
-import {placementObstacles} from './online-placement.js?v=pages31-wheel';
-import {seasonConfirmation} from './season-confirmation.js?v=pages31-wheel';
-import {Event,Card,gameTextToDebugStr} from './everdell/engine.js?v=pages31-wheel';
-import {validCityPosition,freeCityPosition} from './living-board-state.js?v=pages31-wheel';
-import {cityRailMarkup,bindCityRail} from './city-icon-rail.js?v=pages31-wheel';
-import {supplyStatus,zoneDetail} from './living-ui.js?v=pages31-wheel';
-import {renderIcon} from './original-icons.js?v=pages31-wheel';
-import {choiceSpec,pendingCommand,choiceCardName} from './online-choices.js?v=pages31-wheel';
-import {OnlineClient} from './online-client.js?v=pages31-wheel';
-import {onlineDrawing} from './online-view-adapter.js?v=pages31-wheel';
-import {WorldView} from './world.js?v=pages31-wheel';
-import {applyCityScene} from './city-scene.js?v=pages31-wheel';
-import {gameCardFace,prepareGameCard} from './game-source-cards.js?v=pages31-wheel';
-import {CARD_NAMES,LOCATION_NAMES,EVENT_NAMES,EVENT_TEXT,RESOURCE_NAMES,SEASONS,translateText} from './everdell/locale.js?v=pages31-wheel';
-import {SOURCE_CARD_NAMES} from './source-card-map.js?v=pages31-wheel';
-import {resourceChoiceModel} from './decision-ui.js?v=pages31-wheel';
+import {placementObstacles} from './online-placement.js?v=pages32-wheel-slow';
+import {seasonConfirmation} from './season-confirmation.js?v=pages32-wheel-slow';
+import {Event,Card,gameTextToDebugStr} from './everdell/engine.js?v=pages32-wheel-slow';
+import {validCityPosition,freeCityPosition} from './living-board-state.js?v=pages32-wheel-slow';
+import {cityRailMarkup,bindCityRail} from './city-icon-rail.js?v=pages32-wheel-slow';
+import {supplyStatus,zoneDetail} from './living-ui.js?v=pages32-wheel-slow';
+import {renderIcon} from './original-icons.js?v=pages32-wheel-slow';
+import {choiceSpec,pendingCommand,choiceCardName} from './online-choices.js?v=pages32-wheel-slow';
+import {OnlineClient} from './online-client.js?v=pages32-wheel-slow';
+import {onlineDrawing} from './online-view-adapter.js?v=pages32-wheel-slow';
+import {WorldView} from './world.js?v=pages32-wheel-slow';
+import {applyCityScene} from './city-scene.js?v=pages32-wheel-slow';
+import {gameCardFace,prepareGameCard} from './game-source-cards.js?v=pages32-wheel-slow';
+import {CARD_NAMES,LOCATION_NAMES,EVENT_NAMES,EVENT_TEXT,RESOURCE_NAMES,SEASONS,translateText} from './everdell/locale.js?v=pages32-wheel-slow';
+import {SOURCE_CARD_NAMES} from './source-card-map.js?v=pages32-wheel-slow';
+import {resourceChoiceModel} from './decision-ui.js?v=pages32-wheel-slow';
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const cn=name=>SOURCE_CARD_NAMES[name]??CARD_NAMES[name]??name;
 const CHOICE_TITLES={SELECT_CARDS:'Выберите карты',SELECT_CARDS_WITH_SOURCE:'Выберите карты',SELECT_PLAYED_CARDS:'Выберите карты города',DISCARD_CARDS:'Выберите карты для сброса',SELECT_PLAYER:'Выберите игрока',SELECT_RESOURCES:'Выберите ресурсы',SELECT_PAYMENT_FOR_CARD:'Выберите оплату карты',SELECT_OPTION_GENERIC:'Выберите действие',SELECT_WORKER_PLACEMENT:'Выберите работника',SELECT_LOCATION:'Выберите место работы'};
@@ -27,7 +27,8 @@ export function mountOnlineGame(root){
  let disposed=false,busy=false,poll=null,view=null,drawing=null,layout={},viewer=0,viewedOwner=0,modal=null,fieldPanel=null,stopped=false,placement=null;
  root.innerHTML='<div class="game-shell placement-shell everdell-shell living-shell"><div id="online-world" class="world-stage" tabindex="-1"></div><aside class="online-panel" data-camera-ui><h2>Партия вдвоём</h2><div class="online-toolbar"><button data-online="create">Создать комнату</button><button data-online="resume">Вернуться</button><a href="./">Против бота</a></div><p id="online-state" role="status">Создайте комнату и отправьте приглашение</p><div id="online-invite"></div><div id="online-stock"></div><div class="online-toolbar"><button data-online="own">Мой город</button><button data-online="opponent">Город соперника</button><button data-online="production">Поле</button><button data-online="market">Рынок</button><button data-online="events">Задания</button></div><div id="online-actions" class="online-actions"></div><div id="online-city" class="city-icon-rail"></div><div id="online-choice"></div><div id="online-placement" hidden></div><p id="online-error" role="alert"></p></aside><div id="online-hand" class="online-hand" data-camera-ui></div><div id="online-field" class="online-field" data-camera-ui hidden></div><aside id="online-inspect" class="online-inspect" data-camera-ui hidden></aside></div>';
  const $=id=>root.querySelector('#'+id),world=new WorldView($('online-world'),pick,hover);
- world.onPlacementWheel=e=>{if(!placement||!Card.fromName(placement.name).isConstruction)return false;if(e.deltaY)rotatePlacement(Math.sign(e.deltaY));return true;};
+ let rotationWheel={placement:null,total:0,last:0};
+ world.onPlacementWheel=e=>{if(!placement||!Card.fromName(placement.name).isConstruction){rotationWheel={placement:null,total:0,last:0};return false;}const now=performance.now(),delta=Math.sign(e.deltaY)*Math.min(60,Math.abs(e.deltaY)*(e.deltaMode===1?16:e.deltaMode===2?240:1));if(rotationWheel.placement!==placement||now-rotationWheel.last>500||Math.sign(delta)!==Math.sign(rotationWheel.total))rotationWheel={placement,total:0,last:now};rotationWheel.total+=delta;rotationWheel.last=now;if(Math.abs(rotationWheel.total)>=240){rotatePlacement(Math.sign(rotationWheel.total));rotationWheel.total=0;}return true;};
 
  function cancelPlacement(){placement=null;world.setLivingPlacementPreview(null);$('online-placement').hidden=true;$('online-city').hidden=false;$('online-inspect').hidden=true;}
  function renderPlacement(){

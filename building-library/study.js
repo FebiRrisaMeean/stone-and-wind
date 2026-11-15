@@ -1,5 +1,5 @@
 import * as T from '../vendor/three.module.js'
-import {createGameSculpt,animateGameSculpt} from '../game/local-sculpt/game-models.js?v=pages31-wheel'
+import {createGameSculpt,animateGameSculpt} from '../game/local-sculpt/game-models.js?v=pages32-wheel-slow'
 const catalog=await (await fetch('./catalog.json')).json()
 let selected='Crane'
 const castLabels=[]

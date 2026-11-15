@@ -158,7 +158,7 @@ function frame(now) {
   raf = requestAnimationFrame(frame)
 }
 try {
-  const module = await import('../game/local-sculpt/scholar.js?v=pages31-wheel')
+  const module = await import('../game/local-sculpt/scholar.js?v=pages32-wheel-slow')
   animateModel = module.animateLocalScholar
   scene = new T.Scene()
   scene.background = new T.Color('#d9d6ca')

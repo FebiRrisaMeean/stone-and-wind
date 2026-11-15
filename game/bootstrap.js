@@ -1,4 +1,4 @@
-import {mountGame} from './everdell-main.js?v=pages31-wheel';
+import {mountGame} from './everdell-main.js?v=pages32-wheel-slow';
 const node=document.querySelector('[data-game-host]');
 if(node&&!node.dataset.mounted){
  node.dataset.mounted='true';

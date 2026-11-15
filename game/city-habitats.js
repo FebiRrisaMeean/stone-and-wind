@@ -1,4 +1,4 @@
-import {stepNavigation} from './city-navigation.js?v=pages31-wheel';
+import {stepNavigation} from './city-navigation.js?v=pages32-wheel-slow';
 // Visual relationships only: never change card occupancy, payments or city slots
 export function findCityHabitat(item,objects){
  if(item.type!=='city-card'||!item.critter||!item.homeCardName)return null
