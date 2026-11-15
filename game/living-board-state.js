@@ -1,4 +1,4 @@
-import {footprintAt,hullsOverlap,footprintFitsBounds,isBuildingFootprint,navigationFootprint,navigationPassageClear,normalizeCityRotation} from './city-footprints.js?v=pages34-production-models';
+import {footprintAt,hullsOverlap,footprintFitsBounds,isBuildingFootprint,navigationFootprint,navigationPassageClear,normalizeCityRotation} from './city-footprints.js?v=pages35-production-groups';
 // Presentation positions never change engine costs, turns, city capacity or card effects
 export const CITY_LAYOUT_VERSION=2;
 // Cities are independent canonical spaces, shown one at a time by applyCityScene
@@ -14,6 +14,22 @@ export const FOREST_POSITIONS=[[19.9,24.3],[25.7,23.7],[35,24.2],[40.9,24.8]];
 export const LOCATION_FOOTPRINT_RADIUS=1.95;
 // Haven and journeys meet the outgoing path, not a separate row near the city
 export const COMMON_POSITIONS={HAVEN:[20.3,29.7],JOURNEY_TWO:[25.5,29.1],JOURNEY_THREE:[30.7,28.4],JOURNEY_FOUR:[36,29.5],JOURNEY_FIVE:[41.2,30]};
+// Group the actual forest draw together with permanent sites, not by deck order
+export function productionLocationCoords(basics,forests){
+ const family=name=>{
+  if(['TWO_WILD','ONE_TWIG_RESIN_BERRY','DISCARD_UP_TO_THREE_CARDS_TO_GAIN_WILD_PER_CARD','DRAW_TWO_MEADOW_PLAY_ONE_FOR_ONE_LESS'].includes(name))return 3;
+  if(/PEBBLE|STONE/.test(name))return 4;
+  if(/BERRY/.test(name))return 0;
+  if(/RESIN/.test(name))return 5;
+  if(/TWIG/.test(name))return 1;
+  return 2;
+ };
+ const slots=[...BASIC_POSITIONS,...FOREST_POSITIONS],order=[0,1,2,3,7,6,5,4,8,9,10,11];
+ const names=[...basics,...forests].sort((a,b)=>family(a)-family(b)||a.localeCompare(b));
+ const coords=new Map(names.map((name,i)=>[name,slots[order[i]]]));
+ for(const [name,pos]of Object.entries(COMMON_POSITIONS))coords.set(name,pos);
+ return coords;
+}
 export const PRODUCTION_CLEARING={x:30.5,z:22,radius:13.8,scaleX:1,scaleZ:.85};
 export function inCity(owner,x,z){const c=LIVING_CITIES[owner];return !!c&&Number.isFinite(x)&&Number.isFinite(z)&&x>=c.bounds.minX&&x<=c.bounds.maxX&&z>=c.bounds.minZ&&z<=c.bounds.maxZ;}
 export function cityCardEntries(player){const counts={},entries=player.getPlayedCards().map(played=>{const ordinal=counts[played.cardName]??0;counts[played.cardName]=ordinal+1;return{key:player.playerId+'|'+played.cardName+'|'+ordinal,played,cardName:played.cardName};});for(const entry of entries)entry.pairedWith=entry.played.pairId?entries.find(other=>other.key!==entry.key&&other.played.pairId===entry.played.pairId)?.key??null:null;return entries;}

@@ -1,4 +1,4 @@
-import {TROOPS,WORLD} from './data.js?v=pages34-production-models';
+import {TROOPS,WORLD} from './data.js?v=pages35-production-groups';
 
 const WORKER=TROOPS.worker;
 const BASE_VISION=7.8;

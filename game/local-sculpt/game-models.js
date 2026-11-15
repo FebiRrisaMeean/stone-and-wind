@@ -1,13 +1,13 @@
-import {createNightCharacter,animateNightCharacter} from './night-characters.js?v=pages34-production-models'
-import {createNightBuilding} from './night-buildings.js?v=pages34-production-models'
-import {createMeshyPilot,animateMeshyPilot} from './meshy-pilots.js?v=pages34-production-models'
-import {createMeshyBuilding,animateMeshyBuilding} from './meshy-buildings.js?v=pages34-production-models'
-import {createHybridCrane,animateHybridCrane} from './hybrid-crane.js?v=pages34-production-models'
+import {createNightCharacter,animateNightCharacter} from './night-characters.js?v=pages35-production-groups'
+import {createNightBuilding} from './night-buildings.js?v=pages35-production-groups'
+import {createMeshyPilot,animateMeshyPilot} from './meshy-pilots.js?v=pages35-production-groups'
+import {createMeshyBuilding,animateMeshyBuilding} from './meshy-buildings.js?v=pages35-production-groups'
+import {createHybridCrane,animateHybridCrane} from './hybrid-crane.js?v=pages35-production-groups'
 import * as T from '../../vendor/three.module.js'
-import {createMeshyScholar,animateMeshyScholar} from './meshy-scholar.js?v=pages34-production-models'
-import {createLocalScholar,animateLocalScholar} from './scholar.js?v=pages34-production-models'
-import {createLocalCharacter,animateLocalCharacter} from './characters.js?v=pages34-production-models'
-import {ARCHITECTURE_NAMES,createArchitecture,animateArchitecture} from '../architecture-models.js?v=pages34-production-models'
+import {createMeshyScholar,animateMeshyScholar} from './meshy-scholar.js?v=pages35-production-groups'
+import {createLocalScholar,animateLocalScholar} from './scholar.js?v=pages35-production-groups'
+import {createLocalCharacter,animateLocalCharacter} from './characters.js?v=pages35-production-groups'
+import {ARCHITECTURE_NAMES,createArchitecture,animateArchitecture} from '../architecture-models.js?v=pages35-production-groups'
 
 const acceptedBuildings=new Set(ARCHITECTURE_NAMES)
 export function hasLocalBuilding(name){return acceptedBuildings.has(name)}

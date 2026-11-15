@@ -1,10 +1,10 @@
-import {createMovementWorld} from './movement.js?v=pages34-production-models';
-import {WORLD} from './data.js?v=pages34-production-models';
-import {Card,Location} from './everdell/engine.js?v=pages34-production-models';
-import {PRODUCTION_CLEARING,LIVING_CITIES,LIVING_TREE,MARKET_POSITIONS,BASIC_POSITIONS,FOREST_POSITIONS,COMMON_POSITIONS,CITY_CAMPS,CITY_FOREST_GATEWAYS,cityCardEntries,reconcileCityLayout} from './living-board-state.js?v=pages34-production-models';
-import {CARD_NAMES,LOCATION_NAMES,LOCATION_TEXT,EVENT_NAMES,SEASONS} from './everdell/locale.js?v=pages34-production-models';
-import {cityWorkerMarker,zoneBadge,storedResources} from './living-ui.js?v=pages34-production-models';
-import {workerSeatPosition} from './production-props.js?v=pages34-production-models';
+import {createMovementWorld} from './movement.js?v=pages35-production-groups';
+import {WORLD} from './data.js?v=pages35-production-groups';
+import {Card,Location} from './everdell/engine.js?v=pages35-production-groups';
+import {productionLocationCoords,PRODUCTION_CLEARING,LIVING_CITIES,LIVING_TREE,MARKET_POSITIONS,BASIC_POSITIONS,FOREST_POSITIONS,COMMON_POSITIONS,CITY_CAMPS,CITY_FOREST_GATEWAYS,cityCardEntries,reconcileCityLayout} from './living-board-state.js?v=pages35-production-groups';
+import {CARD_NAMES,LOCATION_NAMES,LOCATION_TEXT,EVENT_NAMES,SEASONS} from './everdell/locale.js?v=pages35-production-groups';
+import {cityWorkerMarker,zoneBadge,storedResources} from './living-ui.js?v=pages35-production-groups';
+import {workerSeatPosition} from './production-props.js?v=pages35-production-groups';
 const key=w=>w.location?'l:'+w.location:w.event?'e:'+w.event:'c:'+w.playedCard?.cardOwnerId+':'+w.playedCard?.cardName;
 // Reads only a private-per-seat public projection. No engine restore and no invented cards
 export function onlineDrawing(view,layout={},previous=null){
@@ -16,7 +16,7 @@ export function onlineDrawing(view,layout={},previous=null){
  for(let z=WORLD.height;z<70;z++)for(let x=0;x<WORLD.width;x++)state.tiles.push({x,z,type:'meadow',h:0});
  state.players=g.players.map((p,id)=>({id,level:1,workers:0,gifts:[],explored:Array(WORLD.width*70).fill(true)}));
  const offered=type=>view.offers.filter(o=>o.inputType===type),places=new Set(offered('PLACE_WORKER').map(o=>o.clientOptions.location));
- const names=Object.keys(g.locationsMap),coords=new Map();names.filter(n=>Location.fromName(n).type==='BASIC').forEach((n,i)=>coords.set(n,BASIC_POSITIONS[i]));names.filter(n=>Location.fromName(n).type==='FOREST').forEach((n,i)=>coords.set(n,FOREST_POSITIONS[i]));for(const [n,p]of Object.entries(COMMON_POSITIONS))coords.set(n,p);
+ const names=Object.keys(g.locationsMap),coords=productionLocationCoords(names.filter(n=>Location.fromName(n).type==='BASIC'),names.filter(n=>Location.fromName(n).type==='FOREST'));
  for(const n of names){const c=coords.get(n);if(!c)continue;const loc=Location.fromName(n);state.locations.push({id:'ever:'+n,actualName:n,name:LOCATION_NAMES[n]??n,x:c[0],z:c[1],capacity:loc.occupancy==='UNLIMITED'?null:loc.occupancy==='EXCLUSIVE_FOUR'&&g.players.length===4?2:1,owner:null,workers:[],reward:{},rewardIcons:loc.resourcesToGain??{},description:LOCATION_TEXT[n]??'',locationType:loc.type,available:places.has(n),locked:!places.has(n),badgeHtml:'',ariaLabel:LOCATION_NAMES[n]??n});}
  Object.entries(g.eventsMap).forEach(([eventName,owner],index)=>state.livingObjects.push({id:'event:'+eventName,type:'event',eventName,owner:g.players.findIndex(p=>p.playerId===owner),x:22+index%4*5.2,z:1.5+Math.floor(index/4)*2.7,label:EVENT_NAMES[eventName]??eventName,available:offered('CLAIM_EVENT').some(o=>o.clientOptions.event===eventName)}));
  g.players.forEach((p,owner)=>{

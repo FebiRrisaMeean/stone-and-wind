@@ -392,7 +392,6 @@
 /* Production quantities are UI, not loose reward piles on the landscape */
 .living-shell .world-label.living-zone-badge{color:#433520!important;max-width:none;transition:none!important}
 .living-shell .living-zone-badge .zone-summary{position:absolute;left:50%;bottom:-7px;display:flex;align-items:center;justify-content:center;gap:5px;width:max-content;max-width:145px;box-sizing:border-box;padding:4px 6px;border:1px solid #ac9770;border-radius:8px;background:#f4e7caf5;color:#433520;box-shadow:0 2px 5px #34270c26;transform:translateX(-50%) scale(var(--zone-summary-scale,1));transform-origin:center top;pointer-events:none}
-.living-shell .living-zone-badge[data-available="true"]:not([data-locked="true"]) .zone-summary{border-color:#6e944a;box-shadow:0 0 0 2px #8bb4639c,0 2px 6px #213d2533;background:#f1edcff7}
 .living-shell .living-zone-badge[data-locked="true"] .zone-summary{background:#e8dfccf5;border-color:#a39a86;box-shadow:0 1px 4px #34270c26}
 .living-shell .living-zone-badge .zone-reward{display:flex;align-items:center;justify-content:center;gap:5px;flex-wrap:nowrap;padding:0;margin:0;background:none;border:0;box-shadow:none;min-height:22px;color:#433520}
 .living-shell .living-zone-badge .zone-value{display:inline-flex;align-items:center;gap:3px;white-space:nowrap;min-width:0;padding:0;background:none;border:0;box-shadow:none}

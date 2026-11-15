@@ -1,5 +1,5 @@
 import * as T from '../../vendor/three.module.js'
-import {part,ell,tube,leaf,sculpt,surface,batch} from './geometry.js?v=pages34-production-models'
+import {part,ell,tube,leaf,sculpt,surface,batch} from './geometry.js?v=pages35-production-groups'
 
 export const SCHOLAR_RECIPE = Object.freeze({
   id:'scholar-a-local-2', reference:'approved Scholar A', front:'-Z', height:2.6,

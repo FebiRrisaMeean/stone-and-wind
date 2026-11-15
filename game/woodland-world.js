@@ -1,12 +1,12 @@
-import {createBerryProductionAsset,createProductionAsset,productionAssetKind} from './production-assets.js?v=pages34-production-models';
-import {createSeasonalWeather} from './seasonal-weather.js?v=pages34-production-models';
-import {createWorkerCharacter} from './local-sculpt/worker-characters.js?v=pages34-production-models';
-import {batchProductionSite} from './static-batching.js?v=pages34-production-models';
-import {addWoodlandAssets,addWoodlandPaths,createWoodlandAsset} from './woodland-assets.js?v=pages34-production-models';
-import {addProductionProps} from './production-props.js?v=pages34-production-models';
-import {seasonVisuals} from './seasonal-visuals.js?v=pages34-production-models';
+import {createBerryProductionAsset,createProductionAsset,productionAssetKind} from './production-assets.js?v=pages35-production-groups';
+import {createSeasonalWeather} from './seasonal-weather.js?v=pages35-production-groups';
+import {createWorkerCharacter} from './local-sculpt/worker-characters.js?v=pages35-production-groups';
+import {batchProductionSite} from './static-batching.js?v=pages35-production-groups';
+import {addWoodlandAssets,addWoodlandPaths,createWoodlandAsset} from './woodland-assets.js?v=pages35-production-groups';
+import {addProductionProps} from './production-props.js?v=pages35-production-groups';
+import {seasonVisuals} from './seasonal-visuals.js?v=pages35-production-groups';
 import * as T from '../vendor/three.module.js';
-import {WORLD} from './data.js?v=pages34-production-models';
+import {WORLD} from './data.js?v=pages35-production-groups';
 
 // All geometry is local to the miniature so world-space placement and picking stay unchanged
 const bark=0x765039,moss=0x587c43,cream=0xf2ddac,soil=0x77654b;
@@ -86,9 +86,7 @@ export function woodlandSource(view,m){const g=new T.Group();g.position.set(m.x,
 }
 
 function livingProductionSite(view,l){
- const g=new T.Group(),id=l.actualName??l.id;g.position.set(l.x,view.heightAt(l.x,l.z),l.z);const radius=1.83,owner=view.state.units.find(u=>l.workers?.includes(u.id))?.owner;
- const clearing=view.cylinder(g,0,.04,0,radius+.12,.08,0xbca574,40);clearing.scale.z=.88;const lip=view.cylinder(g,0,.09,0,radius,.08,0x795d3d,40);lip.scale.z=.88;const ground=view.cylinder(g,0,.14,0,radius-.08,.035,0xd9c39a,40);ground.scale.z=.88;
- const ring=view.ring(radius-.02,radius+.035,owner===undefined?0xead9ad:team[owner],.75);ring.position.y=.18;ring.scale.z=.88;g.add(ring);
+ const g=new T.Group(),id=l.actualName??l.id;g.position.set(l.x,view.heightAt(l.x,l.z),l.z);
  const resources=Object.entries(l.rewardIcons??{}).filter(([,n])=>n>0).map(([r])=>r);
  const token=type=>resources.includes(type);
  const generated=createProductionAsset(productionAssetKind(id));

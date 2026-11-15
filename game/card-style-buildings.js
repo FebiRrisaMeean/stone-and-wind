@@ -1,4 +1,4 @@
-import {T,P,random,material,mesh,ell,box,cyl,rod,curve,torus,group,motion,leaf} from './card-style-primitives.js?v=pages34-production-models'
+import {T,P,random,material,mesh,ell,box,cyl,rod,curve,torus,group,motion,leaf} from './card-style-primitives.js?v=pages35-production-groups'
 
 // Source-backed architecture: the silhouettes are built from connected load-bearing parts
 // The small backs and hidden joints are restrained reconstructions of the card artwork

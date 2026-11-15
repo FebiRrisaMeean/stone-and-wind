@@ -39,7 +39,7 @@ export function createProductionAsset(kind){
  if(!parts.get(kind)?.length)return null
  const root=new T.Group();root.name=kind+'-production';root.userData.productionAsset=kind
  for(const part of parts.get(kind)){const mesh=new T.Mesh(part.geometry,part.material);mesh.castShadow=true;mesh.receiveShadow=true;root.add(mesh)}
- root.scale.setScalar(kind==='trail'?1.85:kind==='haven'?2.3:2.05);root.position.set(.12,.17,kind==='trail'||kind==='haven'?-1.05:-.55)
+ root.scale.setScalar(kind==='trail'?1.85:kind==='haven'?2.3:2.05);root.position.set(.12,0,kind==='trail'||kind==='haven'?-1.05:-.55)
  return root
 }
 export const createBerryProductionAsset=()=>createProductionAsset('berry')
