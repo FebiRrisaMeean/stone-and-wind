@@ -3,19 +3,20 @@ export const SHORTCUTS=[['market','Рынок','KeyM','[data-camera-zone="market
 const reserved=new Set(['KeyW','KeyA','KeyS','KeyD','KeyQ','KeyE','KeyR',...Array.from({length:6},(_,i)=>'Digit'+(i+1))]);
 const label=code=>code?code.replace(/^Key|^Digit/,''):'—';
 export function validShortcut(code){return /^(Key[A-Z]|Digit[0-9])$/.test(code)&&!reserved.has(code)}
-export function bindKeyboardControls(root,{canAct}){
+export function bindKeyboardControls(root,{canAct,toggleOpen=()=>false,selectorFor=action=>action[3]}){
  let bindings=Object.fromEntries(SHORTCUTS.map(([id,,code])=>[id,code])),waiting=null;
  try{const saved=JSON.parse(localStorage.getItem(STORAGE));const seen=new Set();for(const [id]of SHORTCUTS){const code=saved?.[id];if(code===null||(validShortcut(code)&&!seen.has(code))){bindings[id]=code;if(code)seen.add(code)}}}catch{}
  function save(){try{localStorage.setItem(STORAGE,JSON.stringify(bindings))}catch{}}
- function refresh(message=''){for(const el of root.querySelectorAll('[data-bind-key]')){const id=el.dataset.bindKey;el.textContent=waiting===id?'Нажмите клавишу…':label(bindings[id]);el.setAttribute('aria-pressed',String(waiting===id))}const note=root.querySelector('[data-key-message]');if(note)note.textContent=message;}
+ function refreshHints(){for(const action of SHORTCUTS){const [id,title]=action;for(const button of root.querySelectorAll(selectorFor(action))){const code=bindings[id],hint=title+(code?' · '+label(code):'');button.title=hint;button.setAttribute('aria-label',hint);if(code)button.setAttribute('aria-keyshortcuts',label(code));else button.removeAttribute('aria-keyshortcuts');const caption=button.querySelector('span');if(caption)caption.textContent=hint}}}
+ function refresh(message=''){refreshHints();for(const el of root.querySelectorAll('[data-bind-key]')){const id=el.dataset.bindKey;el.textContent=waiting===id?'Нажмите клавишу…':label(bindings[id]);el.setAttribute('aria-pressed',String(waiting===id))}const note=root.querySelector('[data-key-message]');if(note)note.textContent=message;}
  function markup(){return `<div class="keyboard-settings"><p>Нажмите на клавишу, чтобы изменить её. Работает и в русской раскладке</p>${SHORTCUTS.map(([id,title])=>`<div class="keyboard-row"><span>${title}</span><button type="button" data-bind-key="${id}" aria-label="Клавиша: ${title}" aria-pressed="false">${label(bindings[id])}</button></div>`).join('')}<p data-key-message role="status"></p><button type="button" data-keys-reset>Сбросить клавиши</button><p>WASD, Q/E, R и 1–6 заняты управлением игры · Esc — отмена · Backspace — убрать назначение</p></div>`}
  function click(e){const button=e.target.closest('[data-bind-key]');if(button){waiting=button.dataset.bindKey;refresh();return}if(e.target.closest('[data-keys-reset]')){bindings=Object.fromEntries(SHORTCUTS.map(([id,,code])=>[id,code]));waiting=null;save();refresh('Назначения сброшены')}}
  function key(e){
   if(waiting&&!root.querySelector(`[data-bind-key="${waiting}"]`))waiting=null;
   if(waiting){e.preventDefault();e.stopImmediatePropagation();if(e.key==='Escape'){waiting=null;refresh();return}if(e.code==='Backspace'||e.code==='Delete'){bindings[waiting]=null;waiting=null;save();refresh();return}if(e.ctrlKey||e.altKey||e.metaKey||e.shiftKey||!validShortcut(e.code)){refresh('Выберите букву или цифру, не занятую управлением камеры');return}const conflict=SHORTCUTS.find(([id])=>id!==waiting&&bindings[id]===e.code);if(conflict){refresh('Эта клавиша уже назначена: '+conflict[1]);return}bindings[waiting]=e.code;waiting=null;save();refresh('Клавиша сохранена');return}
-  if(e.repeat||e.ctrlKey||e.altKey||e.metaKey||e.shiftKey||e.target.closest?.('input,textarea,select,[contenteditable="true"]')||!canAct())return;
-  const action=SHORTCUTS.find(([id])=>bindings[id]===e.code);if(!action)return;const button=root.querySelector(action[3]);if(!button||button.disabled)return;e.preventDefault();e.stopImmediatePropagation();button.click();
+  if(e.repeat||e.ctrlKey||e.altKey||e.metaKey||e.shiftKey||e.target.closest?.('input,textarea,select,[contenteditable="true"]'))return;
+  const action=SHORTCUTS.find(([id])=>bindings[id]===e.code);if(!action)return;if(toggleOpen(action[0])){e.preventDefault();e.stopImmediatePropagation();return}if(!canAct(action[0]))return;const button=root.querySelector(selectorFor(action));if(!button||button.disabled)return;e.preventDefault();e.stopImmediatePropagation();button.click();
  }
- root.addEventListener('click',click);window.addEventListener('keydown',key,true);
- return{markup,dispose(){root.removeEventListener('click',click);window.removeEventListener('keydown',key,true)}};
+ refreshHints();root.addEventListener('pointerover',refreshHints);root.addEventListener('focusin',refreshHints);root.addEventListener('click',click);window.addEventListener('keydown',key,true);
+ return{markup,refreshHints,dispose(){root.removeEventListener('pointerover',refreshHints);root.removeEventListener('focusin',refreshHints);root.removeEventListener('click',click);window.removeEventListener('keydown',key,true)}};
 }

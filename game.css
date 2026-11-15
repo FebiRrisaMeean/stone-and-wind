@@ -660,14 +660,14 @@
 .living-shell .living-zone-badge :is(.zone-value b,.zone-operator,.zone-reward,.zone-lock){color:var(--ui-text)!important}
 .living-shell .living-zone-badge:not(.is-hovered):not(:focus-visible)[data-locked=true] .zone-summary{background:transparent!important}
 .living-shell .camera-zone-controls button span,.living-shell .field-actions button span{background:var(--ui-panel)!important;color:var(--ui-text)!important;border-color:var(--ui-edge)!important}
-.living-shell .map-toolbar{position:absolute;right:18px;top:50%;transform:translateY(-50%);z-index:115;display:flex;flex-direction:column;gap:16px;width:44px}
+.living-shell .map-toolbar{position:absolute;right:18px;top:50%;transform:translateY(-50%);z-index:115;display:flex;flex-direction:column;gap:8px;width:44px}
 .living-shell .map-toolbar .camera-zone-controls,.living-shell .map-toolbar .field-actions{position:static;transform:none;display:flex;flex-direction:column;gap:8px;width:44px}
 .living-shell .map-toolbar button{position:relative;display:grid;place-items:center;width:44px;height:44px;min-width:44px;padding:10px;border-radius:11px}
 .living-shell .map-toolbar button svg{width:24px;height:24px}
 .living-shell .field-actions button span{position:absolute;right:calc(100% + 10px);top:50%;transform:translateY(-50%);padding:7px 10px;white-space:nowrap;border:1px solid var(--ui-edge);border-radius:6px;font:14px/1.25 var(--card-body);opacity:0;pointer-events:none}
 .living-shell .field-actions button:hover span,.living-shell .field-actions button:focus-visible span{opacity:1}
 .living-shell .field-actions .has-action:after{position:absolute;right:-3px;top:-3px;margin:0;width:8px;height:8px;background:#e17968;border:2px solid #253026}
-@media(max-height:650px){.living-shell .map-toolbar{gap:10px}.living-shell .map-toolbar button{width:38px;height:38px;min-width:38px;padding:7px}.living-shell .map-toolbar .camera-zone-controls,.living-shell .map-toolbar .field-actions{gap:5px}}
+@media(max-height:650px){.living-shell .map-toolbar{gap:5px}.living-shell .map-toolbar button{width:38px;height:38px;min-width:38px;padding:7px}.living-shell .map-toolbar .camera-zone-controls,.living-shell .map-toolbar .field-actions{gap:5px}}
 
 .event-required-card{gap:7px}.event-card-portrait{width:34px;height:34px;flex:none;border:1px solid var(--ui-edge,#abb68c55);background-color:var(--ui-inner,#343c32);box-sizing:border-box}
 
@@ -677,3 +677,5 @@
 .keyboard-settings{margin-top:14px;border-top:1px solid var(--ui-edge);padding-top:8px}.keyboard-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:6px 0;font:14px/1.25 var(--card-body)}.keyboard-row button{min-width:52px;min-height:30px;padding:5px 10px}.keyboard-row button[aria-pressed=true]{outline:2px solid #a0bd72}.keyboard-settings [data-key-message]:empty{display:none}
 
 .resource-word{display:inline-flex;align-items:center;gap:5px;vertical-align:middle;white-space:nowrap}
+/* Keep the assigned key attached to its camera action label */
+.living-shell .camera-zone-controls button span{white-space:nowrap;max-width:none}

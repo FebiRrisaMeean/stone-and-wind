@@ -1,5 +1,5 @@
-import {renderIcon} from './original-icons.js?v=pages41-production-overhead';
-import {cityCardPortraitUrl} from './city-icon-rail.js?v=pages41-production-overhead';
+import {renderIcon} from './original-icons.js?v=pages42-tree-controls';
+import {cityCardPortraitUrl} from './city-icon-rail.js?v=pages42-tree-controls';
 const esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export function eventDescription(text){return esc(text).replace(/(\d+)\s+очк(?:ов|а|о|у)(?![а-яё])/gu,(_,n)=>`<span class="event-points">${n}${renderIcon('point',{size:20})}</span>`).replace(/(зелёные|зеленые|красные|синие|коричневые|фиолетовые)\s+карт[ы]/gu,(_,color)=>renderIcon(({зелёные:'production',зеленые:'production',красные:'destination',синие:'governance',коричневые:'traveler',фиолетовые:'prosperity'})[color],{size:22})+' карты');}
 export function requiredCardLabel(name,label){const image=cityCardPortraitUrl(name);return `<span class="event-required-card">${image?`<span class="city-rail-portrait event-card-portrait" style="background-image:url('${esc(image)}')" aria-hidden="true"></span>`:''}${esc(label)}</span>`;}

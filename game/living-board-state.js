@@ -1,6 +1,6 @@
-import {footprintAt,hullsOverlap,footprintFitsBounds,isBuildingFootprint,navigationFootprint,navigationPassageClear,normalizeCityRotation} from './city-footprints.js?v=pages41-production-overhead';
+import {footprintAt,hullsOverlap,footprintFitsBounds,isBuildingFootprint,navigationFootprint,navigationPassageClear,normalizeCityRotation} from './city-footprints.js?v=pages42-tree-controls';
 // Presentation positions never change engine costs, turns, city capacity or card effects
-// v2 starts the compact ring composition; the untouched v1 key is the rollback copy
+// v2 keeps the accepted single-ring composition and its saved editor positions
 // Saved v2 coordinates are authoritative, including deliberate overlap with the crown
 export const FIELD_LAYOUT_KEY='stone-wind-field-layout-v2';
 let fieldLayout={};
@@ -18,7 +18,8 @@ export const LIVING_TREE={x:30,z:20};
 export const MARKET_POSITIONS=Array.from({length:8},(_,i)=>({x:22.5+(i%4)*5,z:25.3+Math.floor(i/4)*5}));
 // Seventeen compact perimeter slots leave a clear central crown, grouped by resource family
 export const LOCATION_FOOTPRINT_RADIUS=1.95;
-const RING_RADIUS=12.5,RING_SLOTS=17;
+export const ELDER_CANOPY_HALF_EXTENT={x:4.334,z:3.951};
+const PRODUCTION_TREE_GAP=2.1,PRODUCTION_SPACING=4.5,RING_RADIUS=12.5,RING_SLOTS=17;
 function ringPositions(tree){
  const cx=Math.max(17.5,Math.min(42.5,tree.x)),cz=Math.max(17.5,Math.min(26.5,tree.z));
  return Array.from({length:RING_SLOTS},(_,i)=>{const angle=-Math.PI/2+i*Math.PI*2/RING_SLOTS;return [cx+Math.cos(angle)*RING_RADIUS,cz+Math.sin(angle)*RING_RADIUS];});
@@ -47,7 +48,7 @@ export function productionLocationCoords(basics,forests){
  for(const name of names){const p=fieldLayout[name];if(p){coords.set(name,[p.x,p.z]);occupied.push([p.x,p.z]);}}
  const ring=ringPositions(tree);let candidates=null;
  // Build the fallback grid only if the compact default ring actually needs repair
- const usable=p=>!productionHiddenByTree(...p,tree,LOCATION_FOOTPRINT_RADIUS)&&occupied.every(q=>Math.hypot(p[0]-q[0],p[1]-q[1])>=4.5);
+ const usable=p=>!productionHiddenByTree(...p,tree,PRODUCTION_TREE_GAP)&&occupied.every(q=>Math.hypot(p[0]-q[0],p[1]-q[1])>=PRODUCTION_SPACING);
  for(const [i,name]of names.entries()){
   if(coords.has(name))continue;
   const preferred=ring[i%ring.length];
@@ -155,7 +156,7 @@ export function migrateCityLayout(game,positions={},version=1){
  return {...result,version:CITY_LAYOUT_VERSION,migrated:version!==CITY_LAYOUT_VERSION||JSON.stringify(result.positions)!==JSON.stringify(original)};
 }
 
-// Conservative top-down crown footprint, with optional building clearance
-export function productionHiddenByTree(x,z,tree,padding=0){return Math.abs(x-tree.x)<6.5+padding&&Math.abs(z-tree.z)<6.5+padding;}
+// Measured top-down elder GLB extent after normalization and runtime scaling
+export function productionHiddenByTree(x,z,tree,padding=0){return Math.abs(x-tree.x)<ELDER_CANOPY_HALF_EXTENT.x+padding&&Math.abs(z-tree.z)<ELDER_CANOPY_HALF_EXTENT.z+padding;}
 // Compatibility helper: presentation must never rewrite an explicit editor position
 export function clearTreeSightline(coords){return new Map([...coords].map(([name,p])=>[name,[...p]]));}

@@ -1,4 +1,4 @@
-import {TROOPS,WORLD} from './data.js?v=pages41-production-overhead';
+import {TROOPS,WORLD} from './data.js?v=pages42-tree-controls';
 
 const WORKER=TROOPS.worker;
 const BASE_VISION=7.8;

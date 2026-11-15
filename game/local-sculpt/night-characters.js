@@ -1,9 +1,9 @@
-import {sampleGroundFloor} from './ground-contact.js?v=pages41-production-overhead'
+import {sampleGroundFloor} from './ground-contact.js?v=pages42-tree-controls'
 import * as T from '../../vendor/three.module.js'
 import {GLTFLoader} from '../../vendor/addons/loaders/GLTFLoader.js'
 import {clone as cloneSkeleton} from '../../vendor/addons/utils/SkeletonUtils.js'
 
-import {createAssetLibrary,eagerAssetsRequested} from './lazy-assets.js?v=pages41-production-overhead'
+import {createAssetLibrary,eagerAssetsRequested} from './lazy-assets.js?v=pages42-tree-controls'
 
 const states=new WeakMap(),point=new T.Vector3()
 const definitions={"Husband": {"file": "husband/rigged", "critter": true}, "Wife": {"file": "wife/rigged", "critter": true}, "Shopkeeper": {"file": "shopkeeper/rigged", "critter": true}, "Barge Toad": {"file": "barge-toad/rigged", "critter": true}, "Chip Sweep": {"file": "chip-sweep/rigged", "critter": true}, "Innkeeper": {"file": "innkeeper/rigged", "critter": true}, "Fool": {"file": "fool/rigged", "critter": true}, "Judge": {"file": "judge/rigged", "critter": true}, "King": {"file": "king/rigged", "critter": true}, "Miner Mole": {"file": "miner-mole/rigged", "critter": true}, "Monk": {"file": "monk/rigged", "critter": true}, "Peddler": {"file": "peddler/rigged", "critter": true}, "Queen": {"file": "queen/rigged", "critter": true}, "Ranger": {"file": "ranger/rigged", "critter": true}, "Wanderer": {"file": "wanderer/rigged", "critter": true}, "Woodcarver": {"file": "woodcarver/rigged", "critter": true}, "Bard": {"file": "bard/rigged", "critter": true}, "Historian": {"file": "historian/rigged", "critter": true}, "Postal Pigeon": {"file": "postal-pigeon/rigged", "critter": true}, "Shepherd": {"file": "shepherd/rigged", "critter": true}, "Teacher": {"file": "teacher/rigged", "critter": true}, "Undertaker": {"file": "undertaker/rigged", "critter": true}}

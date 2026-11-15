@@ -1,5 +1,5 @@
-import {navigationFootprint} from './city-footprints.js?v=pages41-production-overhead'
-import {buildCityRoads} from './city-roads.js?v=pages41-production-overhead'
+import {navigationFootprint} from './city-footprints.js?v=pages42-tree-controls'
+import {buildCityRoads} from './city-roads.js?v=pages42-tree-controls'
 // Visual layout only: never alters playable locations, city footprints or game state
 export const WOODLAND_PATHS=[
  [[16,27],[21,26.5],[26,26],[31,26.6],[36,26.5],[43,27.5]],
@@ -9,6 +9,15 @@ export const WOODLAND_PATHS=[
  [[44,17.5],[44,22],[44,27.5],[42,32]],
  [[29.5,16],[30,12],[30,8]]
 ]
+// Static spokes follow edited production coordinates without changing gameplay paths
+export function productionRoadSegments(state){
+ const tree=state.livingTree??{x:30,z:20};
+ return (state.locations??[]).flatMap(p=>{
+  const target={x:p.x+.12,z:p.z-.55},dx=target.x-tree.x,dz=target.z-tree.z,length=Math.hypot(dx,dz);
+  if(length<2.5)return [];
+  return [{a:{x:tree.x+dx/length*1.1,z:tree.z+dz/length*1.1},b:{x:target.x-dx/length*.75,z:target.z-dz/length*.75}}];
+ });
+}
 export const forestNoise=(x,z)=>{const v=Math.sin(x*127.1+z*311.7)*43758.5453;return v-Math.floor(v)}
 export function distanceToPath(x,z){let best=Infinity;for(const path of WOODLAND_PATHS)for(let i=1;i<path.length;i++){const[a,b]=[path[i-1],path[i]],dx=b[0]-a[0],dz=b[1]-a[1],t=Math.max(0,Math.min(1,((x-a[0])*dx+(z-a[1])*dz)/(dx*dx+dz*dz)));best=Math.min(best,Math.hypot(x-a[0]-dx*t,z-a[1]-dz*t))}return best}
 export function vegetationAllowed(state,x,z,radius=1.6){
@@ -61,7 +70,7 @@ export function woodlandRelief(x,z){
 const pointSegmentDistance=(x,z,a,b)=>{const dx=b.x-a.x,dz=b.z-a.z,t=Math.max(0,Math.min(1,((x-a.x)*dx+(z-a.z)*dz)/(dx*dx+dz*dz||1)));return Math.hypot(x-a.x-dx*t,z-a.z-dz*t)}
 export function forestLayoutKey(state){return JSON.stringify([state.livingTree,(state.locations??[]).map(p=>[p.id,p.x,p.z]),(state.livingObjects??[]).filter(p=>p.type==='city-card'&&!p.critter).map(p=>[p.id,p.cardName,p.x,p.z,p.rotation,p.modelScale])])}
 function denseVegetationAllowed(state,x,z,radius){
- if(distanceToPath(x,z)<radius+.25)return false
+ if(!state.livingBoard&&distanceToPath(x,z)<radius+.25)return false
  const tree=state.livingTree??{x:30,z:8};if(Math.hypot(x-tree.x,z-tree.z)<4.2+radius)return false
  // Crown clearance includes the foreground sightline to each playable miniature
  if((state.locations??[]).some(p=>Math.abs(x-p.x)<radius+1.5&&z>p.z-2-radius&&z<p.z+2.8+radius))return false
@@ -72,7 +81,7 @@ function denseVegetationAllowed(state,x,z,radius){
  return !(state.tiles??[]).some(t=>t.type==='water'&&Math.abs(t.x-x)<radius&&Math.abs(t.z-z)<radius)
 }
 function denseWoodlandPlacements(state){
- const roads=buildCityRoads((state.livingObjects??[]).filter(p=>p.type==='city-card'&&!p.critter)).segments,context={...state,_vegetationRoads:roads},base=[]
+ const roads=[...buildCityRoads((state.livingObjects??[]).filter(p=>p.type==='city-card'&&!p.critter)).segments,...productionRoadSegments(state)],context={...state,_vegetationRoads:roads},base=[]
  for(let z=2;z<68;z+=3.4)for(let x=2;x<59;x+=3.4){const seed=forestNoise(x,z);if(seed>.94)continue;base.push({x:x+(forestNoise(z,x)-.5)*1.3,z:z+(seed-.5)*1.3,seed})}
  // Select a stable forest before cutting clearings: building never regrows trees elsewhere
  base.sort((a,b)=>a.seed-b.seed);const selected=[]

@@ -1,22 +1,23 @@
-import {resourceText} from './resource-text.js?v=pages41-production-overhead';
-import {eventDescription,requiredCardLabel,eventLock} from './event-ui.js?v=pages41-production-overhead';
-import {cityCameraBounds,CITY_CAMERA_PADDING,productionCameraBounds,PRODUCTION_CAMERA_PADDING} from './camera-framing.js?v=pages41-production-overhead';
-import {placementObstacles} from './online-placement.js?v=pages41-production-overhead';
-import {seasonConfirmation} from './season-confirmation.js?v=pages41-production-overhead';
-import {Event,Card,gameTextToDebugStr} from './everdell/engine.js?v=pages41-production-overhead';
-import {validCityPosition,freeCityPosition} from './living-board-state.js?v=pages41-production-overhead';
-import {cityRailMarkup,bindCityRail} from './city-icon-rail.js?v=pages41-production-overhead';
-import {supplyStatus,zoneDetail} from './living-ui.js?v=pages41-production-overhead';
-import {renderIcon} from './original-icons.js?v=pages41-production-overhead';
-import {choiceSpec,pendingCommand,choiceCardName} from './online-choices.js?v=pages41-production-overhead';
-import {OnlineClient} from './online-client.js?v=pages41-production-overhead';
-import {onlineDrawing} from './online-view-adapter.js?v=pages41-production-overhead';
-import {WorldView} from './world.js?v=pages41-production-overhead';
-import {applyCityScene} from './city-scene.js?v=pages41-production-overhead';
-import {gameCardFace,prepareGameCard} from './game-source-cards.js?v=pages41-production-overhead';
-import {CARD_NAMES,LOCATION_NAMES,EVENT_NAMES,EVENT_TEXT,RESOURCE_NAMES,SEASONS,translateText} from './everdell/locale.js?v=pages41-production-overhead';
-import {SOURCE_CARD_NAMES} from './source-card-map.js?v=pages41-production-overhead';
-import {resourceChoiceModel} from './decision-ui.js?v=pages41-production-overhead';
+import {bindKeyboardControls} from './keyboard-controls.js?v=pages42-tree-controls';
+import {resourceText} from './resource-text.js?v=pages42-tree-controls';
+import {eventDescription,requiredCardLabel,eventLock} from './event-ui.js?v=pages42-tree-controls';
+import {cityCameraBounds,CITY_CAMERA_PADDING,productionCameraBounds,PRODUCTION_CAMERA_PADDING} from './camera-framing.js?v=pages42-tree-controls';
+import {placementObstacles} from './online-placement.js?v=pages42-tree-controls';
+import {seasonConfirmation} from './season-confirmation.js?v=pages42-tree-controls';
+import {Event,Card,gameTextToDebugStr} from './everdell/engine.js?v=pages42-tree-controls';
+import {validCityPosition,freeCityPosition} from './living-board-state.js?v=pages42-tree-controls';
+import {cityRailMarkup,bindCityRail} from './city-icon-rail.js?v=pages42-tree-controls';
+import {supplyStatus,zoneDetail} from './living-ui.js?v=pages42-tree-controls';
+import {renderIcon} from './original-icons.js?v=pages42-tree-controls';
+import {choiceSpec,pendingCommand,choiceCardName} from './online-choices.js?v=pages42-tree-controls';
+import {OnlineClient} from './online-client.js?v=pages42-tree-controls';
+import {onlineDrawing} from './online-view-adapter.js?v=pages42-tree-controls';
+import {WorldView} from './world.js?v=pages42-tree-controls';
+import {applyCityScene} from './city-scene.js?v=pages42-tree-controls';
+import {gameCardFace,prepareGameCard} from './game-source-cards.js?v=pages42-tree-controls';
+import {CARD_NAMES,LOCATION_NAMES,EVENT_NAMES,EVENT_TEXT,RESOURCE_NAMES,SEASONS,translateText} from './everdell/locale.js?v=pages42-tree-controls';
+import {SOURCE_CARD_NAMES} from './source-card-map.js?v=pages42-tree-controls';
+import {resourceChoiceModel} from './decision-ui.js?v=pages42-tree-controls';
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const cn=name=>SOURCE_CARD_NAMES[name]??CARD_NAMES[name]??name;
 const CHOICE_TITLES={SELECT_CARDS:'Выберите карты',SELECT_CARDS_WITH_SOURCE:'Выберите карты',SELECT_PLAYED_CARDS:'Выберите карты города',DISCARD_CARDS:'Выберите карты для сброса',SELECT_PLAYER:'Выберите игрока',SELECT_RESOURCES:'Выберите ресурсы',SELECT_PAYMENT_FOR_CARD:'Выберите оплату карты',SELECT_OPTION_GENERIC:'Выберите действие',SELECT_WORKER_PLACEMENT:'Выберите работника',SELECT_LOCATION:'Выберите место работы'};
@@ -118,6 +119,7 @@ export function mountOnlineGame(root){
  case 'copy':{const input=root.querySelector('.online-invite');input.select();navigator.clipboard?.writeText(input.value).catch(()=>{});break}
  case 'cancel-action':return send({kind:'cancel'});case 'resume':return reconnect();case 'own':return focus(viewer);case 'opponent':return focus(1-viewer);case 'market':case 'events':if(!view)return;fieldPanel=button.dataset.online;return renderFieldPanel();case 'close-field':fieldPanel=null;return renderFieldPanel();case 'production':if(!view)return;viewedOwner=viewer;render();return world.focusLivingZone('production',productionCameraBounds(drawing.locations),{...PRODUCTION_CAMERA_PADDING,left:370,bottom:170});case 'pass':return confirmSeason();case 'confirm-season':fieldPanel=null;renderFieldPanel();return send({kind:'pass'});case 'cancel':modal=null;return renderChoice();
  }};
+ const keyboardControls=bindKeyboardControls(root,{selectorFor:([id])=>'[data-online="'+(id==='season'?'pass':id==='stock'?'opponent-stock':id)+'"]',toggleOpen:id=>{if(!fieldPanel||fieldPanel!==id)return false;fieldPanel=null;renderFieldPanel();return true;},canAct:()=>!!view&&!busy&&!placement&&!modal&&!view.pending&&!fieldPanel});
  const onKey=event=>{if(placement&&!event.target.closest('input,textarea,select')){if(event.key==='Escape'){event.preventDefault();event.stopPropagation();cancelPlacement();return;}if(event.key.toLowerCase()==='r'){event.preventDefault();event.stopPropagation();rotatePlacement(event.shiftKey?-1:1);return;}}if(event.key==='Escape'&&fieldPanel){event.preventDefault();fieldPanel=null;renderFieldPanel();return}if(event.key==='Tab'&&(fieldPanel||view?.pending||modal)){const host=fieldPanel?$('online-field'):$('online-choice'),nodes=[...host.querySelectorAll('button:not(:disabled),input:not(:disabled),[tabindex="0"]')];if(!nodes.length)return;const first=nodes[0],last=nodes.at(-1);if(event.shiftKey&&(document.activeElement===first||!host.contains(document.activeElement))){event.preventDefault();last.focus()}else if(!event.shiftKey&&(document.activeElement===last||!host.contains(document.activeElement))){event.preventDefault();first.focus()}}};window.addEventListener('keydown',onKey);
  const submit=event=>{const form=event.target.closest('[data-pending]');if(!form)return;event.preventDefault();try{const template=view.decision[Number(form.dataset.pending)],indices=[...form.querySelectorAll('input:checked')].map(i=>Number(i.value)),resources=Object.fromEntries([...form.querySelectorAll('[data-resource]')].map(i=>[i.dataset.resource,Number(i.value)]));send(pendingCommand(template,view.game.players[viewer],{indices,resources}))}catch(error){message(error)}};
  const preview=event=>{if(placement)return;const hand=event.target.closest('[data-hand]');if(!hand||!view)return;const name=view.game.players[viewer].cardsInHand[Number(hand.dataset.hand)],box=$('online-inspect');box.innerHTML=`<strong>${esc(cn(name))}</strong><div class="runtime-card"><div data-game-card-face="${esc(name)}">${gameCardFace(name)}</div></div>`;box.hidden=false;};
@@ -127,5 +129,5 @@ export function mountOnlineGame(root){
  const context=event=>{if(event.target.closest('[data-city-card-id]'))return;if(placement){event.preventDefault();event.stopPropagation();cancelPlacement();return;}if(event.target.closest('[data-city-card-id]'))return;if(view?.canCancel){event.preventDefault();send({kind:'cancel'})}};root.addEventListener('contextmenu',context);
  const visibility=()=>{clearTimeout(poll);if(!document.hidden&&!disposed&&!stopped)refresh()};root.addEventListener('click',click);root.addEventListener('submit',submit);document.addEventListener('visibilitychange',visibility);
  const params=new URLSearchParams(location.hash.slice(1));if(params.has('invite')){const room=params.get('room'),invite=params.get('invite');history.replaceState(null,'',location.pathname+location.search);run(async()=>{const result=await client.join(room,invite);viewer=result.view.game.players.findIndex(p=>p.playerId===result.playerId);viewedOwner=viewer;accept(result.view)})}else if(credentials)reconnect();
- return()=>{disposed=true;disposeRail();root.removeEventListener('pointerdown',cancelPointer,true);clearTimeout(poll);document.removeEventListener('visibilitychange',visibility);root.removeEventListener('pointerover',preview);root.removeEventListener('pointerout',previewOut);root.removeEventListener('focusin',preview);root.removeEventListener('focusout',previewOut);root.removeEventListener('contextmenu',context);window.removeEventListener('keydown',onKey);root.removeEventListener('click',click);root.removeEventListener('submit',submit);world.dispose?.()};
+ return()=>{disposed=true;keyboardControls.dispose();disposeRail();root.removeEventListener('pointerdown',cancelPointer,true);clearTimeout(poll);document.removeEventListener('visibilitychange',visibility);root.removeEventListener('pointerover',preview);root.removeEventListener('pointerout',previewOut);root.removeEventListener('focusin',preview);root.removeEventListener('focusout',previewOut);root.removeEventListener('contextmenu',context);window.removeEventListener('keydown',onKey);root.removeEventListener('click',click);root.removeEventListener('submit',submit);world.dispose?.()};
 }

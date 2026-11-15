@@ -1,32 +1,32 @@
-import {resourceText} from './resource-text.js?v=pages41-production-overhead';
-import {bindKeyboardControls} from './keyboard-controls.js?v=pages41-production-overhead';
-import {eventDescription,requiredCardLabel,eventLock} from './event-ui.js?v=pages41-production-overhead';
-import {createFieldLayoutEditor} from './field-layout-editor.js?v=pages41-production-overhead';
-import {cityCameraBounds,CITY_CAMERA_PADDING,productionCameraBounds,PRODUCTION_CAMERA_PADDING} from './camera-framing.js?v=pages41-production-overhead';
-import {seasonConfirmation} from './season-confirmation.js?v=pages41-production-overhead';
-import {mountOnlineGame} from './online-game.js?v=pages41-production-overhead';
-import {applyCityScene} from './city-scene.js?v=pages41-production-overhead';
-import {cityRailMarkup,bindCityRail} from './city-icon-rail.js?v=pages41-production-overhead';
-import {finalScoringPlan,createFinalScoring} from './final-scoring.js?v=pages41-production-overhead';
-import {chooseBotCommand,paymentFitsCity} from './bot-policy.js?v=pages41-production-overhead';
-import {BOT_SAVE_KEYS,chooseInitialPlayer,createBotSession,decisionPlayerId,humanCanAct,humanOwnsDecision,applySessionCommand} from './bot-session.js?v=pages41-production-overhead';
-import {fieldActionIcon,cameraControls,cardPreviewPlacement} from './field-ui.js?v=pages41-production-overhead';
-import {renderIcon} from './original-icons.js?v=pages41-production-overhead';
-import {captureAction,bindAction,isActionForGame,restoreAction,recoverPendingAction} from './action-checkpoint.js?v=pages41-production-overhead';
-import {resourceChoiceModel,changeResourceChoice,resourceChoiceMarkup,decisionResources,decisionValue,closeIcon} from './decision-ui.js?v=pages41-production-overhead';
-import {prepareGameCard,gameCardReady,gameCardFace} from './game-source-cards.js?v=pages41-production-overhead';
-import {workerSeatPosition} from './production-props.js?v=pages41-production-overhead';
-import {SOURCE_CARD_NAMES} from './source-card-map.js?v=pages41-production-overhead';
-import {createHandInteraction} from './hand-interaction.js?v=pages41-production-overhead';
-import {createSharedSeasonState,normalizeSharedGame,stepSharedGame,requestSharedSeason,sharedSeason,canActShared,forecastNextSeason} from './shared-seasons.js?v=pages41-production-overhead';
-import {zoneBadge,zoneDetail,supplyStatus,storedResources,cityWorkerMarker,cityWorkerDetail,lockIcon,SPECIES} from './living-ui.js?v=pages41-production-overhead';
-import {fieldTreePosition,productionLocationCoords,PRODUCTION_CLEARING,LIVING_CITIES,CITY_CAMPS,CITY_LAYOUT_VERSION,migrateCityLayout,LIVING_TREE,MARKET_POSITIONS,BASIC_POSITIONS,FOREST_POSITIONS,COMMON_POSITIONS,inCity,cityCardEntries,queuedCityPlacements,validCityPosition,reconcileCityLayout,freeCityPosition} from './living-board-state.js?v=pages41-production-overhead';
-import {cardArt,portraitStyle,placeArt,resourceIcon,cardTypeIcon} from './everdell/art.js?v=pages41-production-overhead';
-import {createGame,stepGame,serializeGame,restoreGame,getPaymentOptions as enginePaymentOptions,getScores,Card,Location,Event,CardName,LocationOccupancy,GameInputType,Season,CardType,PlayerStatus} from './everdell/engine.js?v=pages41-production-overhead';
-import {CARD_NAMES,CARD_TEXT,LOCATION_NAMES,LOCATION_TEXT,EVENT_NAMES,EVENT_TEXT,SEASONS,CARD_TYPES,RESOURCE_NAMES,translateText} from './everdell/locale.js?v=pages41-production-overhead';
-import {createMovementWorld,moveWorker} from './movement.js?v=pages41-production-overhead';
-import {WORLD} from './data.js?v=pages41-production-overhead';
-import {WorldView} from './world.js?v=pages41-production-overhead';
+import {resourceText} from './resource-text.js?v=pages42-tree-controls';
+import {bindKeyboardControls} from './keyboard-controls.js?v=pages42-tree-controls';
+import {eventDescription,requiredCardLabel,eventLock} from './event-ui.js?v=pages42-tree-controls';
+import {createFieldLayoutEditor} from './field-layout-editor.js?v=pages42-tree-controls';
+import {cityCameraBounds,CITY_CAMERA_PADDING,productionCameraBounds,PRODUCTION_CAMERA_PADDING} from './camera-framing.js?v=pages42-tree-controls';
+import {seasonConfirmation} from './season-confirmation.js?v=pages42-tree-controls';
+import {mountOnlineGame} from './online-game.js?v=pages42-tree-controls';
+import {applyCityScene} from './city-scene.js?v=pages42-tree-controls';
+import {cityRailMarkup,bindCityRail} from './city-icon-rail.js?v=pages42-tree-controls';
+import {finalScoringPlan,createFinalScoring} from './final-scoring.js?v=pages42-tree-controls';
+import {chooseBotCommand,paymentFitsCity} from './bot-policy.js?v=pages42-tree-controls';
+import {BOT_SAVE_KEYS,chooseInitialPlayer,createBotSession,decisionPlayerId,humanCanAct,humanOwnsDecision,applySessionCommand} from './bot-session.js?v=pages42-tree-controls';
+import {fieldActionIcon,cameraControls,cardPreviewPlacement} from './field-ui.js?v=pages42-tree-controls';
+import {renderIcon} from './original-icons.js?v=pages42-tree-controls';
+import {captureAction,bindAction,isActionForGame,restoreAction,recoverPendingAction} from './action-checkpoint.js?v=pages42-tree-controls';
+import {resourceChoiceModel,changeResourceChoice,resourceChoiceMarkup,decisionResources,decisionValue,closeIcon} from './decision-ui.js?v=pages42-tree-controls';
+import {prepareGameCard,gameCardReady,gameCardFace} from './game-source-cards.js?v=pages42-tree-controls';
+import {workerSeatPosition} from './production-props.js?v=pages42-tree-controls';
+import {SOURCE_CARD_NAMES} from './source-card-map.js?v=pages42-tree-controls';
+import {createHandInteraction} from './hand-interaction.js?v=pages42-tree-controls';
+import {createSharedSeasonState,normalizeSharedGame,stepSharedGame,requestSharedSeason,sharedSeason,canActShared,forecastNextSeason} from './shared-seasons.js?v=pages42-tree-controls';
+import {zoneBadge,zoneDetail,supplyStatus,storedResources,cityWorkerMarker,cityWorkerDetail,lockIcon,SPECIES} from './living-ui.js?v=pages42-tree-controls';
+import {fieldTreePosition,productionLocationCoords,PRODUCTION_CLEARING,LIVING_CITIES,CITY_CAMPS,CITY_LAYOUT_VERSION,migrateCityLayout,LIVING_TREE,MARKET_POSITIONS,BASIC_POSITIONS,FOREST_POSITIONS,COMMON_POSITIONS,inCity,cityCardEntries,queuedCityPlacements,validCityPosition,reconcileCityLayout,freeCityPosition} from './living-board-state.js?v=pages42-tree-controls';
+import {cardArt,portraitStyle,placeArt,resourceIcon,cardTypeIcon} from './everdell/art.js?v=pages42-tree-controls';
+import {createGame,stepGame,serializeGame,restoreGame,getPaymentOptions as enginePaymentOptions,getScores,Card,Location,Event,CardName,LocationOccupancy,GameInputType,Season,CardType,PlayerStatus} from './everdell/engine.js?v=pages42-tree-controls';
+import {CARD_NAMES,CARD_TEXT,LOCATION_NAMES,LOCATION_TEXT,EVENT_NAMES,EVENT_TEXT,SEASONS,CARD_TYPES,RESOURCE_NAMES,translateText} from './everdell/locale.js?v=pages42-tree-controls';
+import {createMovementWorld,moveWorker} from './movement.js?v=pages42-tree-controls';
+import {WORLD} from './data.js?v=pages42-tree-controls';
+import {WorldView} from './world.js?v=pages42-tree-controls';
 
 const getPaymentOptions=(game,name,source,index)=>enginePaymentOptions(game,name,source,index).filter(p=>paymentFitsCity(game,name,p));
 const {game:SAVE,layout:LAYOUT_SAVE,shared:SHARED_SAVE,teams:TEAMS_SAVE,action:ACTION_SAVE,session:SESSION_SAVE}=BOT_SAVE_KEYS;
@@ -515,7 +515,7 @@ export function mountGame(root){
    try{stopFinalPresentation();finishedGameSeen=false;stopBot();botError=false;actionCheckpoint=null;teams=teamDraft.slice();game=newBotGame();sharedMeta=createSharedSeasonState(game);({game,meta:sharedMeta}=normalizeSharedGame(game,sharedMeta));arrivalMap.clear();setupOnly=false;menu=false;payment=null;pendingIndex=0;promptChoice=[];promptResources={};cityPlayer=null;tab='meadow';open=false;clearTimeout(toastTimer);$('toast').classList.remove('show');$('toast').textContent='';drawing=null;cityLayout={};placement=null;stagedPosition=null;placementQueue=[];world.gameSeed=null;project();selectAvailable();save();render();focusCamera('production',true);}catch(e){toast(e.message);}
   }
  }
- const keyboardControls=bindKeyboardControls(root,{canAct:()=>!menu&&!fieldPanel&&!placement&&!payment&&!humanDecision()&&!finalRun?.active&&!world.inputPaused});
+ const keyboardControls=bindKeyboardControls(root,{toggleOpen:id=>{const panel=id==='stock'?'opponent-stock':id;if(!fieldPanel||fieldPanel!==panel)return false;fieldPanel=null;render();scheduleBot();return true;},canAct:()=>!menu&&!fieldPanel&&!placement&&!payment&&!humanDecision()&&!finalRun?.active&&!world.inputPaused});
  function change(e){if(e.target.matches('[data-resource]')){const value=Number(e.target.value);promptResources[e.target.dataset.resource]=Number.isFinite(value)?Math.max(0,Math.floor(value)):0;}}
  function key(e){
   if(e.altKey||e.metaKey||e.ctrlKey)return;
