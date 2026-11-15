@@ -1,4 +1,4 @@
-import {TROOPS,WORLD} from './data.js?v=pages42-tree-controls';
+import {TROOPS,WORLD} from './data.js?v=pages43-forest-trails';
 
 const WORKER=TROOPS.worker;
 const BASE_VISION=7.8;

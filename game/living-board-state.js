@@ -1,4 +1,4 @@
-import {footprintAt,hullsOverlap,footprintFitsBounds,isBuildingFootprint,navigationFootprint,navigationPassageClear,normalizeCityRotation} from './city-footprints.js?v=pages42-tree-controls';
+import {footprintAt,hullsOverlap,footprintFitsBounds,isBuildingFootprint,navigationFootprint,navigationPassageClear,normalizeCityRotation} from './city-footprints.js?v=pages43-forest-trails';
 // Presentation positions never change engine costs, turns, city capacity or card effects
 // v2 keeps the accepted single-ring composition and its saved editor positions
 // Saved v2 coordinates are authoritative, including deliberate overlap with the crown
@@ -20,9 +20,9 @@ export const MARKET_POSITIONS=Array.from({length:8},(_,i)=>({x:22.5+(i%4)*5,z:25
 export const LOCATION_FOOTPRINT_RADIUS=1.95;
 export const ELDER_CANOPY_HALF_EXTENT={x:4.334,z:3.951};
 const PRODUCTION_TREE_GAP=2.1,PRODUCTION_SPACING=4.5,RING_RADIUS=12.5,RING_SLOTS=17;
-function ringPositions(tree){
+function ringPositions(tree,count=RING_SLOTS){
  const cx=Math.max(17.5,Math.min(42.5,tree.x)),cz=Math.max(17.5,Math.min(26.5,tree.z));
- return Array.from({length:RING_SLOTS},(_,i)=>{const angle=-Math.PI/2+i*Math.PI*2/RING_SLOTS;return [cx+Math.cos(angle)*RING_RADIUS,cz+Math.sin(angle)*RING_RADIUS];});
+ return Array.from({length:count},(_,i)=>{const angle=-Math.PI/2+i*Math.PI*2/count;return [cx+Math.cos(angle)*RING_RADIUS,cz+Math.sin(angle)*RING_RADIUS];});
 }
 const defaultRing=ringPositions(LIVING_TREE);
 export const BASIC_POSITIONS=defaultRing.slice(0,8);
@@ -46,7 +46,7 @@ export function productionLocationCoords(basics,forests){
  const tree=fieldTreePosition(),coords=new Map(),occupied=[];
  // Reserve every explicit position first, so default sites cannot silently occupy it
  for(const name of names){const p=fieldLayout[name];if(p){coords.set(name,[p.x,p.z]);occupied.push([p.x,p.z]);}}
- const ring=ringPositions(tree);let candidates=null;
+ const ring=ringPositions(tree,names.length);let candidates=null;
  // Build the fallback grid only if the compact default ring actually needs repair
  const usable=p=>!productionHiddenByTree(...p,tree,PRODUCTION_TREE_GAP)&&occupied.every(q=>Math.hypot(p[0]-q[0],p[1]-q[1])>=PRODUCTION_SPACING);
  for(const [i,name]of names.entries()){

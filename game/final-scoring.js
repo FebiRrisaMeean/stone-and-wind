@@ -1,5 +1,5 @@
-import {Card,Event,Location,getScores} from './everdell/engine.js?v=pages42-tree-controls';
-import {cityCardEntries} from './living-board-state.js?v=pages42-tree-controls';
+import {Card,Event,Location,getScores} from './everdell/engine.js?v=pages43-forest-trails';
+import {cityCardEntries} from './living-board-state.js?v=pages43-forest-trails';
 
 const sum=steps=>steps.reduce((total,step)=>total+step.points,0);
 const categories=['cards','events','journey','tokens'];

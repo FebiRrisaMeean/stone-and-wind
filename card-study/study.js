@@ -1,4 +1,4 @@
-import {componentGroups,loadDeck,loadSourceCard,sourceReference,sourceCardComponent,loadCardFonts,preloadCardAssets} from '../game/source-card-components.js?v=pages42-tree-controls'
+import {componentGroups,loadDeck,loadSourceCard,sourceReference,sourceCardComponent,loadCardFonts,preloadCardAssets} from '../game/source-card-components.js?v=pages43-forest-trails'
 const $=id=>document.getElementById(id)
 let deck,selected,width=344,part='title',filter='all',card,revision=0
 const hidden=new Set()

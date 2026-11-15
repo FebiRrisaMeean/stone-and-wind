@@ -1,8 +1,7 @@
-import {cityRoadSurface} from './city-road-surface.js?v=pages42-tree-controls'
 import * as T from '../vendor/three.module.js'
 import {GLTFLoader} from '../vendor/addons/loaders/GLTFLoader.js'
-import {WOODLAND_PATHS,woodlandPlacements,productionRoadSegments} from './woodland-layout.js?v=pages42-tree-controls'
-import {forestCullingEnabled,woodlandCells,woodlandInstanceCells,FOREST_CELL_SIZE} from './woodland-cells.js?v=pages42-tree-controls'
+import {WOODLAND_PATHS,woodlandPlacements,productionRoadSegments} from './woodland-layout.js?v=pages43-forest-trails'
+import {forestCullingEnabled,woodlandCells,woodlandInstanceCells,FOREST_CELL_SIZE} from './woodland-cells.js?v=pages43-forest-trails'
 const templates=new Map(),materials=new Map()
 await Promise.all(['elder','oak','spruce','shrub'].map(async name=>{
  try{const file=name!=='elder'&&new URLSearchParams(globalThis.location?.search??'').get('forestDensity')!=='classic'?name+'-dense':name;const gltf=await new GLTFLoader().loadAsync(new URL(`./assets/night-environment/${file}.glb`,import.meta.url).href)
@@ -63,16 +62,12 @@ export function addWoodlandAssets(view,state){
  view.woodlandStats={trees:layout.trees.length,shrubs:layout.shrubs.length,triangles,drawCalls:calls,spatialCulling,cellSize:spatialCulling?FOREST_CELL_SIZE:null};return true
 }
 export function addWoodlandPaths(view,state){
- if(state.livingBoard){
-  const {positions,colors}=cityRoadSurface(productionRoadSegments(state),(x,z)=>view.heightAt(x,z),state.season);
-  const geometry=new T.BufferGeometry();geometry.setAttribute('position',new T.Float32BufferAttribute(positions,3));geometry.setAttribute('color',new T.Float32BufferAttribute(colors,3));geometry.computeVertexNormals();
-  const road=new T.Mesh(geometry,new T.MeshStandardMaterial({vertexColors:true,roughness:1}));road.name='production-spokes';road.receiveShadow=true;view.detail.add(road);
- }
-
- const color=new T.Color(state.season==='WINTER'?0xcad0be:state.season==='AUTUMN'?0xb99869:0xc1af83)
+ const color=new T.Color(state.season==='WINTER'?0xbfc5b3:state.season==='AUTUMN'?0x92774e:0x92805a)
  const points=[],indices=[],colors=[]
- for(const path of (state.livingBoard?[[[30.5,35],[31,39],[30.5,43.7]]]:WOODLAND_PATHS)){const curve=new T.CatmullRomCurve3(path.map(([x,z])=>new T.Vector3(x,0,z))),steps=Math.ceil(curve.getLength()*4),offset=points.length/3
-  for(let i=0;i<=steps;i++){const t=i/steps,p=curve.getPoint(t),d=curve.getTangent(t),width=(.68+.07*Math.sin(t*37))*Math.min(1,.25+Math.sin(t*Math.PI)*4);for(const side of [-1,-.62,.62,1]){const x=p.x+d.z*width*side,z=p.z-d.x*width*side;points.push(x,view.heightAt(x,z)+.027,z);colors.push(color.r,color.g,color.b,Math.abs(side)===1?0:.66)}if(i<steps)for(let j=0;j<3;j++){const a=offset+i*4+j;indices.push(a,a+4,a+1,a+1,a+4,a+5)}}
+ const spokes=productionRoadSegments(state).map(({a,b})=>{const dx=b.x-a.x,dz=b.z-a.z,length=Math.hypot(dx,dz),bend=.22*Math.sin(a.x+b.z);return [[a.x,a.z],[(a.x+b.x)/2-dz/length*bend,(a.z+b.z)/2+dx/length*bend],[b.x,b.z]]});
+ const paths=state.livingBoard?[...spokes,[[30.5,35],[31,39],[30.5,43.7]]]:WOODLAND_PATHS;
+ for(const path of paths){const curve=new T.CatmullRomCurve3(path.map(([x,z])=>new T.Vector3(x,0,z))),steps=Math.ceil(curve.getLength()*4),offset=points.length/3
+  for(let i=0;i<=steps;i++){const t=i/steps,p=curve.getPoint(t),d=curve.getTangent(t),width=(.43+.065*Math.sin(t*19)+.035*Math.sin(t*41))*Math.min(1,.25+Math.sin(t*Math.PI)*4);for(const side of [-1,-.5,.5,1]){const x=p.x+d.z*width*side,z=p.z-d.x*width*side;points.push(x,view.heightAt(x,z)+.027,z);colors.push(color.r,color.g,color.b,Math.abs(side)===1?0:.72)}if(i<steps)for(let j=0;j<3;j++){const a=offset+i*4+j;indices.push(a,a+4,a+1,a+1,a+4,a+5)}}
  }
  const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(points,3));g.setAttribute('color',new T.Float32BufferAttribute(colors,4));g.setIndex(indices);g.computeVertexNormals();const mesh=new T.Mesh(g,new T.MeshStandardMaterial({vertexColors:true,transparent:true,depthWrite:false,roughness:1,side:T.DoubleSide,polygonOffset:true,polygonOffsetFactor:-1}));mesh.receiveShadow=true;view.detail.add(mesh)
 }

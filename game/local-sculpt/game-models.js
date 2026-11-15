@@ -1,13 +1,13 @@
-import {createNightCharacter,animateNightCharacter} from './night-characters.js?v=pages42-tree-controls'
-import {createNightBuilding} from './night-buildings.js?v=pages42-tree-controls'
-import {createMeshyPilot,animateMeshyPilot} from './meshy-pilots.js?v=pages42-tree-controls'
-import {createMeshyBuilding,animateMeshyBuilding} from './meshy-buildings.js?v=pages42-tree-controls'
-import {createHybridCrane,animateHybridCrane} from './hybrid-crane.js?v=pages42-tree-controls'
+import {createNightCharacter,animateNightCharacter} from './night-characters.js?v=pages43-forest-trails'
+import {createNightBuilding} from './night-buildings.js?v=pages43-forest-trails'
+import {createMeshyPilot,animateMeshyPilot} from './meshy-pilots.js?v=pages43-forest-trails'
+import {createMeshyBuilding,animateMeshyBuilding} from './meshy-buildings.js?v=pages43-forest-trails'
+import {createHybridCrane,animateHybridCrane} from './hybrid-crane.js?v=pages43-forest-trails'
 import * as T from '../../vendor/three.module.js'
-import {createMeshyScholar,animateMeshyScholar} from './meshy-scholar.js?v=pages42-tree-controls'
-import {createLocalScholar,animateLocalScholar} from './scholar.js?v=pages42-tree-controls'
-import {createLocalCharacter,animateLocalCharacter} from './characters.js?v=pages42-tree-controls'
-import {ARCHITECTURE_NAMES,createArchitecture,animateArchitecture} from '../architecture-models.js?v=pages42-tree-controls'
+import {createMeshyScholar,animateMeshyScholar} from './meshy-scholar.js?v=pages43-forest-trails'
+import {createLocalScholar,animateLocalScholar} from './scholar.js?v=pages43-forest-trails'
+import {createLocalCharacter,animateLocalCharacter} from './characters.js?v=pages43-forest-trails'
+import {ARCHITECTURE_NAMES,createArchitecture,animateArchitecture} from '../architecture-models.js?v=pages43-forest-trails'
 
 const acceptedBuildings=new Set(ARCHITECTURE_NAMES)
 export function hasLocalBuilding(name){return acceptedBuildings.has(name)}

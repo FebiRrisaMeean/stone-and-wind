@@ -1,4 +1,4 @@
-import {optimizationSettings} from './optimization-settings.js?v=pages42-tree-controls'
+import {optimizationSettings} from './optimization-settings.js?v=pages43-forest-trails'
 import * as T from '../vendor/three.module.js'
 import {mergeGeometries} from '../vendor/addons/utils/BufferGeometryUtils.js'
 // Batch only an explicitly static production-site subtree, retaining its semantic groups

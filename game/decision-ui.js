@@ -1,5 +1,5 @@
-import {Card} from './everdell/engine.js?v=pages42-tree-controls';
-import {renderIcon} from './original-icons.js?v=pages42-tree-controls';
+import {Card} from './everdell/engine.js?v=pages43-forest-trails';
+import {renderIcon} from './original-icons.js?v=pages43-forest-trails';
 export const RESOURCE_KEYS=['TWIG','RESIN','PEBBLE','BERRY'];
 const NAMES={TWIG:'Ветки',RESIN:'Смола',PEBBLE:'Камушки',BERRY:'Ягоды'};
 export const escapeHTML=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

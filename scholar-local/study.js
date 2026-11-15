@@ -158,7 +158,7 @@ function frame(now) {
   raf = requestAnimationFrame(frame)
 }
 try {
-  const module = await import('../game/local-sculpt/scholar.js?v=pages42-tree-controls')
+  const module = await import('../game/local-sculpt/scholar.js?v=pages43-forest-trails')
   animateModel = module.animateLocalScholar
   scene = new T.Scene()
   scene.background = new T.Color('#d9d6ca')

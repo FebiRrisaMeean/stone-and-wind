@@ -1,4 +1,4 @@
-import {serializeGame,restoreGame,GameInputType,PlayerStatus} from './everdell/engine.js?v=pages42-tree-controls';
+import {serializeGame,restoreGame,GameInputType,PlayerStatus} from './everdell/engine.js?v=pages43-forest-trails';
 
 const copy=value=>structuredClone(value);
 const JSON_ACTION_VERSION=1;

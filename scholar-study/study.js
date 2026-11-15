@@ -1,5 +1,5 @@
 import * as T from '../vendor/three.module.js'
-import {SCHOLAR_VARIANTS,createScholarVariant,animateScholarVariant} from '../game/scholar-variants.js?v=pages42-tree-controls'
+import {SCHOLAR_VARIANTS,createScholarVariant,animateScholarVariant} from '../game/scholar-variants.js?v=pages43-forest-trails'
 
 const stages=[],controls=document.querySelector('.controls'),silhouetteMaterial=new T.MeshBasicMaterial({color:'#27342c',side:T.DoubleSide})
 let yaw=-.52,pitch=.16,distance=4.5,rotation=false,silhouette=false,animated=true,drag=null,last=performance.now(),clock=0,raf

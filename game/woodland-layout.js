@@ -1,5 +1,5 @@
-import {navigationFootprint} from './city-footprints.js?v=pages42-tree-controls'
-import {buildCityRoads} from './city-roads.js?v=pages42-tree-controls'
+import {navigationFootprint} from './city-footprints.js?v=pages43-forest-trails'
+import {buildCityRoads} from './city-roads.js?v=pages43-forest-trails'
 // Visual layout only: never alters playable locations, city footprints or game state
 export const WOODLAND_PATHS=[
  [[16,27],[21,26.5],[26,26],[31,26.6],[36,26.5],[43,27.5]],
@@ -72,6 +72,9 @@ export function forestLayoutKey(state){return JSON.stringify([state.livingTree,(
 function denseVegetationAllowed(state,x,z,radius){
  if(!state.livingBoard&&distanceToPath(x,z)<radius+.25)return false
  const tree=state.livingTree??{x:30,z:8};if(Math.hypot(x-tree.x,z-tree.z)<4.2+radius)return false
+ // Keep the whole action ring readable, including gaps between neighbouring sites
+ const radial=Math.hypot(x-tree.x,z-tree.z);
+ if((state.locations??[]).some(p=>Math.abs(radial-Math.hypot(p.x-tree.x,p.z-tree.z))<2.5+radius))return false
  // Crown clearance includes the foreground sightline to each playable miniature
  if((state.locations??[]).some(p=>Math.abs(x-p.x)<radius+1.5&&z>p.z-2-radius&&z<p.z+2.8+radius))return false
  const homes=(state.livingObjects??[]).filter(p=>p.type==='city-card'&&!p.critter)

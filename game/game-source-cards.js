@@ -1,5 +1,5 @@
-import {loadSourceCard,loadCardFonts,preloadCardAssets,sourceCardComponent} from './source-card-components.js?v=pages42-tree-controls';
-import {SOURCE_CARD_IDS} from './source-card-map.js?v=pages42-tree-controls';
+import {loadSourceCard,loadCardFonts,preloadCardAssets,sourceCardComponent} from './source-card-components.js?v=pages43-forest-trails';
+import {SOURCE_CARD_IDS} from './source-card-map.js?v=pages43-forest-trails';
 
 const ready=new Map(),pending=new Map();
 // Bound the initial hand + meadow fan-out and retry temporary network/decode failures
