@@ -1,17 +1,17 @@
-import {forestLayoutKey,woodlandRelief} from './woodland-layout.js?v=pages39-event-portraits';
-import {optimizationSettings} from './optimization-settings.js?v=pages39-event-portraits';
-import {createPerformanceProbe,performanceProbeEnabled,installPerformancePanel} from './performance-probe.js?v=pages39-event-portraits';
-import {animateWorkerCharacter} from './local-sculpt/worker-characters.js?v=pages39-event-portraits';
-import {RenderLoop,renderBudgetEnabled} from './render-budget.js?v=pages39-event-portraits';
-import {stepNavigation} from './city-navigation.js?v=pages39-event-portraits';
-import {fitLivingZone,constrainPresetFrame,livingCameraLimits,constrainLivingTarget} from './camera-framing.js?v=pages39-event-portraits';
-import {seasonVisuals,addSeasonGroundDetails} from './seasonal-visuals.js?v=pages39-event-portraits';
+import {forestLayoutKey,woodlandRelief} from './woodland-layout.js?v=pages40-season-world';
+import {optimizationSettings} from './optimization-settings.js?v=pages40-season-world';
+import {createPerformanceProbe,performanceProbeEnabled,installPerformancePanel} from './performance-probe.js?v=pages40-season-world';
+import {animateWorkerCharacter} from './local-sculpt/worker-characters.js?v=pages40-season-world';
+import {RenderLoop,renderBudgetEnabled} from './render-budget.js?v=pages40-season-world';
+import {stepNavigation} from './city-navigation.js?v=pages40-season-world';
+import {fitLivingZone,constrainPresetFrame,livingCameraLimits,constrainLivingTarget} from './camera-framing.js?v=pages40-season-world';
+import {seasonVisuals,addSeasonGroundDetails} from './seasonal-visuals.js?v=pages40-season-world';
 import * as T from '../vendor/three.module.js';
-import {renderLivingBoard,updateLivingLabels,animateLivingBoard,refreshLivingHover,renderLivingPlacementPreview} from './living-world.js?v=pages39-event-portraits';
-import {resourceIcon} from './everdell/art.js?v=pages39-event-portraits';
-import {FACTIONS,TROOPS,WORLD,BUILDINGS} from './data.js?v=pages39-event-portraits';
-import {count,visible,known,moveRange} from './movement.js?v=pages39-event-portraits';
-import {woodlandCottage,ancientTree,woodlandFigure,woodlandSource,woodlandLocation,addWoodlandTerrain,animateWoodland} from './woodland-world.js?v=pages39-event-portraits';
+import {renderLivingBoard,updateLivingLabels,animateLivingBoard,refreshLivingHover,renderLivingPlacementPreview} from './living-world.js?v=pages40-season-world';
+import {resourceIcon} from './everdell/art.js?v=pages40-season-world';
+import {FACTIONS,TROOPS,WORLD,BUILDINGS} from './data.js?v=pages40-season-world';
+import {count,visible,known,moveRange} from './movement.js?v=pages40-season-world';
+import {woodlandCottage,ancientTree,woodlandFigure,woodlandSource,woodlandLocation,addWoodlandTerrain,animateWoodland} from './woodland-world.js?v=pages40-season-world';
 
 const PALETTE={plain:0x7f9857,meadow:0x9eae69,forest:0x617d48,road:0xc7b589,rock:0x9da186,water:0x79b2a7,mist:0x506d59};
 const TEAM=[0x617baf,0x4f8c73,0x9b8058,0x977e9d];
@@ -381,5 +381,5 @@ export class WorldView{
   this.renderer.render(this.scene,this.camera);
   this.performanceProbe.endRender();this.performanceProbe.mark('render-submit');this.performanceProbe.endFrame();
  }
- dispose(){window.removeEventListener('stone-assets-ready',this.onAssetsReady);this.state=null;this.performancePanel?.remove();this.performanceProbe.dispose();this.renderLoop?.dispose();cancelAnimationFrame(this.frame);this.resizeObserver.disconnect();for(const [name,fn]of [['pointerdown',this.onDown],['pointermove',this.onMove],['pointerup',this.onUp],['pointercancel',this.onCancel],['contextmenu',this.onContext]])this.canvas.removeEventListener(name,fn);this.canvas.removeEventListener('wheel',this.onWheel);window.removeEventListener('keydown',this.onKeyDown);window.removeEventListener('keyup',this.onKeyUp);window.removeEventListener('blur',this.onBlur);window.removeEventListener('focus',this.onFocus);window.removeEventListener('pointermove',this.onWindowMove,true);window.removeEventListener('pointerout',this.onWindowOut);window.removeEventListener('wheel',this.onWindowWheel,true);document.documentElement.removeEventListener('mouseleave',this.onWindowLeave);document.removeEventListener('visibilitychange',this.onVisibility);for(const group of [this.terrain,this.detail,this.actors,this.markers,this.effectLayer])this.clear(group);this.renderer.dispose();this.container.innerHTML='';}
+ dispose(){window.removeEventListener('stone-assets-ready',this.onAssetsReady);this.state=null;this.performancePanel?.remove();this.performanceProbe.dispose();this.renderLoop?.dispose();cancelAnimationFrame(this.frame);this.resizeObserver.disconnect();for(const [name,fn]of [['pointerdown',this.onDown],['pointermove',this.onMove],['pointerup',this.onUp],['pointercancel',this.onCancel],['contextmenu',this.onContext]])this.canvas.removeEventListener(name,fn);this.canvas.removeEventListener('wheel',this.onWheel);window.removeEventListener('keydown',this.onKeyDown);window.removeEventListener('keyup',this.onKeyUp);window.removeEventListener('blur',this.onBlur);window.removeEventListener('focus',this.onFocus);window.removeEventListener('pointermove',this.onWindowMove,true);window.removeEventListener('pointerout',this.onWindowOut);window.removeEventListener('wheel',this.onWindowWheel,true);document.documentElement.removeEventListener('mouseleave',this.onWindowLeave);document.removeEventListener('visibilitychange',this.onVisibility);for(const group of [this.terrain,this.detail,this.actors,this.markers,this.effectLayer])this.clear(group);this.sun.dispose();this.renderer.dispose();this.container.innerHTML='';}
 }

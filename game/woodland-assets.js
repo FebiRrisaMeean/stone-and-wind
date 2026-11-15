@@ -1,6 +1,7 @@
 import * as T from '../vendor/three.module.js'
 import {GLTFLoader} from '../vendor/addons/loaders/GLTFLoader.js'
-import {WOODLAND_PATHS,woodlandPlacements} from './woodland-layout.js?v=pages39-event-portraits'
+import {WOODLAND_PATHS,woodlandPlacements} from './woodland-layout.js?v=pages40-season-world'
+import {forestCullingEnabled,woodlandCells,woodlandInstanceCells,FOREST_CELL_SIZE} from './woodland-cells.js?v=pages40-season-world'
 const templates=new Map(),materials=new Map()
 await Promise.all(['elder','oak','spruce','shrub'].map(async name=>{
  try{const file=name!=='elder'&&new URLSearchParams(globalThis.location?.search??'').get('forestDensity')!=='classic'?name+'-dense':name;const gltf=await new GLTFLoader().loadAsync(new URL(`./assets/night-environment/${file}.glb`,import.meta.url).href)
@@ -30,7 +31,7 @@ export function createWoodlandAsset(kind,season='SUMMER',height=1){
 }
 export function addWoodlandAssets(view,state){
  if(!templates.has('oak')||!templates.has('spruce'))return false
- const layout=woodlandPlacements(state),dummy=new T.Object3D();let triangles=0,calls=0
+ const layout=woodlandPlacements(state),spatialCulling=forestCullingEnabled(globalThis.location?.search??'');let triangles=0,calls=0
  for(const peak of state.cityScene?.decor?.mountains??[]){
   const g=new T.DodecahedronGeometry(1,1);g.scale(peak.width/2,peak.height,peak.depth/2);
   const mesh=new T.Mesh(g,view.material(state.season==='WINTER'?0xb9c3ba:0x7c8a7e));
@@ -38,12 +39,14 @@ export function addWoodlandAssets(view,state){
  }
  // Gateway framing is provided by the validated grove layout, never unchecked trees inside clearings
  for(const kind of ['oak','spruce','shrub']){const entries=(kind==='shrub'?layout.shrubs:layout.trees.filter(t=>t.kind===kind));if(!entries.length)continue
-  for(const p of templates.get(kind)??[]){const mesh=new T.InstancedMesh(p.geometry,seasonalMaterial(p.material,kind,state.season),entries.length)
-   entries.forEach((t,i)=>{dummy.position.set(t.x,view.heightAt(t.x,t.z),t.z);dummy.rotation.set(0,t.r,0);dummy.scale.setScalar(t.size);dummy.updateMatrix();mesh.setMatrixAt(i,dummy.matrix)})
-   mesh.castShadow=true;mesh.receiveShadow=true;mesh.computeBoundingSphere();view.detail.add(mesh);triangles+=entries.length*(p.geometry.index?.count??p.geometry.attributes.position.count)/3;calls++
+  const cells=woodlandCells(entries,spatialCulling)
+  for(const p of templates.get(kind)??[]){
+   const meshes=woodlandInstanceCells(p.geometry,seasonalMaterial(p.material,kind,state.season),cells,(x,z)=>view.heightAt(x,z),kind)
+   for(const mesh of meshes)view.detail.add(mesh)
+   triangles+=entries.length*(p.geometry.index?.count??p.geometry.attributes.position.count)/3;calls+=meshes.length
   }
  }
- view.woodlandStats={trees:layout.trees.length,shrubs:layout.shrubs.length,triangles,drawCalls:calls};return true
+ view.woodlandStats={trees:layout.trees.length,shrubs:layout.shrubs.length,triangles,drawCalls:calls,spatialCulling,cellSize:spatialCulling?FOREST_CELL_SIZE:null};return true
 }
 export function addWoodlandPaths(view,state){
  const color=new T.Color(state.season==='WINTER'?0xcad0be:state.season==='AUTUMN'?0xb99869:0xc1af83)

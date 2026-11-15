@@ -1,18 +1,19 @@
-import {productionAssetRevision} from './production-assets.js?v=pages39-event-portraits';
-import {cityRoadSurface} from './city-road-surface.js?v=pages39-event-portraits';
-import {buildCityRoads} from './city-roads.js?v=pages39-event-portraits';
-import {nightAssetRevision} from './local-sculpt/lazy-assets.js?v=pages39-event-portraits';
-import {animateWorkerCharacter} from './local-sculpt/worker-characters.js?v=pages39-event-portraits';
-import {navigationFootprint} from './city-footprints.js?v=pages39-event-portraits';
-import {createWoodlandAsset} from './woodland-assets.js?v=pages39-event-portraits';
-import {cityFootprint} from './city-footprints.js?v=pages39-event-portraits';
-import {createNavigation,stepNavigation} from './city-navigation.js?v=pages39-event-portraits';
-import {findCityHabitat,stepHabitatWalk} from './city-habitats.js?v=pages39-event-portraits';
-import {applyObjectSeason} from './seasonal-visuals.js?v=pages39-event-portraits';
+import {applyBuildingWinter} from './building-winter.js?v=pages40-season-world';
+import {productionAssetRevision} from './production-assets.js?v=pages40-season-world';
+import {cityRoadSurface} from './city-road-surface.js?v=pages40-season-world';
+import {buildCityRoads} from './city-roads.js?v=pages40-season-world';
+import {nightAssetRevision} from './local-sculpt/lazy-assets.js?v=pages40-season-world';
+import {animateWorkerCharacter} from './local-sculpt/worker-characters.js?v=pages40-season-world';
+import {navigationFootprint} from './city-footprints.js?v=pages40-season-world';
+import {createWoodlandAsset} from './woodland-assets.js?v=pages40-season-world';
+import {cityFootprint} from './city-footprints.js?v=pages40-season-world';
+import {createNavigation,stepNavigation} from './city-navigation.js?v=pages40-season-world';
+import {findCityHabitat,stepHabitatWalk} from './city-habitats.js?v=pages40-season-world';
+import {applyObjectSeason} from './seasonal-visuals.js?v=pages40-season-world';
 import * as T from '../vendor/three.module.js';
-import {createCardMiniature,animateCardMiniature} from './living-models.js?v=pages39-event-portraits';
-import {woodlandCottage,ancientTree,woodlandFigure} from './woodland-world.js?v=pages39-event-portraits';
-import {resourceIcon} from './everdell/art.js?v=pages39-event-portraits';
+import {createCardMiniature,animateCardMiniature} from './living-models.js?v=pages40-season-world';
+import {woodlandCottage,ancientTree,woodlandFigure} from './woodland-world.js?v=pages40-season-world';
+import {resourceIcon} from './everdell/art.js?v=pages40-season-world';
 
 const team=[0x719bb6,0xd7a073,0x97b485,0xb99ac7];
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -84,7 +85,7 @@ export function renderLivingBoard(view,state){
   if(['market','event','supplies','season'].includes(item.type))continue;
   const entity=view.syncEntity('living:'+item.id,`${item.type}:${nightAssetRevision(item.cardName)}:${item.cardName??''}:${item.owner??''}:${item.x}:${item.z}:${item.rotation??0}:${item.radius??''}:${item.type==='city-area'?state.season:''}`,()=>makeObject(view,item));entity.living=item;
   if(item.type==='market'){let glow=entity.group.userData.affordance;if(!glow){glow=view.ring(.91,1.04,0x87cb78,.65);glow.position.y=.14;entity.group.add(glow);entity.group.userData.affordance=glow;}glow.visible=item.available===true;}
-  applyObjectSeason(entity.group,state.season);if(!item.hideOnArrival)objectLabel(view,item);
+  applyObjectSeason(entity.group,state.season);if(item.type==='city-card'&&!item.critter)applyBuildingWinter(entity.group,state.season);if(!item.hideOnArrival)objectLabel(view,item);
  }
  const obstacles=[];for(const item of state.livingObjects??[]){const footprint=view.entities.get('living:'+item.id)?.group.userData.navigationFootprint;if(footprint)obstacles.push({id:item.id,minX:item.x+footprint.minX,maxX:item.x+footprint.maxX,minZ:item.z+footprint.minZ,maxZ:item.z+footprint.maxZ});}
  view.cityRoads=buildCityRoads((state.livingObjects??[]).filter(item=>item.type==='city-card'),{obstacles,previous:view.cityRoads});

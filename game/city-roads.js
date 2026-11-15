@@ -1,6 +1,6 @@
 // Presentation-only city roads: rebuild when buildings move, never in the frame loop
-import {navigationFootprint,isBuildingFootprint,rotateCityPoint} from './city-footprints.js?v=pages39-event-portraits'
-import {expandedObstacles,nearestFree,planRoute} from './city-navigation.js?v=pages39-event-portraits'
+import {navigationFootprint,isBuildingFootprint,rotateCityPoint} from './city-footprints.js?v=pages40-season-world'
+import {expandedObstacles,nearestFree,planRoute} from './city-navigation.js?v=pages40-season-world'
 const distance=(a,b)=>Math.hypot(a.x-b.x,a.z-b.z)
 const pathLength=(start,route)=>route.reduce((sum,p,i)=>sum+distance(i?route[i-1]:start,p),0)
 export function cityRoadEntrance(building,radius=.85){

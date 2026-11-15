@@ -1,5 +1,5 @@
-import {SOURCE_CARD_IDS} from './source-card-map.js?v=pages39-event-portraits';
-import {renderIcon} from './original-icons.js?v=pages39-event-portraits';
+import {SOURCE_CARD_IDS} from './source-card-map.js?v=pages40-season-world';
+import {renderIcon} from './original-icons.js?v=pages40-season-world';
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 export function cityCardPortraitUrl(name){const id=SOURCE_CARD_IDS[name];return id?new URL(`./assets/cards64/illustrations/${id}.webp`,import.meta.url).href:null;}

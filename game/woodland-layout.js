@@ -1,5 +1,5 @@
-import {navigationFootprint} from './city-footprints.js?v=pages39-event-portraits'
-import {buildCityRoads} from './city-roads.js?v=pages39-event-portraits'
+import {navigationFootprint} from './city-footprints.js?v=pages40-season-world'
+import {buildCityRoads} from './city-roads.js?v=pages40-season-world'
 // Visual layout only: never alters playable locations, city footprints or game state
 export const WOODLAND_PATHS=[
  [[16,27],[21,26.5],[26,26],[31,26.6],[36,26.5],[43,27.5]],
